@@ -1,7 +1,5 @@
 find_package(Qt5Test 5.2.0 REQUIRED NO_MODULE)
 
-kde_enable_exceptions()
-
 include(ECMAddTests)
 
 QT5_ADD_RESOURCES( TestDataResources_SRCS TestData.qrc )

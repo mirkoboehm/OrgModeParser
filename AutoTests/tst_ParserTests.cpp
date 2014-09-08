@@ -3,6 +3,7 @@
 #include <QCoreApplication>
 
 #include <Headline.h>
+#include <Parser.h>
 
 using namespace OrgMode;
 
@@ -36,9 +37,9 @@ void ParserTests::testParseSimpleTree()
     QFile orgFile(QLatin1String("://TestData/Parser/SimpleTree.org"));
     QVERIFY(orgFile.exists());
     QVERIFY(orgFile.open(QIODevice::ReadOnly));
-//    Parser parser(&orgFile);
-//    auto headline = parser.parse();
-    QFAIL("NI");
+    Parser parser(&orgFile);
+    auto headline = parser.parse();
+    QCOMPARE(headline->children().count(), 2);
 }
 
 QTEST_MAIN(ParserTests)
