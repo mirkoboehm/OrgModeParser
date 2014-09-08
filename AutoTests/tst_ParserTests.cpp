@@ -2,6 +2,10 @@
 #include <QtTest>
 #include <QCoreApplication>
 
+#include <Headline.h>
+
+using namespace OrgMode;
+
 class ParserTests : public QObject
 {
     Q_OBJECT
@@ -12,7 +16,7 @@ public:
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
-    void testCase1();
+    void testParseSimpleTree();
 };
 
 ParserTests::ParserTests()
@@ -27,9 +31,14 @@ void ParserTests::cleanupTestCase()
 {
 }
 
-void ParserTests::testCase1()
+void ParserTests::testParseSimpleTree()
 {
-    QVERIFY2(true, "Failure");
+    QFile orgFile(QLatin1String("://TestData/Parser/SimpleTree.org"));
+    QVERIFY(orgFile.exists());
+    QVERIFY(orgFile.open(QIODevice::ReadOnly));
+//    Parser parser(&orgFile);
+//    auto headline = parser.parse();
+    QFAIL("NI");
 }
 
 QTEST_MAIN(ParserTests)

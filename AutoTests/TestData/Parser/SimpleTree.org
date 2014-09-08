@@ -1,0 +1,10 @@
+A simple OrgMode file that the parser should parse properly.
+
+* Headline 1
+  This is the text associated wit headline 1. 
+** Headline 1.1
+   1.1 is a child headline of headline 1. 
+** Headline 1.2
+   1.2 is a child headline of headline 1. 
+* Headline 2
+  Headline 2 has no children.
