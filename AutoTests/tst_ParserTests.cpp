@@ -38,10 +38,12 @@ void ParserTests::testParseSimpleTree()
     try {
         QFile orgFile(QLatin1String("://TestData/Parser/SimpleTree.org"));
         QVERIFY(orgFile.exists());
-        QVERIFY(orgFile.open(QIODevice::ReadOnly));
+        if (!orgFile.open(QIODevice::ReadOnly)) {
+            throw RuntimeException(tr("Unable to open device for reading: %1.").arg(orgFile.errorString()));
+        }
+        QTextStream stream(&orgFile);
         Parser parser;
-        parser.setInputDevice(&orgFile);
-        auto headline = parser.parse();
+        auto headline = parser.parse(&stream);
         QCOMPARE(headline->children().count(), 2);
     } catch(Exception& ex) {
         QFAIL(qPrintable(ex.message()));

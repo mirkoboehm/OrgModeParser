@@ -6,7 +6,7 @@
 #include "orgmodeparser_export.h"
 #include <Headline.h>
 
-class QIODevice;
+class QTextStream;
 
 namespace OrgMode {
 
@@ -15,8 +15,9 @@ class ORGMODEPARSER_EXPORT Parser : public QObject
     Q_OBJECT
 public:
     explicit Parser(QObject *parent = 0);
-    void setInputDevice(QIODevice* device);
-    Headline::Pointer parse() const;
+    ~Parser();
+
+    Headline::Pointer parse(QTextStream* data) const;
 
 private:
     class Private;

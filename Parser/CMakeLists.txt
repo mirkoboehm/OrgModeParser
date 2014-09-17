@@ -3,6 +3,7 @@ set(OrgModeParser_LIB_SRCS
         Parser.cpp
         Headline.cpp
         Exception.cpp
+        OrgFileContent.cpp
 )
 
 add_library(OrgModeParser ${OrgModeParser_LIB_SRCS})

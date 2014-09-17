@@ -10,6 +10,8 @@ class QTextStream;
 
 namespace OrgMode {
 
+class OrgFileContent;
+
 /** @brief Headline represent a single headline in an OrgMode file. */
 class ORGMODEPARSER_EXPORT Headline
 {
@@ -19,9 +21,22 @@ public:
     typedef QList<Pointer> List;
 
     Headline();
+    ~Headline();
     List children() const;
 
-    void readFrom(QTextStream* device);
+    void addChild(const Pointer& child);
+
+    int level() const;
+    void setLevel(int level);
+
+    QString caption() const;
+    void setCaption(const QString& caption);
+
+    void readFrom(OrgFileContent* content);
+
+private:
+    class Private;
+    Private* d;
 };
 
 }

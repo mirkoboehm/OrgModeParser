@@ -4,15 +4,12 @@
 #include "Parser.h"
 #include "Headline.h"
 #include "Exception.h"
+#include "OrgFileContent.h"
 
 namespace OrgMode {
 
 class Parser::Private {
 public:
-    Private()
-        : device_()
-    {}
-    QIODevice* device_;
 };
 
 Parser::Parser(QObject *parent)
@@ -21,20 +18,17 @@ Parser::Parser(QObject *parent)
 {
 }
 
-void Parser::setInputDevice(QIODevice *device)
+Parser::~Parser()
 {
-    Q_ASSERT(d);
-    Q_ASSERT(d->device_ == 0);
-    Q_ASSERT(device->isReadable());
-    d->device_ = device;
+    delete d; d = 0;
 }
 
-Headline::Pointer Parser::parse() const
+Headline::Pointer Parser::parse(QTextStream *data) const
 {
-    Q_ASSERT(d->device_);
-    QTextStream stream(d->device_);
+    Q_ASSERT(data);
+    OrgFileContent content(data);
     Headline::Pointer toplevel(new Headline());
-    toplevel->readFrom(&stream);
+    toplevel->readFrom(&content);
     return toplevel;
 }
 
