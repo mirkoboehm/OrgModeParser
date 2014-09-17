@@ -2,7 +2,7 @@
 #include <QTextStream>
 
 #include "Parser.h"
-#include "Headline.h"
+#include "OrgElement.h"
 #include "Exception.h"
 #include "OrgFileContent.h"
 
@@ -23,13 +23,14 @@ Parser::~Parser()
     delete d; d = 0;
 }
 
-Headline::Pointer Parser::parse(QTextStream *data) const
+OrgElement::Pointer Parser::parse(QTextStream *data) const
 {
     Q_ASSERT(data);
     OrgFileContent content(data);
-    Headline::Pointer toplevel(new Headline());
-    toplevel->readFrom(&content);
-    return toplevel;
+
+    //OrgElement::Pointer toplevel(new Headline());
+    //toplevel->readFrom(&content);
+    return OrgElement::Pointer();
 }
 
 }

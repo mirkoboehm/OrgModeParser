@@ -4,7 +4,7 @@
 #include <QObject>
 
 #include "orgmodeparser_export.h"
-#include <Headline.h>
+#include <OrgElement.h>
 
 class QTextStream;
 
@@ -17,7 +17,7 @@ public:
     explicit Parser(QObject *parent = 0);
     ~Parser();
 
-    Headline::Pointer parse(QTextStream* data) const;
+    OrgElement::Pointer parse(QTextStream* data) const;
 
 private:
     class Private;
