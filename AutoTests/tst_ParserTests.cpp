@@ -43,8 +43,9 @@ void ParserTests::testParseSimpleTree()
         }
         QTextStream stream(&orgFile);
         Parser parser;
-        auto headline = parser.parse(&stream);
-        QCOMPARE(headline->children().count(), 2);
+        auto element = parser.parse(&stream);
+        qDebug() << endl << qPrintable(element->describe());
+        QCOMPARE(element->children().count(), 4);
     } catch(Exception& ex) {
         QFAIL(qPrintable(ex.message()));
     }

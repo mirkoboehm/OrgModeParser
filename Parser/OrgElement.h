@@ -21,13 +21,22 @@ public:
     typedef QList<Pointer> List;
 
     OrgElement();
-    ~OrgElement();
+    virtual ~OrgElement();
+    bool isValid() const;
 
     List children() const;
+    void addChild(const Pointer& child);
     void setChildren(const List& children);
 
     int level() const;
     void setLevel(int level);
+
+    QString describe() const;
+
+protected:
+    virtual bool isElementValid() const = 0;
+    virtual QString mnemonic() const = 0;
+    virtual QString description() const = 0;
 
 private:
     class Private;

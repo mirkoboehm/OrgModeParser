@@ -11,13 +11,12 @@ class QTextStream;
 
 namespace OrgMode {
 
-class OrgFileContent;
-
 /** @brief Headline represent a single headline in an OrgMode file. */
 class ORGMODEPARSER_EXPORT Headline : public OrgElement
 {
     Q_DECLARE_TR_FUNCTIONS(Headline)
 public:
+    typedef QSharedPointer<Headline> Pointer;
 
     Headline();
     ~Headline();
@@ -25,7 +24,10 @@ public:
     QString caption() const;
     void setCaption(const QString& caption);
 
-    void readFrom(OrgFileContent* content);
+protected:
+    bool isElementValid() const override;
+    QString mnemonic() const override;
+    QString description() const override;
 
 private:
     class Private;

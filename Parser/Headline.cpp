@@ -1,7 +1,3 @@
-#include <QRegularExpression>
-#include <QTextStream>
-#include <QtDebug>
-
 #include "Headline.h"
 #include "Exception.h"
 #include "OrgFileContent.h"
@@ -34,33 +30,19 @@ void Headline::setCaption(const QString &caption)
     d->caption_ = caption;
 }
 
-void Headline::readFrom(OrgFileContent *content)
+bool Headline::isElementValid() const
 {
-//    QRegularExpression re(QStringLiteral("^([*]+)\\s+(.*)$"));
-//    d->lines_.clear();
+    return level() > 0;
+}
 
-//    while(!content->atEnd()) {
-//        const QString line = content->getLine();
-//        auto const match = re.match(line);
-//        if (match.hasMatch()) {
-//            const QString structureMarker = match.captured(1);
-//            if (structureMarker.length() <= level()) {
-//                // the matched element is at the same level as this element
-//                // stop and return, this one is complete
-//                content->ungetLine(line);
-//                return;
-//            }
-//            const QString description = match.captured(2);
-//            auto child = Pointer(new Headline);
-//            child->setLevel(level()+1);
-//            child->setCaption(description);
-//            qDebug() << "Beginning of level" << child->level() << "headline found:" << line;
-//            child->readFrom(content);
-//            addChild(child);
-//        } else {
-//            d->lines_.append(line);
-//        }
-//    }
+QString Headline::mnemonic() const
+{
+    return QLatin1String("Headline");
+}
+
+QString Headline::description() const
+{
+    return tr("%1 %3").arg(QString(), level(), QLatin1Char('*')).arg(caption());
 }
 
 }

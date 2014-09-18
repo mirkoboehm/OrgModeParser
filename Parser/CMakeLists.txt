@@ -4,6 +4,7 @@ set(OrgModeParser_LIB_SRCS
         Exception.cpp
         OrgFileContent.cpp
         OrgElement.cpp
+        OrgFile.cpp
         OrgLine.cpp
         Headline.cpp
 )
