@@ -20,16 +20,17 @@ public:
     typedef QSharedPointer<OrgElement> Pointer;
     typedef QList<Pointer> List;
 
-    OrgElement();
+    explicit OrgElement(OrgElement* parent = 0);
     virtual ~OrgElement();
     bool isValid() const;
+    void setParent(OrgElement* parent);
+    OrgElement* parent() const;
 
     List children() const;
     void addChild(const Pointer& child);
     void setChildren(const List& children);
 
     int level() const;
-    void setLevel(int level);
 
     QString describe() const;
 

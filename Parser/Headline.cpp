@@ -10,8 +10,9 @@ public:
     QStringList lines_;
 };
 
-Headline::Headline()
-    : d(new Private)
+Headline::Headline(OrgElement* parent)
+    : OrgElement(parent)
+    , d(new Private)
 {
 }
 

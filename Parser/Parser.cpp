@@ -56,10 +56,9 @@ OrgElement::Pointer Parser::Private::parseOrgElement(OrgElement::Pointer parent,
             return OrgElement::Pointer(); // end recursing
         } else {
             //This is a new headline, parse it and it's children until another sibling or parent headline is discovered
-            auto self = Headline::Pointer(new Headline);
+            auto self = Headline::Pointer(new Headline(parent.data()));
             auto const description = match.captured(2);
             self->setCaption(description);
-            self->setLevel(parent->level() + 1);
             while(OrgElement::Pointer child = parseOrgElement(self, content)) {
                 self->addChild(child);
             }
@@ -80,7 +79,7 @@ OrgElement::Pointer Parser::Private::parseOrgLine(OrgElement::Pointer parent, Or
         return OrgElement::Pointer();
     }
     const QString text = content->getLine();
-    auto element = OrgElement::Pointer(new OrgLine(text));
+    const auto element = OrgElement::Pointer(new OrgLine(text, parent.data()));
     return element;
 }
 

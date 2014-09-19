@@ -7,8 +7,9 @@ public:
     QString fileName_;
 };
 
-OrgFile::OrgFile()
-    : d(new Private)
+OrgFile::OrgFile(OrgElement *parent)
+    : OrgElement(parent)
+    , d(new Private)
 {
 }
 

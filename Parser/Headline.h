@@ -18,7 +18,7 @@ class ORGMODEPARSER_EXPORT Headline : public OrgElement
 public:
     typedef QSharedPointer<Headline> Pointer;
 
-    Headline();
+    explicit Headline(OrgElement* parent = 0);
     ~Headline();
 
     QString caption() const;

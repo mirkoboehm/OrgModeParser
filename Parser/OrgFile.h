@@ -12,7 +12,7 @@ class ORGMODEPARSER_EXPORT OrgFile : public OrgElement
 {
     Q_DECLARE_TR_FUNCTIONS(OrgFile)
 public:
-    OrgFile();
+    explicit OrgFile(OrgElement* parent = 0);
     ~OrgFile();
 
     void setFileName(const QString& fileName);

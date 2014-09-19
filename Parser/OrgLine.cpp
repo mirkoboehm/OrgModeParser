@@ -7,13 +7,14 @@ public:
     QString line_;
 };
 
-OrgLine::OrgLine()
-    : d(new Private())
+OrgLine::OrgLine(OrgElement *parent)
+    : OrgElement(parent)
+    , d(new Private())
 {
 }
 
-OrgLine::OrgLine(const QString &text)
-    : OrgLine()
+OrgLine::OrgLine(const QString &text, OrgElement *parent)
+    : OrgLine(parent)
 {
     d->line_ = text;
 }

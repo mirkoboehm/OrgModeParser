@@ -6,26 +6,36 @@ namespace OrgMode {
 
 class OrgElement::Private {
 public:
-    Private()
-        : level_()
+    Private(OrgElement* parent)
+        : parent_(parent)
     {}
     OrgElement::List children_;
-    int level_;
+    OrgElement* parent_;
 };
 
-bool OrgElement::isValid() const
-{
-    return isElementValid();
-}
-
-OrgElement::OrgElement()
-    : d(new Private())
+OrgElement::OrgElement(OrgElement* parent)
+    : d(new Private(parent))
 {
 }
 
 OrgElement::~OrgElement()
 {
     delete d; d = 0;
+}
+
+bool OrgElement::isValid() const
+{
+    return isElementValid();
+}
+
+void OrgElement::setParent(OrgElement* parent)
+{
+    d->parent_ = parent;
+}
+
+OrgElement* OrgElement::parent() const
+{
+    return d->parent_;
 }
 
 OrgElement::List OrgElement::children() const
@@ -35,23 +45,25 @@ OrgElement::List OrgElement::children() const
 
 void OrgElement::addChild(const OrgElement::Pointer &child)
 {
-    child->setLevel(level() + 1);
+    child->setParent(this);
     d->children_.append(child);
 }
 
 void OrgElement::setChildren(const OrgElement::List &children)
 {
+    for(auto child : children) {
+        child->setParent(this);
+    }
     d->children_ = children;
 }
 
 int OrgElement::level() const
 {
-    return d->level_;
-}
-
-void OrgElement::setLevel(int level)
-{
-    d->level_ = level;
+    if (d->parent_) {
+        return d->parent_->level() + 1;
+    } else {
+        return 0;
+    }
 }
 
 QString OrgElement::describe() const

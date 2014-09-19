@@ -12,8 +12,8 @@ class ORGMODEPARSER_EXPORT OrgLine : public OrgElement
 {
     Q_DECLARE_TR_FUNCTIONS(OrgLine)
 public:
-    OrgLine();
-    explicit OrgLine(const QString& text);
+    explicit OrgLine(OrgElement* parent = 0);
+    explicit OrgLine(const QString& text, OrgElement* parent = 0);
     ~OrgLine();
 
     void setText(const QString& text);
