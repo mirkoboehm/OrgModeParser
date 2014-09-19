@@ -21,7 +21,7 @@ public:
     {}
 
     /** @brief Parse a sequence of top level elements, considering it as one file unit. */
-    OrgElement::Pointer parseOrgFile(OrgFileContent* content) const;
+    OrgFile::Pointer parseOrgFile(OrgFileContent* content, const QString& filename) const;
 
     OrgElement::Pointer parseOrgElement(OrgElement::Pointer parent, OrgFileContent* content) const;
     OrgElement::Pointer parseHeadline(OrgElement::Pointer parent, OrgFileContent* content) const;
@@ -31,9 +31,10 @@ private:
     Parser* parser_;
 };
 
-OrgElement::Pointer Parser::Private::parseOrgFile(OrgFileContent *content) const
+OrgFile::Pointer Parser::Private::parseOrgFile(OrgFileContent *content, const QString &filename) const
 {
-    auto file = OrgElement::Pointer(new OrgFile);
+    auto file = OrgFile::Pointer(new OrgFile);
+    file->setFileName(filename);
     while(!content->atEnd()) {
         file->addChild(parseOrgElement(file, content));
     }
@@ -94,11 +95,11 @@ Parser::~Parser()
     delete d; d = 0;
 }
 
-OrgElement::Pointer Parser::parse(QTextStream *data) const
+OrgElement::Pointer Parser::parse(QTextStream *data, const QString fileName) const
 {
     Q_ASSERT(data);
     OrgFileContent content(data);
-    return d->parseOrgFile(&content);
+    return d->parseOrgFile(&content, fileName);
 }
 
 }

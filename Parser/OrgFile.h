@@ -12,6 +12,9 @@ class ORGMODEPARSER_EXPORT OrgFile : public OrgElement
 {
     Q_DECLARE_TR_FUNCTIONS(OrgFile)
 public:
+    typedef QSharedPointer<OrgFile> Pointer;
+    typedef QList<Pointer> List;
+
     explicit OrgFile(OrgElement* parent = 0);
     ~OrgFile();
 

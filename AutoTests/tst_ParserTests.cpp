@@ -45,10 +45,8 @@ void ParserTests::testParseSimpleTree()
         }
         QTextStream stream(&orgFile);
         Parser parser;
-        auto element = parser.parse(&stream);
+        auto element = parser.parse(&stream, fileName);
         QCOMPARE(element->children().count(), 4);
-        OrgFile* orgFileElement = dynamic_cast<OrgFile*>(element.data());
-        orgFileElement->setFileName(fileName);
         qDebug() << endl << qPrintable(element->describe());
     } catch(Exception& ex) {
         QFAIL(qPrintable(ex.message()));
