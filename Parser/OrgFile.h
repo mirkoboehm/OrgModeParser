@@ -13,10 +13,18 @@ class ORGMODEPARSER_EXPORT OrgFile : public OrgElement
     Q_DECLARE_TR_FUNCTIONS(OrgFile)
 public:
     OrgFile();
+    ~OrgFile();
+
+    void setFileName(const QString& fileName);
+    QString fileName() const;
+
 protected:
     bool isElementValid() const override;
     QString mnemonic() const override;
     QString description() const override;
+private:
+    class Private;
+    Private* d;
 };
 
 }
