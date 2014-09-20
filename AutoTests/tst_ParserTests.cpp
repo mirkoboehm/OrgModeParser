@@ -6,6 +6,7 @@
 #include <Parser.h>
 #include <Writer.h>
 #include <OrgFile.h>
+#include <Clock.h>
 #include <Exception.h>
 
 using namespace OrgMode;
@@ -42,7 +43,8 @@ void ParserTests::testParserAndIdentity_data()
 
     //Verify that CLOCK: lines are detected, parsed, and the numbers calculated and aggregated up the tree:
     VerificationMethod testClockEntries = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
-        QFAIL("NI");
+        Clock clock(element);
+        QCOMPARE(clock.duration(), 30 * 60); // 30 minutes
     };
     QTest::newRow("ClockEntries") << QString::fromLatin1("://TestData/Parser/ClockEntries.org") << testClockEntries;
 }
@@ -84,7 +86,11 @@ void ParserTests::testParserAndIdentity()
     //We now have access to the input data, the parsed element and the output data:
     QCOMPARE(input.size(), output.size());
     QCOMPARE(input, output);
-    method(input, output, element);
+    try {
+        method(input, output, element);
+    }  catch(Exception& ex) {
+        QFAIL(qPrintable(ex.message()));
+    }
 }
 
 QTEST_MAIN(ParserTests)

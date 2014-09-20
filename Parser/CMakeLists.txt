@@ -4,10 +4,13 @@ set(OrgModeParser_LIB_SRCS
         Writer.cpp
         Exception.cpp
         OrgFileContent.cpp
+# Classes that represent different OrgElements:
         OrgElement.cpp
         OrgFile.cpp
         OrgLine.cpp
         Headline.cpp
+# Classes that process OrgElements:
+        Clock.cpp
 )
 
 add_library(OrgModeParser ${OrgModeParser_LIB_SRCS})
