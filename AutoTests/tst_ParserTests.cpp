@@ -10,6 +10,9 @@
 
 using namespace OrgMode;
 
+typedef void (*VerificationMethod)(const QByteArray& input, const QByteArray& output, OrgElement::Pointer element);
+Q_DECLARE_METATYPE(VerificationMethod)
+
 class ParserTests : public QObject
 {
     Q_OBJECT
@@ -22,9 +25,6 @@ private Q_SLOTS:
     void cleanupTestCase();
     void testParserAndIdentity_data();
     void testParserAndIdentity();
-
-    void testParseSimpleTree();
-    void testParseAndWriteIdentity();
 };
 
 ParserTests::ParserTests()
@@ -42,12 +42,19 @@ void ParserTests::cleanupTestCase()
 void ParserTests::testParserAndIdentity_data()
 {
     QTest::addColumn<QString>("filename");
-    QTest::newRow("SimpleTree") << QString::fromLatin1("://TestData/Parser/SimpleTree.org");
+    QTest::addColumn<VerificationMethod>("method");
+
+    //Verification of the properties of SimpleTree.org:
+    VerificationMethod testSimpleTree = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
+        QCOMPARE(element->children().count(), 4);
+    };
+    QTest::newRow("SimpleTree") << QString::fromLatin1("://TestData/Parser/SimpleTree.org") << testSimpleTree;
 }
 
 void ParserTests::testParserAndIdentity()
 {
     QFETCH(QString, filename);
+    QFETCH(VerificationMethod, method);
 
     OrgElement::Pointer element;
     QByteArray input;
@@ -81,55 +88,7 @@ void ParserTests::testParserAndIdentity()
     //We now have access to the input data, the parsed element and the output data:
     QCOMPARE(input.size(), output.size());
     QCOMPARE(input, output);
-}
-
-void ParserTests::testParseSimpleTree()
-{
-    try {
-        const QString fileName(QLatin1String("://TestData/Parser/SimpleTree.org"));
-        QFile orgFile(fileName);
-        QVERIFY(orgFile.exists());
-        if (!orgFile.open(QIODevice::ReadOnly)) {
-            throw RuntimeException(tr("Unable to open device for reading: %1.").arg(orgFile.errorString()));
-        }
-        QTextStream stream(&orgFile);
-        Parser parser;
-        auto element = parser.parse(&stream, fileName);
-        QCOMPARE(element->children().count(), 4);
-        //qDebug() << endl << qPrintable(element->describe());
-
-    } catch(Exception& ex) {
-        QFAIL(qPrintable(ex.message()));
-    }
-}
-
-void ParserTests::testParseAndWriteIdentity()
-{
-    const QString fileName(QLatin1String("://TestData/Parser/SimpleTree.org"));
-    QFile orgFile(fileName);
-    QVERIFY(orgFile.exists());
-    if (!orgFile.open(QIODevice::ReadOnly)) {
-        throw RuntimeException(tr("Unable to open device for reading: %1.").arg(orgFile.errorString()));
-    }
-    QByteArray fileData = orgFile.readAll();
-    QVERIFY(!fileData.isEmpty());
-    QBuffer buffer(&fileData);
-    buffer.open(QBuffer::ReadOnly);
-    QTextStream stream(&buffer);
-    Parser parser;
-    auto element = parser.parse(&stream, fileName);
-    QCOMPARE(element->children().count(), 4);
-    QByteArray outputData;
-    QBuffer outputBuffer(&outputData);
-    outputBuffer.open(QBuffer::WriteOnly);
-    {
-        QTextStream outputStream(&outputBuffer);
-        Writer writer;
-        writer.writeTo(&outputStream, element);
-    }
-    // qDebug() << "fileData:" << endl << fileData << endl << "outputData:" << endl << outputData;
-    QCOMPARE(fileData.size(), outputData.size());
-    QCOMPARE(fileData, outputData);
+    method(input, output, element);
 }
 
 QTEST_MAIN(ParserTests)
