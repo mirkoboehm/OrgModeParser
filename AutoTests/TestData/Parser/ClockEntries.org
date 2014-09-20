@@ -1,0 +1,13 @@
+Hello, this Org file tests the parsing of clock entries
+  
+* headline_1
+  This headline has two children, each containing one clock entry. The
+  top level headline (headline_1) should show the aggregated clock
+  time of it's children.
+** headline_1_1
+   CLOCK: [2014-09-20 Sat 14:00]--[2014-09-20 Sat 14:10] =>  0:10
+   This headline contributes 10 minutes to the total.
+
+** headline_1_2
+   CLOCK: [2014-09-20 Sat 14:10]--[2014-09-20 Sat 14:30] =>  0:20
+   And this headline contributes 20 minutes to the total.

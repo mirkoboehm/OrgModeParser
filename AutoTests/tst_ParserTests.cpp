@@ -21,21 +21,11 @@ public:
     ParserTests();
 
 private Q_SLOTS:
-    void initTestCase();
-    void cleanupTestCase();
     void testParserAndIdentity_data();
     void testParserAndIdentity();
 };
 
 ParserTests::ParserTests()
-{
-}
-
-void ParserTests::initTestCase()
-{
-}
-
-void ParserTests::cleanupTestCase()
 {
 }
 
@@ -49,6 +39,12 @@ void ParserTests::testParserAndIdentity_data()
         QCOMPARE(element->children().count(), 4);
     };
     QTest::newRow("SimpleTree") << QString::fromLatin1("://TestData/Parser/SimpleTree.org") << testSimpleTree;
+
+    //Verify that CLOCK: lines are detected, parsed, and the numbers calculated and aggregated up the tree:
+    VerificationMethod testClockEntries = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
+        QFAIL("NI");
+    };
+    QTest::newRow("ClockEntries") << QString::fromLatin1("://TestData/Parser/ClockEntries.org") << testClockEntries;
 }
 
 void ParserTests::testParserAndIdentity()
