@@ -57,7 +57,7 @@ OrgElement::Pointer Parser::Private::parseOrgElement(OrgElement::Pointer parent,
             return OrgElement::Pointer(); // end recursing
         } else {
             //This is a new headline, parse it and it's children until another sibling or parent headline is discovered
-            auto self = Headline::Pointer(new Headline(parent.data()));
+            auto self = Headline::Pointer(new Headline(line, parent.data()));
             auto const description = match.captured(2);
             self->setCaption(description);
             while(OrgElement::Pointer child = parseOrgElement(self, content)) {

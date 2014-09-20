@@ -1,6 +1,7 @@
 # The OrgMode parser library
 set(OrgModeParser_LIB_SRCS
         Parser.cpp
+        Writer.cpp
         Exception.cpp
         OrgFileContent.cpp
         OrgElement.cpp
