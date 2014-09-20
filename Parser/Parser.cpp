@@ -9,6 +9,7 @@
 #include "OrgLine.h"
 #include "OrgFile.h"
 #include "Headline.h"
+#include "ClockLine.h"
 #include "Exception.h"
 #include "OrgFileContent.h"
 
@@ -26,6 +27,7 @@ public:
     OrgElement::Pointer parseOrgElement(OrgElement::Pointer parent, OrgFileContent* content) const;
     OrgElement::Pointer parseHeadline(OrgElement::Pointer parent, OrgFileContent* content) const;
     OrgElement::Pointer parseOrgLine(OrgElement::Pointer parent, OrgFileContent* content) const;
+    OrgElement::Pointer parseClockLine(OrgElement::Pointer parent, OrgFileContent* content) const;
 
 private:
     Parser* parser_;
@@ -68,8 +70,12 @@ OrgElement::Pointer Parser::Private::parseOrgElement(OrgElement::Pointer parent,
     } else {
         //Not a headline, parse it as a non-recursive element.
         content->ungetLine(line);
-        //(For now, only lines are parsed):
-        return parseOrgLine(parent, content);
+        if (OrgElement::Pointer element = parseClockLine(parent, content)) {
+            return element;
+        } else {
+            //Every line is an OrgLine, so this is the fallback:
+            return parseOrgLine(parent, content);
+        }
     }
 }
 
@@ -82,6 +88,28 @@ OrgElement::Pointer Parser::Private::parseOrgLine(OrgElement::Pointer parent, Or
     const QString text = content->getLine();
     const auto element = OrgElement::Pointer(new OrgLine(text, parent.data()));
     return element;
+}
+
+OrgElement::Pointer Parser::Private::parseClockLine(OrgElement::Pointer parent, OrgFileContent *content) const
+{
+    static QRegularExpression clockLineStructure(QStringLiteral("^(\\s*)CLOCK:\\s*\\[(.+)\\]--\\[(.+)\\]"));
+    const QString line = content->getLine();
+    auto const match = clockLineStructure.match(line);
+    if (match.hasMatch()) {
+        auto const format = QString::fromLatin1("yyyy-MM-dd ddd hh:mm");
+        auto const startText = match.captured(2);
+        const QDateTime start = QDateTime::fromString(startText, format);
+        auto const endText = match.captured(3);
+        const QDateTime end = QDateTime::fromString(endText, format);
+        if (start.isValid() && end.isValid()) {
+            auto self = ClockLine::Pointer(new ClockLine(line, parent.data()));
+            self->setStartTime(start);
+            self->setEndTime(end);
+            return self;
+        }
+    }
+    content->ungetLine(line);
+    return OrgElement::Pointer();
 }
 
 Parser::Parser(QObject *parent)

@@ -7,8 +7,6 @@
 #include <OrgElement.h>
 #include "orgmodeparser_export.h"
 
-class QTextStream;
-
 namespace OrgMode {
 
 /** @brief Headline represent a single headline in an OrgMode file. */

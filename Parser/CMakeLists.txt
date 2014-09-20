@@ -9,6 +9,7 @@ set(OrgModeParser_LIB_SRCS
         OrgFile.cpp
         OrgLine.cpp
         Headline.cpp
+        ClockLine.cpp
 # Classes that process OrgElements:
         Clock.cpp
 )
