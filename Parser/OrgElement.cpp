@@ -11,7 +11,14 @@ public:
     {}
     OrgElement::List children_;
     OrgElement* parent_;
+    QString line_;
 };
+
+OrgElement::OrgElement(const QString &line, OrgElement *parent)
+    : OrgElement(parent)
+{
+    setLine(line);
+}
 
 OrgElement::OrgElement(OrgElement* parent)
     : d(new Private(parent))
@@ -36,6 +43,16 @@ void OrgElement::setParent(OrgElement* parent)
 OrgElement* OrgElement::parent() const
 {
     return d->parent_;
+}
+
+QString OrgElement::line() const
+{
+    return d->line_;
+}
+
+void OrgElement::setLine(const QString &line)
+{
+    d->line_ = line;
 }
 
 OrgElement::List OrgElement::children() const
@@ -68,6 +85,7 @@ int OrgElement::level() const
 
 QString OrgElement::describe() const
 {
+    Q_ASSERT(mnemonic().length() > 0 && mnemonic().length() <=8);
     QString result = tr("[%1] %2: %3\n")
             .arg(mnemonic(), 8)
             .arg(level(), 3)

@@ -2,41 +2,25 @@
 
 namespace OrgMode {
 
-class OrgLine::Private {
-public:
-    QString line_;
-};
-
 OrgLine::OrgLine(OrgElement *parent)
     : OrgElement(parent)
-    , d(new Private())
+    , d(0)
 {
 }
 
-OrgLine::OrgLine(const QString &text, OrgElement *parent)
-    : OrgLine(parent)
+OrgLine::OrgLine(const QString &line, OrgElement *parent)
+    : OrgElement(line, parent)
+    , d(0)
 {
-    d->line_ = text;
 }
 
 OrgLine::~OrgLine()
 {
-    delete d; d = 0;
-}
-
-void OrgLine::setText(const QString &text)
-{
-    d->line_ = text;
-}
-
-QString OrgLine::text() const
-{
-    return d->line_;
 }
 
 bool OrgLine::isElementValid() const
 {
-    return !d->line_.isNull(); // an empty string is not null
+    return !line().isNull(); // an empty string is not null
 }
 
 QString OrgLine::mnemonic() const
@@ -46,7 +30,7 @@ QString OrgLine::mnemonic() const
 
 QString OrgLine::description() const
 {
-    return tr("%1").arg(text());
+    return tr("%1").arg(line());
 }
 
 }

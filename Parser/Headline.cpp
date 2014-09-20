@@ -10,6 +10,13 @@ public:
     QStringList lines_;
 };
 
+Headline::Headline(const QString &line, OrgElement *parent)
+    : OrgElement(line, parent)
+    , d(new Private)
+{
+
+}
+
 Headline::Headline(OrgElement* parent)
     : OrgElement(parent)
     , d(new Private)
