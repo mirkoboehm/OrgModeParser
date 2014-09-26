@@ -25,7 +25,6 @@ public:
     OrgFile::Pointer parseOrgFile(OrgFileContent* content, const QString& filename) const;
 
     OrgElement::Pointer parseOrgElement(OrgElement::Pointer parent, OrgFileContent* content) const;
-    OrgElement::Pointer parseHeadline(OrgElement::Pointer parent, OrgFileContent* content) const;
     OrgElement::Pointer parseOrgLine(OrgElement::Pointer parent, OrgFileContent* content) const;
     OrgElement::Pointer parseClockLine(OrgElement::Pointer parent, OrgFileContent* content) const;
 
@@ -60,7 +59,18 @@ OrgElement::Pointer Parser::Private::parseOrgElement(OrgElement::Pointer parent,
         } else {
             //This is a new headline, parse it and it's children until another sibling or parent headline is discovered
             auto self = Headline::Pointer(new Headline(line, parent.data()));
-            auto const description = match.captured(2);
+            QString description = match.captured(2);
+            static QRegularExpression tagsMatch(QStringLiteral("^(.+)(\\s+):(.+):\\s*$"));
+            auto const match = tagsMatch.match(description);
+            if (match.hasMatch()) {
+                //We have tags:
+                const QStringList tagsList = match.captured(3).split(QLatin1Char(':'));
+                Headline::Tags tags;
+                std::copy(tagsList.begin(), tagsList.end(), std::inserter(tags, tags.begin()));
+                self->setTags(tags);
+                //Set description to the remainder of the headline:
+                description = match.captured(2);
+            }
             self->setCaption(description);
             while(OrgElement::Pointer child = parseOrgElement(self, content)) {
                 self->addChild(child);

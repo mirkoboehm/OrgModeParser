@@ -1,9 +1,10 @@
 #ifndef HEADLINE_H
 #define HEADLINE_H
 
+#include <set>
+
 #include <QCoreApplication>
 #include <QSharedPointer>
-#include <QSet>
 
 #include <OrgElement.h>
 #include "orgmodeparser_export.h"
@@ -16,7 +17,7 @@ class ORGMODEPARSER_EXPORT Headline : public OrgElement
     Q_DECLARE_TR_FUNCTIONS(Headline)
 public:
     typedef QSharedPointer<Headline> Pointer;
-    typedef QSet<QString> Tags;
+    typedef std::set<QString> Tags;
 
     explicit Headline(const QString& line, OrgElement* parent = 0);
     explicit Headline(OrgElement* parent = 0);
