@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>TestData/Parser/SimpleTree.org</file>
         <file>TestData/Parser/ClockEntries.org</file>
+        <file>TestData/Parser/Tags.org</file>
     </qresource>
 </RCC>

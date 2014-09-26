@@ -1,0 +1,9 @@
+An OrgMode file that contains various combinations of tags. 
+
+* headline_1							       :HOME:
+  Headline 1 is tagged HOME. This tag should be inherited by it's
+  childen. 
+** headline_1_1							      :FLOSS:
+   Headline 1.1 is directly tagged FLOSS. It should also inherit it's
+   parents tag, HOME.  
+   

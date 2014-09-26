@@ -47,6 +47,11 @@ void ParserTests::testParserAndIdentity_data()
         QCOMPARE(clock.duration(), 30 * 60); // 30 minutes
     };
     QTest::newRow("ClockEntries") << QString::fromLatin1("://TestData/Parser/ClockEntries.org") << testClockEntries;
+
+    //Verify that tags are parsed and can be retrieved:
+    VerificationMethod testTagParsing = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
+    };
+    QTest::newRow("Tags") << QString::fromLatin1("://TestData/Parser/Tags.org") << testTagParsing;
 }
 
 void ParserTests::testParserAndIdentity()
