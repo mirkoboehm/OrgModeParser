@@ -8,6 +8,7 @@ class Headline::Private {
 public:
     QString caption_;
     QStringList lines_;
+    Headline::Tags tags_;
 };
 
 Headline::Headline(const QString &line, OrgElement *parent)
@@ -36,6 +37,16 @@ QString Headline::caption() const
 void Headline::setCaption(const QString &caption)
 {
     d->caption_ = caption;
+}
+
+Headline::Tags Headline::tags() const
+{
+    return d->tags_;
+}
+
+void Headline::setTags(const Headline::Tags &tags)
+{
+    d->tags_ = tags;
 }
 
 bool Headline::isElementValid() const

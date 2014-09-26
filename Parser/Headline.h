@@ -3,6 +3,7 @@
 
 #include <QCoreApplication>
 #include <QSharedPointer>
+#include <QSet>
 
 #include <OrgElement.h>
 #include "orgmodeparser_export.h"
@@ -15,6 +16,7 @@ class ORGMODEPARSER_EXPORT Headline : public OrgElement
     Q_DECLARE_TR_FUNCTIONS(Headline)
 public:
     typedef QSharedPointer<Headline> Pointer;
+    typedef QSet<QString> Tags;
 
     explicit Headline(const QString& line, OrgElement* parent = 0);
     explicit Headline(OrgElement* parent = 0);
@@ -22,6 +24,9 @@ public:
 
     QString caption() const;
     void setCaption(const QString& caption);
+
+    Tags tags() const;
+    void setTags(const Tags& tags);
 
 protected:
     bool isElementValid() const override;

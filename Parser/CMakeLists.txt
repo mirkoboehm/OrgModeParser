@@ -10,7 +10,7 @@ set(OrgModeParser_LIB_SRCS
         OrgLine.cpp
         Headline.cpp
         ClockLine.cpp
-# Classes that process OrgElements:
+# Classes that process OrgElements as visitors:
         Clock.cpp
 )
 
