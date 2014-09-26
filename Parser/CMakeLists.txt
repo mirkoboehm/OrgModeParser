@@ -12,6 +12,7 @@ set(OrgModeParser_LIB_SRCS
         ClockLine.cpp
 # Classes that process OrgElements as visitors:
         Clock.cpp
+        Tags.cpp
 )
 
 add_library(OrgModeParser ${OrgModeParser_LIB_SRCS})

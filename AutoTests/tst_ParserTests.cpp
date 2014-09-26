@@ -7,6 +7,7 @@
 #include <Writer.h>
 #include <OrgFile.h>
 #include <Clock.h>
+#include <Tags.h>
 #include <Exception.h>
 
 using namespace OrgMode;
@@ -50,6 +51,9 @@ void ParserTests::testParserAndIdentity_data()
 
     //Verify that tags are parsed and can be retrieved:
     VerificationMethod testTagParsing = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
+        Headline::Pointer headline_1; // = element.findChild<OrgMode::Headline>(QLatin1String("headline_1"));
+        Tags tags(headline_1);
+        QVERIFY(tags.hasTag(QLatin1String("TAG1")));
     };
     QTest::newRow("Tags") << QString::fromLatin1("://TestData/Parser/Tags.org") << testTagParsing;
 }
