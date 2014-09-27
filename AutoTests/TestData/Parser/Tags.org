@@ -6,9 +6,5 @@ An OrgMode file that contains various combinations of tags.
 ** headline_1_1 						       :TAG2:
    Headline 1.1 is directly tagged TAG2. It should also inherit it's
    parents tag, TAG1.
-** headline_1_1 						:TEST:VERIFY:
-   This headline has two tags, TEST and VERIFY.
-
-
-
-   
+** headline_1_2 						:TEST:VERIFY:
+   This headline has two tags, TEST and VERIFY. And it inherits TAG1.

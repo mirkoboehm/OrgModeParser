@@ -51,13 +51,30 @@ void ParserTests::testParserAndIdentity_data()
 
     //Verify that tags are parsed and can be retrieved:
     VerificationMethod testTagParsing = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
-        //qDebug() << endl << element->describe();
-        static QRegularExpression regex(QLatin1String("headline_1"));
-        Headline::Pointer headline_1 = findElement<OrgMode::Headline>(element, regex);
+        //Headline 1 only has TAG1:
+        static QRegularExpression headline1Regex(QLatin1String("headline_1"));
+        Headline::Pointer headline_1 = findElement<OrgMode::Headline>(element, headline1Regex);
         QVERIFY(headline_1);
-        Tags tags(headline_1);
-        QVERIFY(tags.hasTag(QLatin1String("TAG1")));
-        QVERIFY(!tags.hasTag(QLatin1String("NONSENSE")));
+        Tags tags_1(headline_1);
+        QVERIFY(tags_1.hasTag(QLatin1String("TAG1")));
+        QVERIFY(!tags_1.hasTag(QLatin1String("NONSENSE")));
+        //Headline 1.1 is tagged TAG2 and inherits TAG1 from headline 1:
+        static QRegularExpression headline1_1Regex(QLatin1String("headline_1_1"));
+        Headline::Pointer headline_1_1 = findElement<OrgMode::Headline>(element, headline1_1Regex);
+        QVERIFY(headline_1_1);
+        Tags tags_1_1(headline_1_1);
+        QVERIFY(tags_1_1.hasTag(QLatin1String("TAG1"))); // inherited
+        QVERIFY(tags_1_1.hasTag(QLatin1String("TAG2"))); // directly
+        QVERIFY(!tags_1_1.hasTag(QLatin1String("NONSENSE")));
+        //Headline 1.2 has two tags (this tests parsing of multiple tags):
+        static QRegularExpression headline1_2Regex(QLatin1String("headline_1_2"));
+        Headline::Pointer headline_1_2 = findElement<OrgMode::Headline>(element, headline1_2Regex);
+        QVERIFY(headline_1_2);
+        Tags tags_1_2(headline_1_2);
+        QVERIFY(tags_1_2.hasTag(QLatin1String("TAG1"))); // inherited
+        QVERIFY(tags_1_2.hasTag(QLatin1String("TEST"))); // directly
+        QVERIFY(tags_1_2.hasTag(QLatin1String("VERIFY"))); // directly
+        QVERIFY(!tags_1_2.hasTag(QLatin1String("NONSENSE")));
     };
     QTest::newRow("Tags") << QString::fromLatin1("://TestData/Parser/Tags.org") << testTagParsing;
 }
