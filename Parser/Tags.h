@@ -11,8 +11,8 @@ namespace OrgMode {
 class ORGMODEPARSER_EXPORT Tags
 {
 public:
-    Tags(Headline::Pointer element);
-    bool hasTag(QString tag) const;
+    Tags(const Headline::Pointer& element);
+    bool hasTag(const QString& tag) const;
 
 private:
     class Private;

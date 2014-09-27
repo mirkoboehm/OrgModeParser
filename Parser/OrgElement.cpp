@@ -100,7 +100,7 @@ QString OrgElement::describe() const
 bool OrgElement::isMatch(const QRegularExpression &pattern) const
 {
     auto const match = pattern.match(line());
-    qDebug() << line() << "matches" << pattern << "?" << (match.hasMatch() ? "yes" : "no");
+    //qDebug() << line() << "matches" << pattern << "?" << (match.hasMatch() ? "yes" : "no");
     return match.hasMatch();
 }
 

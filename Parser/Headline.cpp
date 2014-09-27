@@ -70,7 +70,7 @@ QString Headline::description() const
 bool Headline::isMatch(const QRegularExpression &pattern) const
 {
     auto const match = pattern.match(caption());
-    qDebug() << caption() << "matches" << pattern << "?" << (match.hasMatch() ? "yes" : "no");
+    //qDebug() << caption() << "matches" << pattern << "?" << (match.hasMatch() ? "yes" : "no");
     return match.hasMatch();
 }
 

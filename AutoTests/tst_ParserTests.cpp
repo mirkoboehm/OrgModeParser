@@ -57,6 +57,7 @@ void ParserTests::testParserAndIdentity_data()
         QVERIFY(headline_1);
         Tags tags(headline_1);
         QVERIFY(tags.hasTag(QLatin1String("TAG1")));
+        QVERIFY(!tags.hasTag(QLatin1String("NONSENSE")));
     };
     QTest::newRow("Tags") << QString::fromLatin1("://TestData/Parser/Tags.org") << testTagParsing;
 }
