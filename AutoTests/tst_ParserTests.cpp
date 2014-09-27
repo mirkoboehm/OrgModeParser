@@ -54,8 +54,12 @@ void ParserTests::testParserAndIdentity_data()
 
     //Verify that CLOCK: lines are detected, parsed, and the numbers calculated and aggregated up the tree:
     VerificationMethod testClockEntries = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
-        Clock clock(element);
-        QCOMPARE(clock.duration(), 30 * 60); // 30 minutes
+        //Headline 1.1 contians one clock entry:
+        QCOMPARE(Clock(findElement<OrgMode::Headline>(element, QLatin1String("headline_1_1"))).duration(), 10 * 60);
+        //Headline 1.2 contains two clock entries that need to be accumulated:
+        QCOMPARE(Clock(findElement<OrgMode::Headline>(element, QLatin1String("headline_1_2"))).duration(), 20 * 60);
+        //Headline 1 is the parent of 1.1 and 1.2 and should have their times added up:
+        QCOMPARE(Clock(findElement<OrgMode::Headline>(element, QLatin1String("headline_1"))).duration(), 30 * 60);
     };
     QTest::newRow("ClockEntries") << QString::fromLatin1("://TestData/Parser/ClockEntries.org") << testClockEntries;
 

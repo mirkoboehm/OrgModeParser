@@ -9,5 +9,6 @@ Hello, this Org file tests the parsing of clock entries
    This headline contributes 10 minutes to the total.
 
 ** headline_1_2
-   CLOCK: [2014-09-20 Sat 14:10]--[2014-09-20 Sat 14:30] =>  0:20
+   CLOCK: [2014-09-20 Sat 14:10]--[2014-09-20 Sat 14:15] =>  0:05
+   CLOCK: [2014-09-20 Sat 14:15]--[2014-09-20 Sat 14:30]
    And this headline contributes 20 minutes to the total.
