@@ -51,7 +51,10 @@ void ParserTests::testParserAndIdentity_data()
 
     //Verify that tags are parsed and can be retrieved:
     VerificationMethod testTagParsing = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
-        Headline::Pointer headline_1; // = element.findChild<OrgMode::Headline>(QLatin1String("headline_1"));
+        //qDebug() << endl << element->describe();
+        static QRegularExpression regex(QLatin1String("headline_1"));
+        Headline::Pointer headline_1 = findElement<OrgMode::Headline>(element, regex);
+        QVERIFY(headline_1);
         Tags tags(headline_1);
         QVERIFY(tags.hasTag(QLatin1String("TAG1")));
     };

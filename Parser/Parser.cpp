@@ -69,7 +69,7 @@ OrgElement::Pointer Parser::Private::parseOrgElement(OrgElement::Pointer parent,
                 std::copy(tagsList.begin(), tagsList.end(), std::inserter(tags, tags.begin()));
                 self->setTags(tags);
                 //Set description to the remainder of the headline:
-                description = match.captured(2);
+                description = match.captured(1).trimmed();
             }
             self->setCaption(description);
             while(OrgElement::Pointer child = parseOrgElement(self, content)) {

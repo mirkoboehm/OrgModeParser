@@ -29,11 +29,12 @@ public:
     Tags tags() const;
     void setTags(const Tags& tags);
 
+    bool isMatch(const QRegularExpression& pattern) const override;
+
 protected:
     bool isElementValid() const override;
     QString mnemonic() const override;
     QString description() const override;
-
 private:
     class Private;
     Private* d;

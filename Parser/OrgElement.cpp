@@ -1,4 +1,5 @@
 #include <QtDebug>
+#include <QRegularExpression>
 
 #include "OrgElement.h"
 
@@ -93,7 +94,14 @@ QString OrgElement::describe() const
      for( auto const child : children()) {
          result += child->describe();
      }
-    return result;
+     return result;
+}
+
+bool OrgElement::isMatch(const QRegularExpression &pattern) const
+{
+    auto const match = pattern.match(line());
+    qDebug() << line() << "matches" << pattern << "?" << (match.hasMatch() ? "yes" : "no");
+    return match.hasMatch();
 }
 
 }

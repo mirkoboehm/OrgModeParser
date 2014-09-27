@@ -6,6 +6,8 @@
 
 #include "orgmodeparser_export.h"
 
+class QRegularExpression;
+
 namespace OrgMode {
 
 /** @brief OrgElement represents an element of an org mode file.
@@ -38,6 +40,8 @@ public:
 
     QString describe() const;
 
+    virtual bool isMatch(const QRegularExpression& pattern) const;
+
 protected:
     virtual bool isElementValid() const = 0;
     virtual QString mnemonic() const = 0;
@@ -47,6 +51,23 @@ private:
     class Private;
     Private* d;
 };
+
+template <typename T>
+QSharedPointer<T> findElement(OrgElement::Pointer element, const QRegularExpression& pattern) {
+    QSharedPointer<T> p = element.dynamicCast<T>();
+    if (p && element->isMatch(pattern)) {
+        return p;
+    } else {
+        for(auto child : element->children()) {
+            if (QSharedPointer<T> match = findElement<T>(child, pattern)) {
+                return match;
+            } else {
+                //No match, continue
+            }
+        }
+    }
+    return QSharedPointer<T>();
+}
 
 }
 

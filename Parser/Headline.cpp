@@ -1,3 +1,6 @@
+#include <QtDebug>
+#include <QRegularExpression>
+
 #include "Headline.h"
 #include "Exception.h"
 #include "OrgFileContent.h"
@@ -62,6 +65,13 @@ QString Headline::mnemonic() const
 QString Headline::description() const
 {
     return tr("%1 %3").arg(QString(), level(), QLatin1Char('*')).arg(caption());
+}
+
+bool Headline::isMatch(const QRegularExpression &pattern) const
+{
+    auto const match = pattern.match(caption());
+    qDebug() << caption() << "matches" << pattern << "?" << (match.hasMatch() ? "yes" : "no");
+    return match.hasMatch();
 }
 
 }
