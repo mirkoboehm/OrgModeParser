@@ -69,6 +69,12 @@ QSharedPointer<T> findElement(OrgElement::Pointer element, const QRegularExpress
     return QSharedPointer<T>();
 }
 
+template <typename T>
+QSharedPointer<T> findElement(OrgElement::Pointer element, const QString& pattern) {
+    const QRegularExpression re(pattern);
+    return findElement<T>(element, re);
+}
+
 }
 
 #endif // ORGELEMENT_H

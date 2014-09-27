@@ -8,6 +8,7 @@
 #include <OrgFile.h>
 #include <Clock.h>
 #include <Tags.h>
+#include <OrgLine.h>
 #include <Exception.h>
 
 using namespace OrgMode;
@@ -39,6 +40,15 @@ void ParserTests::testParserAndIdentity_data()
     //Verification of the properties of SimpleTree.org:
     VerificationMethod testSimpleTree = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
         QCOMPARE(element->children().count(), 4);
+        QVERIFY(findElement<OrgMode::Headline>(element, QLatin1String("Headline 1")));
+        QVERIFY(findElement<OrgMode::Headline>(element, QLatin1String("Headline 1.1")));
+        QVERIFY(findElement<OrgMode::Headline>(element, QLatin1String("Headline 1.2")));
+        QVERIFY(findElement<OrgMode::Headline>(element, QLatin1String("Headline 2")));
+        QVERIFY(!findElement<OrgMode::Headline>(element, QLatin1String("Headline 3")));
+        //This finds the opening line by regular expression:
+        QVERIFY(findElement<OrgMode::OrgLine>(element, QLatin1String("OrgMode file that the parser should parse")));
+        //This line does not exist:
+        QVERIFY(!findElement<OrgMode::OrgLine>(element, QLatin1String("There is no line like this")));
     };
     QTest::newRow("SimpleTree") << QString::fromLatin1("://TestData/Parser/SimpleTree.org") << testSimpleTree;
 
