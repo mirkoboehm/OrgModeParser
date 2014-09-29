@@ -16,6 +16,10 @@ public:
     explicit FileAttributeLine(const QString& line, OrgElement* parent = 0);
     ~FileAttributeLine();
 
+    void setProperty(const QString& key, const QString& value);
+    QString key() const;
+    QString value() const;
+
 protected:
     bool isElementValid() const override;
     QString mnemonic() const override;

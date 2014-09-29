@@ -1,4 +1,6 @@
 #+DRAWERS: MyDrawers
+#+EMPTY_PROPERTY: 
+
 This Org file contains examples for drawers and property drawers.
 
 * headline_1
@@ -9,6 +11,8 @@ This Org file contains examples for drawers and property drawers.
   :Thursday: blue boxers
   :Friday:   hawaiian trunks
   :Saturday: party, going commando
-  :Sunday:   not getting up anyway
+  :Sunday:   
   :END:
+  Not wearing any drawers on Sunday. It is still a valid drawer entry
+  with an empty value.
 * headline_2

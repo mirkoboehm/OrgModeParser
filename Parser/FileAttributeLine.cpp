@@ -24,6 +24,22 @@ FileAttributeLine::~FileAttributeLine()
     delete d; d = 0;
 }
 
+void FileAttributeLine::setProperty(const QString &key, const QString &value)
+{
+    d->key_ = key;
+    d->value_ = value;
+}
+
+QString FileAttributeLine::key() const
+{
+    return d->key_;
+}
+
+QString FileAttributeLine::value() const
+{
+    return d->value_;
+}
+
 bool FileAttributeLine::isElementValid() const
 {
     return !d->key_.isEmpty() && !d->value_.isEmpty();

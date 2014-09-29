@@ -9,6 +9,7 @@
 #include <Clock.h>
 #include <Tags.h>
 #include <OrgLine.h>
+#include <FileAttributeLine.h>
 #include <Properties.h>
 #include <Exception.h>
 
@@ -99,11 +100,13 @@ void ParserTests::testParserAndIdentity_data()
 
     //Verify parsing of file attributes (#+ATTRIBUTE: value):
     VerificationMethod testFileAttributes = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
-        Q_UNUSED(element);
-        //NI
-        auto const toplevel = findElement<OrgMode::OrgFile>(element, FL1("://TestData/Parser/DrawersAndProperties.org"));
-        Properties properties(toplevel);
-        QCOMPARE(properties.property(FL1("DRAWERS")), FL1("MyDrawers"));
+        //qDebug() << element->describe();
+        auto const attributeLine = findElement<OrgMode::FileAttributeLine>(element, FL1("DRAWERS"));
+        QVERIFY(attributeLine);
+        QCOMPARE(attributeLine->value(), FL1("MyDrawers"));
+        //auto const toplevel = findElement<OrgMode::OrgFile>(element, FL1("://TestData/Parser/DrawersAndProperties.org"));
+        //Properties properties(toplevel);
+        //QCOMPARE(properties.property(FL1("DRAWERS")), FL1("MyDrawers"));
     };
     QTest::newRow("FileAttributes") << FL1("://TestData/Parser/DrawersAndProperties.org") << testFileAttributes;
 }

@@ -7,6 +7,7 @@
 #include "Parser.h"
 #include "OrgElement.h"
 #include "OrgLine.h"
+#include "FileAttributeLine.h"
 #include "OrgFile.h"
 #include "Headline.h"
 #include "ClockLine.h"
@@ -27,6 +28,7 @@ public:
     OrgElement::Pointer parseOrgElement(OrgElement::Pointer parent, OrgFileContent* content) const;
     OrgElement::Pointer parseOrgLine(OrgElement::Pointer parent, OrgFileContent* content) const;
     OrgElement::Pointer parseClockLine(OrgElement::Pointer parent, OrgFileContent* content) const;
+    OrgElement::Pointer parseFileAttributeLine(OrgElement::Pointer parent, OrgFileContent* content) const;
 
 private:
     Parser* parser_;
@@ -82,6 +84,8 @@ OrgElement::Pointer Parser::Private::parseOrgElement(OrgElement::Pointer parent,
         content->ungetLine(line);
         if (OrgElement::Pointer element = parseClockLine(parent, content)) {
             return element;
+        } else if (OrgElement::Pointer element = parseFileAttributeLine(parent, content)) {
+            return element;
         } else {
             //Every line is an OrgLine, so this is the fallback:
             return parseOrgLine(parent, content);
@@ -116,6 +120,24 @@ OrgElement::Pointer Parser::Private::parseClockLine(OrgElement::Pointer parent, 
             self->setStartTime(start);
             self->setEndTime(end);
             return self;
+        }
+    }
+    content->ungetLine(line);
+    return OrgElement::Pointer();
+}
+
+OrgElement::Pointer Parser::Private::parseFileAttributeLine(OrgElement::Pointer parent, OrgFileContent *content) const
+{
+    static QRegularExpression fileAttributeStructure(QStringLiteral("\\#\\+(.+):\\s+(.+)$"));
+    const QString line = content->getLine();
+    auto const match = fileAttributeStructure.match(line);
+    if (match.hasMatch()) {
+        const QString key = match.captured(1);
+        const QString value = match.captured(2);
+        if (!key.isEmpty()) {
+            auto self = new FileAttributeLine(line, parent.data());
+            self->setProperty(key, value);
+            return OrgElement::Pointer(self);
         }
     }
     content->ungetLine(line);
