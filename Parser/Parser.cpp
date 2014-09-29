@@ -128,7 +128,7 @@ OrgElement::Pointer Parser::Private::parseClockLine(OrgElement::Pointer parent, 
 
 OrgElement::Pointer Parser::Private::parseFileAttributeLine(OrgElement::Pointer parent, OrgFileContent *content) const
 {
-    static QRegularExpression fileAttributeStructure(QStringLiteral("\\#\\+(.+):\\s+(.+)$"));
+    static QRegularExpression fileAttributeStructure(QStringLiteral("\\#\\+(.+):\\s+(.*)$"));
     const QString line = content->getLine();
     auto const match = fileAttributeStructure.match(line);
     if (match.hasMatch()) {
