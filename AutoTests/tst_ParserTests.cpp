@@ -100,7 +100,7 @@ void ParserTests::testParserAndIdentity_data()
 
     //Verify parsing of file attributes (#+ATTRIBUTE: value):
     VerificationMethod testFileAttributes = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
-        qDebug() << element->describe();
+        qDebug() << endl << element->describe();
         auto const attributeLine = findElement<OrgMode::FileAttributeLine>(element, FL1("DRAWERS"));
         QVERIFY(attributeLine);
         QCOMPARE(attributeLine->value(), FL1("MyDrawers"));
@@ -108,6 +108,9 @@ void ParserTests::testParserAndIdentity_data()
         auto const emptyProperty = findElement<OrgMode::FileAttributeLine>(element, FL1("EMPTY_PROPERTY"));
         QVERIFY(emptyProperty);
         QVERIFY(emptyProperty->value().isEmpty());
+        //A non-existant file attribute:
+        auto const nonExistentAttribute = findElement<OrgMode::FileAttributeLine>(element, FL1("I DO NOT EXIST"));
+        QVERIFY(!nonExistentAttribute);
         //auto const toplevel = findElement<OrgMode::OrgFile>(element, FL1("://TestData/Parser/DrawersAndProperties.org"));
         //Properties properties(toplevel);
         //QCOMPARE(properties.property(FL1("DRAWERS")), FL1("MyDrawers"));
