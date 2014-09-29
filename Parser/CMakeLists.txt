@@ -8,6 +8,7 @@ set(OrgModeParser_LIB_SRCS
         OrgElement.cpp
         OrgFile.cpp
         OrgLine.cpp
+        FileAttributeLine.cpp
         Headline.cpp
         ClockLine.cpp
 # Classes that process OrgElements as visitors:
