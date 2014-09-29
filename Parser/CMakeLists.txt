@@ -13,6 +13,7 @@ set(OrgModeParser_LIB_SRCS
 # Classes that process OrgElements as visitors:
         Clock.cpp
         Tags.cpp
+        Properties.cpp
 )
 
 add_library(OrgModeParser ${OrgModeParser_LIB_SRCS})

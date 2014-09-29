@@ -9,6 +9,7 @@
 #include <Clock.h>
 #include <Tags.h>
 #include <OrgLine.h>
+#include <Properties.h>
 #include <Exception.h>
 
 using namespace OrgMode;
@@ -27,6 +28,10 @@ private Q_SLOTS:
     void testParserAndIdentity_data();
     void testParserAndIdentity();
 };
+
+QString FL1(const char* text) {
+    return QString::fromLatin1(text);
+}
 
 ParserTests::ParserTests()
 {
@@ -50,7 +55,7 @@ void ParserTests::testParserAndIdentity_data()
         //This line does not exist:
         QVERIFY(!findElement<OrgMode::OrgLine>(element, QLatin1String("There is no line like this")));
     };
-    QTest::newRow("SimpleTree") << QString::fromLatin1("://TestData/Parser/SimpleTree.org") << testSimpleTree;
+    QTest::newRow("SimpleTree") << FL1("://TestData/Parser/SimpleTree.org") << testSimpleTree;
 
     //Verify that CLOCK: lines are detected, parsed, and the numbers calculated and aggregated up the tree:
     VerificationMethod testClockEntries = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
@@ -61,7 +66,7 @@ void ParserTests::testParserAndIdentity_data()
         //Headline 1 is the parent of 1.1 and 1.2 and should have their times added up:
         QCOMPARE(Clock(findElement<OrgMode::Headline>(element, QLatin1String("headline_1"))).duration(), 30 * 60);
     };
-    QTest::newRow("ClockEntries") << QString::fromLatin1("://TestData/Parser/ClockEntries.org") << testClockEntries;
+    QTest::newRow("ClockEntries") << FL1("://TestData/Parser/ClockEntries.org") << testClockEntries;
 
     //Verify that tags are parsed and can be retrieved:
     VerificationMethod testTagParsing = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
@@ -90,7 +95,17 @@ void ParserTests::testParserAndIdentity_data()
         QVERIFY(tags_1_2.hasTag(QLatin1String("VERIFY"))); // directly
         QVERIFY(!tags_1_2.hasTag(QLatin1String("NONSENSE")));
     };
-    QTest::newRow("Tags") << QString::fromLatin1("://TestData/Parser/Tags.org") << testTagParsing;
+    QTest::newRow("Tags") << FL1("://TestData/Parser/Tags.org") << testTagParsing;
+
+    //Verify parsing of file attributes (#+ATTRIBUTE: value):
+    VerificationMethod testFileAttributes = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
+        Q_UNUSED(element);
+        //NI
+        auto const toplevel = findElement<OrgMode::OrgFile>(element, FL1("://TestData/Parser/DrawersAndProperties.org"));
+        Properties properties(toplevel);
+        QCOMPARE(properties.property(FL1("DRAWERS")), FL1("MyDrawers"));
+    };
+    QTest::newRow("FileAttributes") << FL1("://TestData/Parser/DrawersAndProperties.org") << testFileAttributes;
 }
 
 void ParserTests::testParserAndIdentity()

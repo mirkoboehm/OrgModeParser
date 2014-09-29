@@ -1,0 +1,14 @@
+#+DRAWERS: MyDrawers
+This Org file contains examples for drawers and property drawers.
+
+* headline_1
+  :MyDrawers:
+  :Monday:   yellow
+  :Tuesday:  green
+  :Wednesday: polka dots
+  :Thursday: blue boxers
+  :Friday:   hawaiian trunks
+  :Saturday: party, going commando
+  :Sunday:   not getting up anyway
+  :END:
+* headline_2

@@ -3,5 +3,6 @@
         <file>TestData/Parser/SimpleTree.org</file>
         <file>TestData/Parser/ClockEntries.org</file>
         <file>TestData/Parser/Tags.org</file>
+        <file>TestData/Parser/DrawersAndProperties.org</file>
     </qresource>
 </RCC>
