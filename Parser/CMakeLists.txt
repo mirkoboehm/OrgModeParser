@@ -7,6 +7,7 @@ set(OrgModeParser_LIB_SRCS
 # Classes that represent different OrgElements:
         OrgElement.cpp
         OrgFile.cpp
+        Drawer.cpp
         OrgLine.cpp
         FileAttributeLine.cpp
         Headline.cpp

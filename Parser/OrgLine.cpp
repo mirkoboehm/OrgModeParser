@@ -3,8 +3,7 @@
 namespace OrgMode {
 
 OrgLine::OrgLine(OrgElement *parent)
-    : OrgElement(parent)
-    , d(0)
+    : OrgLine(QString(), parent)
 {
 }
 
