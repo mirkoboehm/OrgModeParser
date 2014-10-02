@@ -13,7 +13,11 @@ class ORGMODEPARSER_EXPORT Properties
     Q_DECLARE_TR_FUNCTIONS(Properties)
 public:
     explicit Properties(const OrgElement::Pointer& element);
-    QString property(const QString&);
+    QString property(const QString&) const;
+
+private:
+    class Private;
+    Private* d;
 };
 
 }

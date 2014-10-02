@@ -12,7 +12,9 @@ This Org file contains examples for drawers and property drawers.
   :Friday:   hawaiian trunks
   :Saturday: party, going commando
   :Sunday:   
-  :END:
   Not wearing any drawers on Sunday. It is still a valid drawer entry
-  with an empty value.
+  with an empty value. Drawers can also have entries that are just
+  text, like these.
+  :END:
+  
 * headline_2

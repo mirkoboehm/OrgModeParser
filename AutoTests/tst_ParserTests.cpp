@@ -100,7 +100,7 @@ void ParserTests::testParserAndIdentity_data()
 
     //Verify parsing of file attributes (#+ATTRIBUTE: value):
     VerificationMethod testFileAttributes = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
-        qDebug() << endl << element->describe();
+        //Test for an existing, non-empty attribute:
         auto const attributeLine = findElement<OrgMode::FileAttributeLine>(element, FL1("DRAWERS"));
         QVERIFY(attributeLine);
         QCOMPARE(attributeLine->value(), FL1("MyDrawers"));
@@ -111,11 +111,23 @@ void ParserTests::testParserAndIdentity_data()
         //A non-existant file attribute:
         auto const nonExistentAttribute = findElement<OrgMode::FileAttributeLine>(element, FL1("I DO NOT EXIST"));
         QVERIFY(!nonExistentAttribute);
-        //auto const toplevel = findElement<OrgMode::OrgFile>(element, FL1("://TestData/Parser/DrawersAndProperties.org"));
-        //Properties properties(toplevel);
-        //QCOMPARE(properties.property(FL1("DRAWERS")), FL1("MyDrawers"));
     };
     QTest::newRow("FileAttributes") << FL1("://TestData/Parser/DrawersAndProperties.org") << testFileAttributes;
+
+    //Verify calculation of properties for individual elements:
+    VerificationMethod testPropertyCalculation = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
+        //qDebug() << endl << element->describe();
+        //Headline 1 inherits the attributes from the attributes of the file it is in:
+        auto const headline_1 = findElement<OrgMode::Headline>(element, FL1("headline_1"));
+        QVERIFY(headline_1);
+        Properties properties(headline_1);
+        //A file level property:
+        QCOMPARE(properties.property(FL1("DRAWERS")), FL1("MyDrawers"));
+        //A file level property, but empty:
+        QCOMPARE(properties.property(FL1("EMPTY_PROPERTY")), FL1(""));
+    };
+    QTest::newRow("PropertyCalculation") << FL1("://TestData/Parser/DrawersAndProperties.org") << testPropertyCalculation;
+
 }
 
 void ParserTests::testParserAndIdentity()
