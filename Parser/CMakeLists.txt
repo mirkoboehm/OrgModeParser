@@ -8,7 +8,9 @@ set(OrgModeParser_LIB_SRCS
         OrgElement.cpp
         OrgFile.cpp
         Drawer.cpp
+        DrawerEntry.cpp
         OrgLine.cpp
+        AttributeLine.cpp
         FileAttributeLine.cpp
         Headline.cpp
         ClockLine.cpp
