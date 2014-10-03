@@ -10,9 +10,13 @@
 #include "FileAttributeLine.h"
 #include "OrgFile.h"
 #include "Headline.h"
+#include "Properties.h"
 #include "ClockLine.h"
 #include "Exception.h"
 #include "OrgFileContent.h"
+#include "Drawer.h"
+#include "DrawerEntry.h"
+#include "DrawerClosingEntry.h"
 
 namespace OrgMode {
 
@@ -35,9 +39,10 @@ public:
     OrgElement::Pointer parseOrgLine(OrgElement::Pointer parent, OrgFileContent::Pointer content) const;
     OrgElement::Pointer parseClockLine(OrgElement::Pointer parent, OrgFileContent::Pointer content) const;
     OrgElement::Pointer parseFileAttributeLine(OrgElement::Pointer parent, OrgFileContent::Pointer content) const;
+    OrgElement::Pointer parseDrawerLine(OrgElement::Pointer parent, OrgFileContent::Pointer content) const;
 
-private:
     Parser* parser_;
+    Properties::PropertiesMap filePropertiesAfterFirstPass_;
 };
 
 Parser::Private::ParseRunOutput Parser::Private::parseOrgFileFirstPass(OrgFileContent::Pointer content, const QString &filename) const
@@ -110,6 +115,8 @@ OrgElement::Pointer Parser::Private::parseOrgElement(OrgElement::Pointer parent,
             return element;
         } else if (OrgElement::Pointer element = parseFileAttributeLine(parent, content)) {
             return element;
+        } else if (OrgElement::Pointer element = parseDrawerLine(parent, content)) {
+            return element;
         } else {
             //Every line is an OrgLine, so this is the fallback:
             return parseOrgLine(parent, content);
@@ -168,6 +175,59 @@ OrgElement::Pointer Parser::Private::parseFileAttributeLine(OrgElement::Pointer 
     return OrgElement::Pointer();
 }
 
+OrgElement::Pointer Parser::Private::parseDrawerLine(OrgElement::Pointer parent, OrgFileContent::Pointer content) const
+{
+    static QRegularExpression drawerTitleStructure(QStringLiteral("^\\s+:(.+):\\s(.*)$"));
+    const QString line = content->getLine();
+    auto const match = drawerTitleStructure.match(line);
+    if (match.hasMatch()) {
+        const QString name = match.captured(1);
+        QStringList drawernames = filePropertiesAfterFirstPass_.value(QString::fromLatin1("DRAWERS"))
+                .split(QRegExp(QLatin1String("\\s+")));
+        if (drawernames.contains(name)) {
+            //This is a drawer
+            Drawer::Pointer self(new Drawer(line, parent.data()));
+            self->setName(name);
+            //Parse elements until :END: (complete) or headline (cancel)
+            static QRegularExpression drawerEntryStructure(QStringLiteral("^\\s*:(.+):\\s*(.*)$"));
+            while(!content->atEnd()) {
+                const QString line = content->getLine();
+                //FIXME TODO
+//                if (lineIsHeadline()) {
+//                    content.ungetLines(allLinesReadSoFar);
+//                    return OrgElement::Pointer();
+//                }
+                auto const match = drawerEntryStructure.match(line);
+                if (match.hasMatch()) {
+                    const QString name = match.captured(1);
+                    const QString value = match.captured(2).trimmed();
+                    if (name == QStringLiteral("END")) {
+                        //The end element, add it to the drawer, return
+                        DrawerClosingEntry::Pointer child(new DrawerClosingEntry(line, self.data()));
+                        child->setProperty(name, value);
+                        self->addChild(child);
+                        break;
+                    } else {
+                        //This is a drawer entry, specifying one key-value pair
+                        DrawerEntry::Pointer child(new DrawerEntry(line, self.data()));
+                        child->setProperty(name, value);
+                        self->addChild(child);
+                    }
+                } else {
+                    //The line is not a drawer entry, but located within a drawer.
+                    //Consider it a regular OrgLine.
+                    self->addChild(OrgLine::Pointer(new OrgLine(line, self.data())));
+                }
+            }
+            return self;
+        } else {
+           //This is just a regular line that looks like a drawer, do nothing
+        }
+    }
+    content->ungetLine(line);
+    return OrgElement::Pointer();
+}
+
 Parser::Parser(QObject *parent)
     : QObject(parent)
     , d(new Private(this))
@@ -184,6 +244,8 @@ OrgElement::Pointer Parser::parse(QTextStream *data, const QString fileName) con
     Q_ASSERT(data);
     OrgFileContent::Pointer content(new OrgFileContent(data));
     auto firstPassResults = d->parseOrgFileFirstPass(content, fileName);
+    const Properties properties(firstPassResults.first);
+    d->filePropertiesAfterFirstPass_ = properties.properties();
     return d->parseOrgFile(firstPassResults.second, fileName);
 }
 

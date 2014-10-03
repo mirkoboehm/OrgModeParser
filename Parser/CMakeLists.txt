@@ -8,10 +8,11 @@ set(OrgModeParser_LIB_SRCS
         OrgElement.cpp
         OrgFile.cpp
         Drawer.cpp
+        DrawerEntry.cpp
+        DrawerClosingEntry.cpp
         OrgLine.cpp
         AttributeLine.cpp
         FileAttributeLine.cpp
-        DrawerEntry.cpp
         Headline.cpp
         ClockLine.cpp
 # Classes that process OrgElements as visitors:

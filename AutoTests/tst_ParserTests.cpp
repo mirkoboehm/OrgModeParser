@@ -121,7 +121,7 @@ void ParserTests::testParserAndIdentity_data()
         //Test for an existing, non-empty attribute:
         auto const attributeLine = findElement<OrgMode::FileAttributeLine>(element, FL1("DRAWERS"));
         QVERIFY(attributeLine);
-        QCOMPARE(attributeLine->value(), FL1("MyDrawers"));
+        QCOMPARE(attributeLine->value(), FL1("MyDrawers TestDrawer"));
         //An existing but empty file attribute:
         auto const emptyProperty = findElement<OrgMode::FileAttributeLine>(element, FL1("EMPTY_PROPERTY"));
         QVERIFY(emptyProperty);
@@ -139,7 +139,7 @@ void ParserTests::testParserAndIdentity_data()
         QVERIFY(headline_1);
         Properties properties(headline_1);
         //A file level property:
-        QCOMPARE(properties.property(FL1("DRAWERS")), FL1("MyDrawers"));
+        QVERIFY(properties.property(FL1("DRAWERS")).contains(FL1("MyDrawers")));
         //A file level property, but empty:
         QCOMPARE(properties.property(FL1("EMPTY_PROPERTY")), FL1(""));
         //TODO element properties are not parsed yet, depends on drawer parsing
@@ -148,7 +148,7 @@ void ParserTests::testParserAndIdentity_data()
 
     //Test two-pass parsing that provides the file properties first that will influence element parsing later:
     VerificationMethod testTwoPassParsing = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
-        qDebug() << endl << qPrintable(element->describe());
+        //qDebug() << endl << qPrintable(element->describe());
         //Drawers are only identified if the first pass yielded a value for the #+DRAWERS: property
         auto const headline_1 = findElement<OrgMode::Headline>(element, FL1("headline_1"));
         QVERIFY(headline_1);
@@ -200,6 +200,15 @@ void ParserTests::testParserAndIdentity()
         QFAIL(qPrintable(ex.message()));
     }
     //We now have access to the input data, the parsed element and the output data:
+    if (input != output) {
+        qDebug() << endl
+                 << "---------- STRUCTURE --------" << endl
+                 << endl << qPrintable(element->describe()) << endl
+                 << "------------ INPUT  ---------" << endl
+                 << input
+                 << "------------ OUTPUT ---------" << endl
+                 << output;
+    }
     QCOMPARE(input.size(), output.size());
     QCOMPARE(input, output);
     try {

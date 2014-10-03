@@ -12,6 +12,8 @@ class ORGMODEPARSER_EXPORT DrawerEntry : public AttributeLine
 {
     Q_DECLARE_TR_FUNCTIONS(DrawerEntry)
 public:
+    typedef QSharedPointer<DrawerEntry> Pointer;
+
     explicit DrawerEntry(OrgElement* parent = 0);
     explicit DrawerEntry(const QString& line, OrgElement* parent = 0);
     ~DrawerEntry();

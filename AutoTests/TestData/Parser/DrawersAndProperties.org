@@ -1,10 +1,10 @@
-#+DRAWERS: MyDrawers
+#+DRAWERS: MyDrawers TestDrawer
 #+EMPTY_PROPERTY: 
 
 This Org file contains examples for drawers and property drawers.
 
 * headline_1
-  :MyDrawers:
+  :MyDrawers: 
   :Monday:   yellow
   :Tuesday:  green
   :Wednesday: polka dots
@@ -17,8 +17,3 @@ This Org file contains examples for drawers and property drawers.
   text, like these three lines.
   :END:
   
-* headline_2
-  :NotADrawer:
-  :WHY: This is not a drawer because it's name is not listed in #+DRAWERS
-  :END:
-  The "not drawer" should be parsed as regular OrgLine elements.

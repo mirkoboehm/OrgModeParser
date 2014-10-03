@@ -10,12 +10,9 @@ namespace OrgMode {
 
 class Properties::Private {
 public:
-    typedef QMap<QString, QString> PropertyMap;
-
     explicit Private(const OrgElement::Pointer &element)
         : element_(element)
     {}
-    PropertyMap properties() const;
     OrgElement::Pointer element_;
 };
 
@@ -48,23 +45,6 @@ QList<QSharedPointer<T>> findChildren(const OrgElement::Pointer& element) {
 
 static void NilDeleter(OrgElement*) {}
 
-Properties::Private::PropertyMap Properties::Private::properties() const
-{
-    //Find an OrgFile element that is the parent of this one. If there isn't any, no problem, continue.
-    //If there is, query its property values and add it to the map as the default for the element
-    //local properties:
-    auto const file = findNextHigherUp<OrgFile>(element_.data());
-    QSharedPointer<OrgFile> pf(file, NilDeleter);
-    PropertyMap p;
-    if (file) {
-        auto const fileAttributes = findChildren<FileAttributeLine>(pf);
-        for(auto const attribute : fileAttributes) {
-            p.insert(attribute->key(), attribute->value());
-        }
-    }
-    return p;
-}
-
 Properties::Properties(const OrgElement::Pointer &element)
     : d(new Private(element))
 {
@@ -72,13 +52,30 @@ Properties::Properties(const OrgElement::Pointer &element)
 
 QString Properties::property(const QString& key) const
 {
-    const Private::PropertyMap properties = d->properties();
-    Private::PropertyMap::const_iterator it = properties.find(key);
-    if (it != properties.end()) {
+    const PropertiesMap props(properties());
+    PropertiesMap::const_iterator it = props.find(key);
+    if (it != props.end()) {
         return it.value();
     } else {
         return QString();
     }
+}
+
+Properties::PropertiesMap Properties::properties() const
+{
+    //Find an OrgFile element that is the parent of this one. If there isn't any, no problem, continue.
+    //If there is, query its property values and add it to the map as the default for the element
+    //local properties:
+    auto const file = findNextHigherUp<OrgFile>(d->element_.data());
+    QSharedPointer<OrgFile> pf(file, NilDeleter);
+    PropertiesMap p;
+    if (file) {
+        auto const fileAttributes = findChildren<FileAttributeLine>(pf);
+        for(auto const attribute : fileAttributes) {
+            p.insert(attribute->key(), attribute->value());
+        }
+    }
+    return p;
 }
 
 }
