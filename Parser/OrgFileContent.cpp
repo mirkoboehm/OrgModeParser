@@ -20,21 +20,23 @@ QString OrgFileContent::getLine()
     }
 }
 
-bool OrgFileContent::isValid() const
-{
-    return data_ != 0;
-}
-
 void OrgFileContent::ungetLine(const QString &line)
 {
     if (!line.isNull()) {
-        lines_.append(line);
+        lines_.prepend(line);
+    }
+}
+
+void OrgFileContent::ungetLines(const QStringList &lines)
+{
+    if (!lines.isEmpty()) {
+        lines_ = lines + lines_;
     }
 }
 
 bool OrgFileContent::atEnd() const
 {
-    return lines_.isEmpty() && data_->atEnd();
+    return lines_.isEmpty() && (data_ == 0 || data_->atEnd());
 }
 
 }

@@ -2,6 +2,7 @@
 #include <QtTest>
 #include <QCoreApplication>
 
+#include <OrgFileContent.h>
 #include <Headline.h>
 #include <Parser.h>
 #include <Writer.h>
@@ -27,6 +28,7 @@ public:
     ParserTests();
 
 private Q_SLOTS:
+    void testOrgFileContent();
     void testParserAndIdentity_data();
     void testParserAndIdentity();
 };
@@ -37,6 +39,21 @@ QString FL1(const char* text) {
 
 ParserTests::ParserTests()
 {
+}
+
+void ParserTests::testOrgFileContent()
+{
+    OrgFileContent content;
+    QVERIFY(content.atEnd());
+    const QString line1(FL1("1"));
+    const QString line2(FL1("2"));
+    content.ungetLine(line1);
+    content.ungetLine(line2);
+    QVERIFY(!content.atEnd());
+    //Now LIFO-style, line2 is expected first, line1 second:
+    QCOMPARE(content.getLine(), line2);
+    QCOMPARE(content.getLine(), line1);
+    QVERIFY(content.atEnd());
 }
 
 void ParserTests::testParserAndIdentity_data()
@@ -131,7 +148,7 @@ void ParserTests::testParserAndIdentity_data()
 
     //Test two-pass parsing that provides the file properties first that will influence element parsing later:
     VerificationMethod testTwoPassParsing = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
-        qDebug() << endl << element->describe();
+        qDebug() << endl << qPrintable(element->describe());
         //Drawers are only identified if the first pass yielded a value for the #+DRAWERS: property
         auto const headline_1 = findElement<OrgMode::Headline>(element, FL1("headline_1"));
         QVERIFY(headline_1);

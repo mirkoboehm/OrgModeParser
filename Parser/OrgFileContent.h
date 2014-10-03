@@ -3,6 +3,8 @@
 
 #include <QStringList>
 
+#include "orgmodeparser_export.h"
+
 class QTextStream;
 
 namespace OrgMode {
@@ -10,14 +12,16 @@ namespace OrgMode {
 /** @brief OrgFileContent represents a data file and adds unget functionality for lines.
  *  It is not exported.
  */
-class OrgFileContent
+class ORGMODEPARSER_EXPORT OrgFileContent
 {
 public:
+    typedef QSharedPointer<OrgFileContent> Pointer;
+
     explicit OrgFileContent(QTextStream* data = 0);
-    bool isValid() const;
 
     QString getLine();
-    void ungetLine(const QString& getLine);
+    void ungetLine(const QString& line);
+    void ungetLines(const QStringList& lines);
     bool atEnd() const;
 
 private:
