@@ -3,12 +3,12 @@
 
 #include <QCoreApplication>
 
-#include <OrgLine.h>
+#include <OrgElement.h>
 #include "orgmodeparser_export.h"
 
 namespace OrgMode {
 
-class Drawer : public OrgLine
+class Drawer : public OrgElement
 {
     Q_DECLARE_TR_FUNCTIONS(Drawer)
 public:

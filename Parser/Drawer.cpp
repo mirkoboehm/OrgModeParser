@@ -10,11 +10,10 @@ public:
 Drawer::Drawer(OrgElement *parent)
     : Drawer(QString(), parent)
 {
-
 }
 
 Drawer::Drawer(const QString &line, OrgElement *parent)
-    : OrgLine(line, parent)
+    : OrgElement(line, parent)
     , d(new Private())
 {
 }
