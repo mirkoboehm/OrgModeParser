@@ -8,7 +8,7 @@
 
 namespace OrgMode {
 
-class Drawer : public OrgElement
+class ORGMODEPARSER_EXPORT Drawer : public OrgElement
 {
     Q_DECLARE_TR_FUNCTIONS(Drawer)
 public:

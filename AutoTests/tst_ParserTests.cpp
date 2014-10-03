@@ -12,6 +12,7 @@
 #include <FileAttributeLine.h>
 #include <Properties.h>
 #include <Exception.h>
+#include <Drawer.h>
 
 using namespace OrgMode;
 
@@ -116,7 +117,6 @@ void ParserTests::testParserAndIdentity_data()
 
     //Verify calculation of properties for individual elements:
     VerificationMethod testPropertyCalculation = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
-        //qDebug() << endl << element->describe();
         //Headline 1 inherits the attributes from the attributes of the file it is in:
         auto const headline_1 = findElement<OrgMode::Headline>(element, FL1("headline_1"));
         QVERIFY(headline_1);
@@ -125,9 +125,27 @@ void ParserTests::testParserAndIdentity_data()
         QCOMPARE(properties.property(FL1("DRAWERS")), FL1("MyDrawers"));
         //A file level property, but empty:
         QCOMPARE(properties.property(FL1("EMPTY_PROPERTY")), FL1(""));
+        //TODO element properties are not parsed yet, depends on drawer parsing
     };
     QTest::newRow("PropertyCalculation") << FL1("://TestData/Parser/DrawersAndProperties.org") << testPropertyCalculation;
 
+    //Test two-pass parsing that provides the file properties first that will influence element parsing later:
+    VerificationMethod testTwoPassParsing = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
+        qDebug() << endl << element->describe();
+        //Drawers are only identified if the first pass yielded a value for the #+DRAWERS: property
+        auto const headline_1 = findElement<OrgMode::Headline>(element, FL1("headline_1"));
+        QVERIFY(headline_1);
+        auto const myDrawer = findElement<OrgMode::Drawer>(element, FL1("MyDrawers"));
+        QVERIFY(myDrawer);
+//        //TODO verify elements
+
+        //Verify that content in drawer syntax is not considered a drawer if the name is not in #+DRAWERS:
+        auto const headline_2 = findElement<OrgMode::Headline>(element, FL1("headline_2"));
+        QVERIFY(headline_1);
+        auto const notADrawer = findElement<OrgMode::Drawer>(element, FL1("NotADrawer"));
+        QVERIFY(!notADrawer);
+    };
+    QTest::newRow("TwoPassParsing") << FL1("://TestData/Parser/DrawersAndProperties.org") << testTwoPassParsing;
 }
 
 void ParserTests::testParserAndIdentity()

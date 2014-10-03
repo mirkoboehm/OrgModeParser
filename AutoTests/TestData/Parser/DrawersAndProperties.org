@@ -18,3 +18,7 @@ This Org file contains examples for drawers and property drawers.
   :END:
   
 * headline_2
+  :NotADrawer:
+  :WHY: This is not a  drawer because it's name is not listed in #+DRAWERS
+  :END:
+  The "not drawer" should be parsed as regular OrgLine elements.
