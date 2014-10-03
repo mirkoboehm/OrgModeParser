@@ -3,12 +3,12 @@
 
 #include <QCoreApplication>
 
-#include <OrgElement.h>
+#include <AttributeLine.h>
 #include "orgmodeparser_export.h"
 
 namespace OrgMode {
 
-class ORGMODEPARSER_EXPORT DrawerEntry : public OrgElement
+class ORGMODEPARSER_EXPORT DrawerEntry : public AttributeLine
 {
     Q_DECLARE_TR_FUNCTIONS(DrawerEntry)
 public:
@@ -17,9 +17,7 @@ public:
     ~DrawerEntry();
 
 protected:
-    bool isElementValid() const override;
     QString mnemonic() const override;
-    QString description() const override;
 
 private:
     class Private;
