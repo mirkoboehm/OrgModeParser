@@ -162,7 +162,7 @@ void ParserTests::testParserAndIdentity_data()
     };
     QTest::newRow("TwoPassParsing") << FL1("://TestData/Parser/DrawersAndProperties.org") << testTwoPassParsing;
 
-    //Test corner cases of drawer parsing
+    //Test regular drawer parsing
     VerificationMethod testDrawerParsing = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
         //qDebug() << endl << qPrintable(element->describe());
         auto const headline_1 = findElement<OrgMode::Headline>(element, FL1("headline_1"));
@@ -182,6 +182,16 @@ void ParserTests::testParserAndIdentity_data()
         QVERIFY(thursdayEntry == 0);
     };
     QTest::newRow("DrawerParsing") << FL1("://TestData/Parser/DrawersAndProperties.org") << testDrawerParsing;
+
+    //Test corner cases of drawer parsing
+    VerificationMethod testDrawerCornerCases = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
+        //headline_1 has no drawer, because the drawer title line has text after the closing colon
+        auto const headline_1 = findElement<OrgMode::Headline>(element, FL1("headline_1"));
+        QVERIFY(headline_1);
+        auto const testDrawer = findElement<OrgMode::Drawer>(headline_1, FL1("TestDrawer"));
+        QVERIFY(!testDrawer);
+    };
+    QTest::newRow("DrawerCornerCases") << FL1("://TestData/Parser/DrawersCornerCases.org") << testDrawerCornerCases;
 
 }
 

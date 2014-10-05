@@ -5,19 +5,13 @@ This Org file contains cases for drawer syntax that are cornercases
 and need to be parsed correctly.
 
 * headline_1
-  :NotADrawer:
-  :WHY: This is not a drawer because it's name is not listed in #+DRAWERS
-  :END:
-  The "not drawer" should be parsed as regular OrgLine elements.
-
-* headline_2
   :TestDrawer: Extra value after drawer title
   Note: This is a not drawer (the only test being OrgMode agreeing to
   it). If there is text after the drawer title :TESTDRAWER:, OrgMode
   does not fold it.
   :END:
 
-* headline_3
+* headline_2
   :TestDrawer:
   Note: This is a drawer, as verified by OrgMode detecting it.
   If there is text after the drawer closing line :END:, OrgMode does
@@ -25,11 +19,11 @@ and need to be parsed correctly.
   :END:      Extra value after drawer title
   But what is this piece of text called?
 
-* headline_4
+* headline_3
   :TestDrawer:
   Note: This is not a drawer, as verified by OrgMode not folding it,
   but it does highlight it.
-** headline_5_1
+** headline_3_1
   If the drawer entries contain a headline before :END:, OrgMode does
   not fold it.
   :END:
