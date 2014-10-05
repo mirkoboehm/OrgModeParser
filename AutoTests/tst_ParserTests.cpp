@@ -188,8 +188,16 @@ void ParserTests::testParserAndIdentity_data()
         //headline_1 has no drawer, because the drawer title line has text after the closing colon
         auto const headline_1 = findElement<OrgMode::Headline>(element, FL1("headline_1"));
         QVERIFY(headline_1);
-        auto const testDrawer = findElement<OrgMode::Drawer>(headline_1, FL1("TestDrawer"));
-        QVERIFY(!testDrawer);
+        auto const headline1TestDrawer = findElement<OrgMode::Drawer>(headline_1, FL1("TestDrawer"));
+        QVERIFY(!headline1TestDrawer);
+        //headline_2 has a drawer. It has text after the closing :END:, but OrgMode accepts that
+        auto const headline_2 = findElement<OrgMode::Headline>(element, FL1("headline_2"));
+        QVERIFY(headline_2);
+        auto const headline2TestDrawer = findElement<OrgMode::Drawer>(headline_2, FL1("TestDrawer"));
+        QVERIFY(headline2TestDrawer);
+        auto const testEntry = findElement<OrgMode::DrawerEntry>(headline2TestDrawer, FL1("TestValue"));
+        QVERIFY(testEntry);
+        QCOMPARE(testEntry->value(), FL1("1"));
     };
     QTest::newRow("DrawerCornerCases") << FL1("://TestData/Parser/DrawersCornerCases.org") << testDrawerCornerCases;
 

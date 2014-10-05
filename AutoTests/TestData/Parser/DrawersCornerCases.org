@@ -13,6 +13,7 @@ and need to be parsed correctly.
 
 * headline_2
   :TestDrawer:
+  :TestValue: 1
   Note: This is a drawer, as verified by OrgMode detecting it.
   If there is text after the drawer closing line :END:, OrgMode does
   fold it.
