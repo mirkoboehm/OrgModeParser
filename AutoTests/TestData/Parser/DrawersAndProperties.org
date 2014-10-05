@@ -8,7 +8,7 @@ This Org file contains examples for drawers and property drawers.
   :Monday:   yellow
   :Tuesday:  green
   :Wednesday: polka dots
-  :Thursday: blue boxers
+  Hm, where is the curiously missing Thursday entry?
   :Friday:   hawaiian trunks
   :Saturday: party, going commando
   :Sunday:   
@@ -17,3 +17,9 @@ This Org file contains examples for drawers and property drawers.
   text, like these three lines.
   :END:
   
+* headline_2
+  :NotADrawer:
+  Note: This is a not drawer (the only test being OrgMode agreeing to
+  it). If there is text after the drawer title :TESTDRAWER:, OrgMode
+  does not fold it.
+  :END:
