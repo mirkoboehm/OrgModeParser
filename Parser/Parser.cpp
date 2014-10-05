@@ -182,6 +182,11 @@ OrgElement::Pointer Parser::Private::parseDrawerLine(OrgElement::Pointer parent,
     auto const match = drawerTitleStructure.match(line);
     if (match.hasMatch()) {
         const QString name = match.captured(1);
+        const QString value = match.captured(2);
+        if (!value.isEmpty()) {
+            content->ungetLine(line);
+            return OrgElement::Pointer();
+        }
         QStringList drawernames = filePropertiesAfterFirstPass_.value(QString::fromLatin1("DRAWERS"))
                 .split(QRegExp(QLatin1String("\\s+")));
         if (drawernames.contains(name)) {
