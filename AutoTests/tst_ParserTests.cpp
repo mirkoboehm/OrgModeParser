@@ -164,7 +164,6 @@ void ParserTests::testParserAndIdentity_data()
 
     //Test regular drawer parsing
     VerificationMethod testDrawerParsing = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
-        //qDebug() << endl << qPrintable(element->describe());
         auto const headline_1 = findElement<OrgMode::Headline>(element, FL1("headline_1"));
         QVERIFY(headline_1);
         auto const myDrawer = findElement<OrgMode::Drawer>(headline_1, FL1("MyDrawers"));
@@ -198,6 +197,13 @@ void ParserTests::testParserAndIdentity_data()
         auto const testEntry = findElement<OrgMode::DrawerEntry>(headline2TestDrawer, FL1("TestValue"));
         QVERIFY(testEntry);
         QCOMPARE(testEntry->value(), FL1("1"));
+        //headline_3 does not contain a drawer, because a new headline starts in the middle of it:
+        qDebug() << endl << qPrintable(element->describe());
+        auto const headline_3 = findElement<OrgMode::Headline>(element, FL1("headline_3"));
+        QVERIFY(headline_3);
+        auto const headline3TestDrawer = findElement<OrgMode::Drawer>(headline_3, FL1("TestDrawer"));
+        QVERIFY(!headline3TestDrawer);
+
     };
     QTest::newRow("DrawerCornerCases") << FL1("://TestData/Parser/DrawersCornerCases.org") << testDrawerCornerCases;
 
