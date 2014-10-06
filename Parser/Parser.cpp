@@ -31,21 +31,21 @@ public:
     /** @brief First parse pass that provide the file-level attributes.
      * @return The parse results and the content for the second pass in a std::pair.
      */
-    ParseRunOutput parseOrgFileFirstPass(OrgFileContent::Pointer content, const QString& filename) const;
+    ParseRunOutput parseOrgFileFirstPass(const OrgFileContent::Pointer& content, const QString& filename) const;
     /** @brief Parse a sequence of top level elements, considering it as one file unit. */
     OrgFile::Pointer parseOrgFile(OrgFileContent::Pointer content, const QString& filename) const;
 
-    OrgElement::Pointer parseOrgElement(OrgElement::Pointer parent, OrgFileContent::Pointer content) const;
-    OrgElement::Pointer parseOrgLine(OrgElement::Pointer parent, OrgFileContent::Pointer content) const;
-    OrgElement::Pointer parseClockLine(OrgElement::Pointer parent, OrgFileContent::Pointer content) const;
-    OrgElement::Pointer parseFileAttributeLine(OrgElement::Pointer parent, OrgFileContent::Pointer content) const;
-    OrgElement::Pointer parseDrawerLine(OrgElement::Pointer parent, OrgFileContent::Pointer content) const;
+    OrgElement::Pointer parseOrgElement(const OrgElement::Pointer& parent, const OrgFileContent::Pointer& content) const;
+    OrgElement::Pointer parseOrgLine(const OrgElement::Pointer& parent, const OrgFileContent::Pointer& content) const;
+    OrgElement::Pointer parseClockLine(const OrgElement::Pointer& parent, const OrgFileContent::Pointer& content) const;
+    OrgElement::Pointer parseFileAttributeLine(const OrgElement::Pointer& parent, const OrgFileContent::Pointer& content) const;
+    OrgElement::Pointer parseDrawerLine(const OrgElement::Pointer& parent, const OrgFileContent::Pointer& content) const;
 
     Parser* parser_;
     Properties::PropertiesMap filePropertiesAfterFirstPass_;
 };
 
-Parser::Private::ParseRunOutput Parser::Private::parseOrgFileFirstPass(OrgFileContent::Pointer content, const QString &filename) const
+Parser::Private::ParseRunOutput Parser::Private::parseOrgFileFirstPass(const OrgFileContent::Pointer &content, const QString &filename) const
 {
     QSharedPointer<OrgFileContent> output(new OrgFileContent);
     OrgFile::Pointer file(new OrgFile);
@@ -73,7 +73,7 @@ OrgFile::Pointer Parser::Private::parseOrgFile(OrgFileContent::Pointer content, 
     return file;
 }
 
-OrgElement::Pointer Parser::Private::parseOrgElement(OrgElement::Pointer parent, OrgFileContent::Pointer content) const
+OrgElement::Pointer Parser::Private::parseOrgElement(const OrgElement::Pointer &parent, const OrgFileContent::Pointer &content) const
 {
     static QRegularExpression beginningOfHeadline(QStringLiteral("^([*]+)\\s+(.*)$"));
     //Let's see, is it a headline?
@@ -124,7 +124,7 @@ OrgElement::Pointer Parser::Private::parseOrgElement(OrgElement::Pointer parent,
     }
 }
 
-OrgElement::Pointer Parser::Private::parseOrgLine(OrgElement::Pointer parent, OrgFileContent::Pointer content) const
+OrgElement::Pointer Parser::Private::parseOrgLine(const OrgElement::Pointer &parent, const OrgFileContent::Pointer &content) const
 {
     Q_UNUSED(parent);
     if (content->atEnd()) {
@@ -135,7 +135,7 @@ OrgElement::Pointer Parser::Private::parseOrgLine(OrgElement::Pointer parent, Or
     return element;
 }
 
-OrgElement::Pointer Parser::Private::parseClockLine(OrgElement::Pointer parent, OrgFileContent::Pointer content) const
+OrgElement::Pointer Parser::Private::parseClockLine(const OrgElement::Pointer& parent, const OrgFileContent::Pointer& content) const
 {
     static QRegularExpression clockLineStructure(QStringLiteral("^(\\s*)CLOCK:\\s*\\[(.+)\\]--\\[(.+)\\]"));
     const QString line = content->getLine();
@@ -157,7 +157,7 @@ OrgElement::Pointer Parser::Private::parseClockLine(OrgElement::Pointer parent, 
     return OrgElement::Pointer();
 }
 
-OrgElement::Pointer Parser::Private::parseFileAttributeLine(OrgElement::Pointer parent, OrgFileContent::Pointer content) const
+OrgElement::Pointer Parser::Private::parseFileAttributeLine(const OrgElement::Pointer &parent, const OrgFileContent::Pointer &content) const
 {
     static QRegularExpression fileAttributeStructure(QStringLiteral("\\#\\+(.+):\\s+(.*)$"));
     const QString line = content->getLine();
@@ -175,7 +175,7 @@ OrgElement::Pointer Parser::Private::parseFileAttributeLine(OrgElement::Pointer 
     return OrgElement::Pointer();
 }
 
-OrgElement::Pointer Parser::Private::parseDrawerLine(OrgElement::Pointer parent, OrgFileContent::Pointer content) const
+OrgElement::Pointer Parser::Private::parseDrawerLine(const OrgElement::Pointer &parent, const OrgFileContent::Pointer &content) const
 {
     static QRegularExpression drawerTitleStructure(QStringLiteral("^\\s+:(.+):\\s*(.*)$"));
     const QString line = content->getLine();
@@ -244,7 +244,7 @@ Parser::~Parser()
     delete d; d = 0;
 }
 
-OrgElement::Pointer Parser::parse(QTextStream *data, const QString fileName) const
+OrgElement::Pointer Parser::parse(QTextStream *data, const QString &fileName) const
 {
     Q_ASSERT(data);
     OrgFileContent::Pointer content(new OrgFileContent(data));

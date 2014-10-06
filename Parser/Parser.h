@@ -17,7 +17,7 @@ public:
     explicit Parser(QObject *parent = 0);
     ~Parser();
 
-    OrgElement::Pointer parse(QTextStream* data, const QString fileName = QString()) const;
+    OrgElement::Pointer parse(QTextStream* data, const QString& fileName = QString()) const;
 
 private:
     class Private;
