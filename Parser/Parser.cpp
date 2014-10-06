@@ -175,6 +175,15 @@ OrgElement::Pointer Parser::Private::parseFileAttributeLine(const OrgElement::Po
     return OrgElement::Pointer();
 }
 
+QStringList collectLines(const OrgElement::Pointer& element) {
+    QStringList lines;
+    lines << element->line();
+    for(const OrgElement::Pointer child : element->children()) {
+        lines << collectLines(child);
+    }
+    return lines;
+}
+
 OrgElement::Pointer Parser::Private::parseDrawerLine(const OrgElement::Pointer &parent, const OrgFileContent::Pointer &content) const
 {
     static QRegularExpression drawerTitleStructure(QStringLiteral("^\\s+:(.+):\\s*(.*)$"));
@@ -198,10 +207,15 @@ OrgElement::Pointer Parser::Private::parseDrawerLine(const OrgElement::Pointer &
             while(!content->atEnd()) {
                 const QString line = content->getLine();
                 //FIXME TODO
-//                if (lineIsHeadline()) {
-//                    content.ungetLines(allLinesReadSoFar);
-//                    return OrgElement::Pointer();
-//                }
+                //Make "uncommittedElementLinesUngetter"
+                //Refactor duplicated detection of headlines
+                static QRegularExpression beginningOfHeadline(QStringLiteral("^([*]+)\\s+(.*)$"));
+                auto const headlineMatch = beginningOfHeadline.match(line);
+                if (headlineMatch.hasMatch()) {
+                    const QStringList lines = QStringList() << collectLines(self) << line;
+                    content->ungetLines(lines);
+                    return OrgElement::Pointer();
+                }
                 auto const match = drawerEntryStructure.match(line);
                 if (match.hasMatch()) {
                     const QString name = match.captured(1);
