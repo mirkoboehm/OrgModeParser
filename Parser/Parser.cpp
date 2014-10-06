@@ -177,7 +177,7 @@ OrgElement::Pointer Parser::Private::parseFileAttributeLine(OrgElement::Pointer 
 
 OrgElement::Pointer Parser::Private::parseDrawerLine(OrgElement::Pointer parent, OrgFileContent::Pointer content) const
 {
-    static QRegularExpression drawerTitleStructure(QStringLiteral("^\\s+:(.+):\\s(.*)$"));
+    static QRegularExpression drawerTitleStructure(QStringLiteral("^\\s+:(.+):\\s*(.*)$"));
     const QString line = content->getLine();
     auto const match = drawerTitleStructure.match(line);
     if (match.hasMatch()) {

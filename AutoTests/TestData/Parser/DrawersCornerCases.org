@@ -1,5 +1,4 @@
 #+DRAWERS: MyDrawers TestDrawer
-#+EMPTY_PROPERTY: 
 
 This Org file contains cases for drawer syntax that are cornercases
 and need to be parsed correctly.
