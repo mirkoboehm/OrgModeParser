@@ -198,7 +198,7 @@ void ParserTests::testParserAndIdentity_data()
         QVERIFY(testEntry);
         QCOMPARE(testEntry->value(), FL1("1"));
         //headline_3 does not contain a drawer, because a new headline starts in the middle of it:
-        qDebug() << endl << qPrintable(element->describe());
+        //qDebug() << endl << qPrintable(element->describe());
         auto const headline_3 = findElement<OrgMode::Headline>(element, FL1("headline_3"));
         QVERIFY(headline_3);
         auto const headline3TestDrawer = findElement<OrgMode::Drawer>(headline_3, FL1("TestDrawer"));
