@@ -19,7 +19,5 @@ This Org file contains examples for drawers and property drawers.
   
 * headline_2
   :NotADrawer:
-  Note: This is a not drawer (the only test being OrgMode agreeing to
-  it). If there is text after the drawer title :TESTDRAWER:, OrgMode
-  does not fold it.
+  Note: This is a not drawer because it's name is not listed in #+DRAWERS:.
   :END:
