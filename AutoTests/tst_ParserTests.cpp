@@ -118,34 +118,35 @@ void ParserTests::testParserAndIdentity_data()
     QTest::newRow("Tags") << FL1("://TestData/Parser/Tags.org") << testTagParsing;
 
     //Verify parsing of file attributes (#+ATTRIBUTE: value):
-    VerificationMethod testFileAttributes = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
+    VerificationMethod testAttributeParsing = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
         //Test for an existing, non-empty attribute:
         auto const attributeLine = findElement<OrgMode::FileAttributeLine>(element, FL1("DRAWERS"));
         QVERIFY(attributeLine);
         QCOMPARE(attributeLine->value(), FL1("MyDrawers TestDrawer"));
         //An existing but empty file attribute:
-        auto const emptyProperty = findElement<OrgMode::FileAttributeLine>(element, FL1("EMPTY_PROPERTY"));
-        QVERIFY(emptyProperty);
-        QVERIFY(emptyProperty->value().isEmpty());
+        auto const emptyAttribute = findElement<OrgMode::FileAttributeLine>(element, FL1("EMPTY_ATTRIBUTE"));
+        QVERIFY(emptyAttribute);
+        QVERIFY(emptyAttribute->value().isEmpty());
         //A non-existant file attribute:
         auto const nonExistentAttribute = findElement<OrgMode::FileAttributeLine>(element, FL1("I DO NOT EXIST"));
         QVERIFY(!nonExistentAttribute);
     };
-    QTest::newRow("FileAttributes") << FL1("://TestData/Parser/DrawersAndProperties.org") << testFileAttributes;
+    QTest::newRow("AttributeParsing") << FL1("://TestData/Parser/DrawersAndProperties.org") << testAttributeParsing;
 
-    //Verify calculation of properties for individual elements:
-    VerificationMethod testPropertyCalculation = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
+    //Verify calculation of attributes at file scope by the Properties class:
+    VerificationMethod testFileAttributes = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
         //Headline 1 inherits the attributes from the attributes of the file it is in:
         auto const headline_1 = findElement<OrgMode::Headline>(element, FL1("headline_1"));
         QVERIFY(headline_1);
         Properties properties(headline_1);
-        //A file level property:
-        QVERIFY(properties.property(FL1("DRAWERS")).contains(FL1("MyDrawers")));
-        //A file level property, but empty:
-        QCOMPARE(properties.property(FL1("EMPTY_PROPERTY")), FL1(""));
-        //TODO element properties are not parsed yet, depends on drawer parsing
+        //A file level attribute:
+        QVERIFY(properties.fileAttribute(FL1("DRAWERS")).contains(FL1("MyDrawers")));
+        //A file level attribute, but empty:
+        QCOMPARE(properties.fileAttribute(FL1("EMPTY_ATTRIBUTE")), FL1(""));
+        //A non-existant attribute:
+        QCOMPARE(properties.fileAttribute(FL1("I DO NOT EXIST")), QString());
     };
-    QTest::newRow("PropertyCalculation") << FL1("://TestData/Parser/DrawersAndProperties.org") << testPropertyCalculation;
+    QTest::newRow("FileAttributes") << FL1("://TestData/Parser/DrawersAndProperties.org") << testFileAttributes;
 
     //Test two-pass parsing that provides the file properties first that will influence element parsing later:
     VerificationMethod testTwoPassParsing = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
@@ -207,6 +208,47 @@ void ParserTests::testParserAndIdentity_data()
     };
     QTest::newRow("DrawerCornerCases") << FL1("://TestData/Parser/DrawersCornerCases.org") << testDrawerCornerCases;
 
+    //Verify calculation of properties for individual elements:
+    VerificationMethod testDrawerEntries = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
+        //QFAIL("NI");
+        //Headline 1 inherits the attributes from the attributes of the file it is in:
+        auto const headline_1 = findElement<OrgMode::Headline>(element, FL1("headline_1"));
+        QVERIFY(headline_1);
+//        Properties properties(headline_1);
+//        Properties::PropertiesMap props = properties.properties();
+//        //An element property:
+//        QCOMPARE(props.value(FL1("Monday")), FL1("yellow"));
+//        //An inherited property:
+//        QVERIFY(props.value(FL1("DRAWERS")).contains(FL1("MyDrawers")));
+//        //A no-existant property:
+//        QCOMPARE(props.value(FL1("Thursday")), FL1("none"));
+    };
+    QTest::newRow("DrawerEntries") << FL1("://TestData/Parser/DrawersAndProperties.org") << testDrawerEntries;
+
+    //FIXME these aren't properties, but attributes.
+    //Properties are of the syntax #+PROPERTY: key <value>.
+    //See http://orgmode.org/manual/Property-syntax.html.
+    //FIXME Implement and test examples from http://orgmode.org/manual/Property-syntax.html.
+    //(See OrgModePropertiesExample.org resource.)
+
+    //Verify detection of file-scope properties ("#+PROPERTY: var 123"):
+    VerificationMethod testFileScopeProperties = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
+        //QFAIL("NI");
+    };
+    QTest::newRow("FileScopeProperties") << FL1("://TestData/Parser/DrawersAndProperties.org") << testFileScopeProperties;
+
+    //Verify calculation of properties for individual elements:
+    VerificationMethod testElementProperties = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
+        //QFAIL("NI");
+    };
+    QTest::newRow("ElementProperties") << FL1("://TestData/Parser/DrawersAndProperties.org") << testElementProperties;
+
+    //FIXME org-use-property-inheritance as a property parser status?
+    //Verify inheritance of properties:
+    VerificationMethod testPropertyInheritance = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
+        //QFAIL("NI");
+    };
+    QTest::newRow("PropertyInheritance") << FL1("://TestData/Parser/DrawersAndProperties.org") << testPropertyInheritance;
 }
 
 void ParserTests::testParserAndIdentity()

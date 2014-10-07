@@ -1,5 +1,5 @@
 #+DRAWERS: MyDrawers TestDrawer
-#+EMPTY_PROPERTY: 
+#+EMPTY_ATTRIBUTE: 
 
 This Org file contains examples for drawers and property drawers.
 
@@ -21,3 +21,4 @@ This Org file contains examples for drawers and property drawers.
   :NotADrawer:
   Note: This is a not drawer because it's name is not listed in #+DRAWERS:.
   :END:
+

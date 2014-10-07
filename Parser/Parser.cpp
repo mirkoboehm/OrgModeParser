@@ -42,7 +42,7 @@ public:
     OrgElement::Pointer parseDrawerLine(const OrgElement::Pointer& parent, const OrgFileContent::Pointer& content) const;
 
     Parser* parser_;
-    Properties::PropertiesMap filePropertiesAfterFirstPass_;
+    Properties::PropertiesMap fileAttributesAfterFirstPass_;
 
 private:
     QRegularExpressionMatch headlineMatch(const QString& line) const;
@@ -203,7 +203,7 @@ OrgElement::Pointer Parser::Private::parseDrawerLine(const OrgElement::Pointer &
             content->ungetLine(line);
             return OrgElement::Pointer();
         }
-        const QStringList drawernames = filePropertiesAfterFirstPass_.value(QString::fromLatin1("DRAWERS"))
+        const QStringList drawernames = fileAttributesAfterFirstPass_.value(QString::fromLatin1("DRAWERS"))
                 .split(QRegExp(QLatin1String("\\s+")));
         if (drawernames.contains(name)) {
             //This is a drawer
@@ -273,7 +273,7 @@ OrgElement::Pointer Parser::parse(QTextStream *data, const QString &fileName) co
     const OrgFileContent::Pointer content(new OrgFileContent(data));
     auto const firstPassResults = d->parseOrgFileFirstPass(content, fileName);
     const Properties properties(firstPassResults.first);
-    d->filePropertiesAfterFirstPass_ = properties.properties();
+    d->fileAttributesAfterFirstPass_ = properties.fileAttributes();
     return d->parseOrgFile(firstPassResults.second, fileName);
 }
 

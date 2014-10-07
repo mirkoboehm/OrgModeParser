@@ -50,18 +50,33 @@ Properties::Properties(const OrgElement::Pointer &element)
 {
 }
 
+Properties::~Properties()
+{
+    delete d; d = 0;
+}
+
 QString Properties::property(const QString& key) const
 {
-    const PropertiesMap props(properties());
-    PropertiesMap::const_iterator it = props.find(key);
-    if (it != props.end()) {
+    return QString(); //NI
+}
+
+Properties::PropertiesMap Properties::properties() const
+{
+    return PropertiesMap();
+}
+
+QString Properties::fileAttribute(const QString &key) const
+{
+    const PropertiesMap attributes(fileAttributes());
+    PropertiesMap::const_iterator it = attributes.find(key);
+    if (it != attributes.end()) {
         return it.value();
     } else {
         return QString();
     }
 }
 
-Properties::PropertiesMap Properties::properties() const
+Properties::PropertiesMap Properties::fileAttributes() const
 {
     //Find an OrgFile element that is the parent of this one. If there isn't any, no problem, continue.
     //If there is, query its property values and add it to the map as the default for the element
