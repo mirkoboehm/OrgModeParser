@@ -210,20 +210,36 @@ void ParserTests::testParserAndIdentity_data()
 
     //Verify calculation of properties for individual elements:
     VerificationMethod testDrawerEntries = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
-        //QFAIL("NI");
-        //Headline 1 inherits the attributes from the attributes of the file it is in:
+        //Headline 1 contains a drawer "MyDrawers":
         auto const headline_1 = findElement<OrgMode::Headline>(element, FL1("headline_1"));
         QVERIFY(headline_1);
-//        Properties properties(headline_1);
-//        Properties::PropertiesMap props = properties.properties();
-//        //An element property:
-//        QCOMPARE(props.value(FL1("Monday")), FL1("yellow"));
-//        //An inherited property:
-//        QVERIFY(props.value(FL1("DRAWERS")).contains(FL1("MyDrawers")));
-//        //A no-existant property:
-//        QCOMPARE(props.value(FL1("Thursday")), FL1("none"));
+        const Properties properties1(headline_1);
+        const Properties::Map myDrawers = properties1.drawer(FL1("MyDrawers"));
+        //A drawer entry:
+        QCOMPARE(myDrawers.value(FL1("Monday")), FL1("yellow"));
+        //An empty drawer entry:
+        QVERIFY(myDrawers.value(FL1("Sunday")).contains(FL1("")));
+        //A no-existant drawer entry:
+        QVERIFY(myDrawers.value(FL1("Thursday")).isNull());
     };
     QTest::newRow("DrawerEntries") << FL1("://TestData/Parser/DrawersAndProperties.org") << testDrawerEntries;
+
+    //Verify drawers are only detected as children of an element, not in the elements children:
+    VerificationMethod testDrawerInHierarchy = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
+        //Headline 2 does not have a drawer "MyDrawers", but it's child headline_2_1 does:
+        auto const headline_2 = findElement<OrgMode::Headline>(element, FL1("headline_2"));
+        const Properties properties_2(headline_2);
+        try {
+            properties_2.drawer(FL1("MyDrawers"));
+        } catch(const RuntimeException&) {
+            // pass
+        }
+        auto const headline_2_1 = findElement<OrgMode::Headline>(element, FL1("headline_2_1"));
+        const Properties properties_2_1(headline_2_1);
+        auto const drawer_2_1 = properties_2_1.drawer(FL1("MyDrawers"));
+        QCOMPARE(drawer_2_1.value(FL1("Monday")), FL1("yellow"));
+    };
+    QTest::newRow("DrawerInHierarchy") << FL1("://TestData/Parser/DrawersAndProperties.org") << testDrawerInHierarchy;
 
     //FIXME these aren't properties, but attributes.
     //Properties are of the syntax #+PROPERTY: key <value>.

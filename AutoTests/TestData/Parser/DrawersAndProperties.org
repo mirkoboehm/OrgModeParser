@@ -21,4 +21,13 @@ This Org file contains examples for drawers and property drawers.
   :NotADrawer:
   Note: This is a not drawer because it's name is not listed in #+DRAWERS:.
   :END:
-
+** headline_2_1  
+   :MyDrawers: 
+   :Monday:   yellow
+   :Tuesday:  green
+   :Wednesday: polka dots
+   :Friday:   hawaiian trunks
+   :Saturday: party, going commando
+   :Sunday:   
+   :END:
+   headline_2_1 has a drawer "MyDrawers", but headline_2 does not.
