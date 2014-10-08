@@ -279,12 +279,6 @@ void ParserTests::testParserAndIdentity_data()
     };
     QTest::newRow("DrawerInHierarchy") << FL1("://TestData/Parser/DrawersAndProperties.org") << testDrawerInHierarchy;
 
-    //FIXME these aren't properties, but attributes.
-    //Properties are of the syntax #+PROPERTY: key <value>.
-    //See http://orgmode.org/manual/Property-syntax.html.
-    //FIXME Implement and test examples from http://orgmode.org/manual/Property-syntax.html.
-    //(See OrgModePropertiesExample.org resource.)
-
     //Verify detection of file-scope properties ("#+PROPERTY: var 123"):
     VerificationMethod testFileScopeProperties = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
         //qDebug() << endl << qPrintable(element->describe());

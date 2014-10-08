@@ -12,6 +12,9 @@ namespace OrgMode {
  *
  * It handles attributes and properties because they are syntactially the same, based on file attributes
  * and drawers. Properties are file attributes and drawers with special names.
+ *
+ * See http://orgmode.org/manual/Property-syntax.html. The OrgModePropertiesExample.org resource emulates the
+ * examples from the OrgMode manual and verifies with unit tests that the results are as expected.
  */
 class ORGMODEPARSER_EXPORT Properties
 {
