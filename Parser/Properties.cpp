@@ -32,18 +32,6 @@ T* findNextHigherUp(OrgElement* element) {
     }
 }
 
-template <typename T>
-QList<QSharedPointer<T>> findOwnChildren(const OrgElement::Pointer& element) {
-    if (!element) return QList<QSharedPointer<T>>();
-    QList<QSharedPointer<T>> matches;
-    for(auto const child : element->children()) {
-        if (QSharedPointer<T> subElement = child.dynamicCast<T>()) {
-            matches.append(subElement);
-        }
-    }
-    return matches;
-}
-
 static void NilDeleter(OrgElement*) {}
 
 Properties::Properties(const OrgElement::Pointer &element)
@@ -88,7 +76,7 @@ Properties::Map Properties::drawer(const QString &name) const
         throw RuntimeException(tr("No drawer named %1 found!").arg(name));
     }
     auto const drawer = drawers.first();
-    auto const entryElements = findOwnChildren<DrawerEntry>(drawer);
+    auto const entryElements = findElements<DrawerEntry>(drawer, 1);
     Map entries;
     std::for_each(entryElements.begin(), entryElements.end(),
                   [&entries](const DrawerEntry::Pointer& entry) {
