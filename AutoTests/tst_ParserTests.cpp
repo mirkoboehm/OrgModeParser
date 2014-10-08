@@ -8,6 +8,7 @@
 #include <Writer.h>
 #include <OrgFile.h>
 #include <Clock.h>
+#include <ClockLine.h>
 #include <Tags.h>
 #include <OrgLine.h>
 #include <FileAttributeLine.h>
@@ -15,6 +16,7 @@
 #include <Exception.h>
 #include <Drawer.h>
 #include <DrawerEntry.h>
+#include <FindElements.h>
 
 using namespace OrgMode;
 
@@ -199,7 +201,6 @@ void ParserTests::testParserAndIdentity_data()
         QVERIFY(testEntry);
         QCOMPARE(testEntry->value(), FL1("1"));
         //headline_3 does not contain a drawer, because a new headline starts in the middle of it:
-        //qDebug() << endl << qPrintable(element->describe());
         auto const headline_3 = findElement<OrgMode::Headline>(element, FL1("headline_3"));
         QVERIFY(headline_3);
         auto const headline3TestDrawer = findElement<OrgMode::Drawer>(headline_3, FL1("TestDrawer"));
@@ -231,8 +232,9 @@ void ParserTests::testParserAndIdentity_data()
         const Properties properties_2(headline_2);
         try {
             properties_2.drawer(FL1("MyDrawers"));
-        } catch(const RuntimeException&) {
-            // pass
+            QFAIL("Retrieving a non-existant drawer should throw an exception!");
+        } catch(const RuntimeException& ex) {
+            qDebug() << qPrintable(ex.message());
         }
         auto const headline_2_1 = findElement<OrgMode::Headline>(element, FL1("headline_2_1"));
         const Properties properties_2_1(headline_2_1);
@@ -240,6 +242,44 @@ void ParserTests::testParserAndIdentity_data()
         QCOMPARE(drawer_2_1.value(FL1("Monday")), FL1("yellow"));
     };
     QTest::newRow("DrawerInHierarchy") << FL1("://TestData/Parser/DrawersAndProperties.org") << testDrawerInHierarchy;
+
+    VerificationMethod testFindElements = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
+        {   //There is one headline that is a direct child of element, headline_1:
+            auto const headlines = findElements<Headline>(element, 1);
+            QVERIFY(headlines.size() == 1);
+            const Headline::Pointer headline_1 = headlines.first();
+            QCOMPARE(headline_1->caption(), FL1("headline_1"));
+        }
+        {   //At maxdepth 2, there are 3 headlines:
+            auto const headlines = findElements<Headline>(element, 2);
+            QVERIFY(headlines.size() == 3);
+            const Headline::Pointer headline_1_2 = headlines.at(2);
+            QCOMPARE(headline_1_2->caption(), FL1("headline_1_2"));
+        }
+        {   //At maxdepth 0, there are no headlines:
+            auto const headlines = findElements<Headline>(element, 0);
+            QVERIFY(headlines.isEmpty());
+        }
+        {   //At maxdepth 0, there one OrgFile:
+            auto const orgFiles = findElements<OrgFile>(element, 0);
+            QVERIFY(orgFiles.size() == 1);
+            const OrgFile::Pointer orgFile = orgFiles.first();
+            QCOMPARE(orgFile->fileName(), FL1("://TestData/Parser/ClockEntries.org"));
+        }
+    };
+    QTest::newRow("FindElements") << FL1("://TestData/Parser/ClockEntries.org") << testFindElements;
+
+    VerificationMethod testFindElementsFiltered = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
+        qDebug() << endl << qPrintable(element->describe());
+        {   //There is one headline that is a direct child of element, headline_1:
+            auto const nonEmptyClockLines = [](const ClockLine::Pointer& clock) { return clock->duration() > 0; };
+            auto const clockLines = findElements<ClockLine>(element, -1, nonEmptyClockLines);
+            QVERIFY(clockLines.size() == 3);
+            const ClockLine::Pointer clockLine_1_1 = clockLines.first();
+            QCOMPARE(clockLine_1_1->duration(), 600);
+        }
+    };
+    QTest::newRow("FindElementsFiltered") << FL1("://TestData/Parser/ClockEntries.org") << testFindElementsFiltered;
 
     //FIXME these aren't properties, but attributes.
     //Properties are of the syntax #+PROPERTY: key <value>.
