@@ -5,6 +5,9 @@
 #include <FileAttributeLine.h>
 #include <Exception.h>
 #include <OrgFile.h>
+#include <Drawer.h>
+#include <DrawerEntry.h>
+#include <FindElements.h>
 
 namespace OrgMode {
 
@@ -30,15 +33,13 @@ T* findNextHigherUp(OrgElement* element) {
 }
 
 template <typename T>
-QList<QSharedPointer<T>> findChildren(const OrgElement::Pointer& element) {
-    QList<QSharedPointer<T>> matches;
+QList<QSharedPointer<T>> findOwnChildren(const OrgElement::Pointer& element) {
     if (!element) return QList<QSharedPointer<T>>();
-    auto const p = element.dynamicCast<T>();
-    if (p) {
-        matches.append(p);
-    }
+    QList<QSharedPointer<T>> matches;
     for(auto const child : element->children()) {
-        matches.append(findChildren<T>(child));
+        if (QSharedPointer<T> subElement = child.dynamicCast<T>()) {
+            matches.append(subElement);
+        }
     }
     return matches;
 }
@@ -57,18 +58,18 @@ Properties::~Properties()
 
 QString Properties::property(const QString& key) const
 {
-    return QString(); //NI
+    throw NotImplementedException();
 }
 
-Properties::PropertiesMap Properties::properties() const
+Properties::Map Properties::properties() const
 {
-    return PropertiesMap();
+    throw NotImplementedException();
 }
 
 QString Properties::fileAttribute(const QString &key) const
 {
-    const PropertiesMap attributes(fileAttributes());
-    PropertiesMap::const_iterator it = attributes.find(key);
+    const Map attributes(fileAttributes());
+    Map::const_iterator it = attributes.find(key);
     if (it != attributes.end()) {
         return it.value();
     } else {
@@ -76,16 +77,36 @@ QString Properties::fileAttribute(const QString &key) const
     }
 }
 
-Properties::PropertiesMap Properties::fileAttributes() const
+
+Properties::Map Properties::drawer(const QString &name) const
+{
+    auto const decision = [name](const Drawer::Pointer& drawer) -> bool {
+        return name == drawer->name();
+    };
+    auto const drawers = findElements<Drawer>(d->element_, 1, decision);
+    if (drawers.isEmpty()) {
+        throw RuntimeException(tr("No drawer named %1 found!").arg(name));
+    }
+    auto const drawer = drawers.first();
+    auto const entryElements = findOwnChildren<DrawerEntry>(drawer);
+    Map entries;
+    std::for_each(entryElements.begin(), entryElements.end(),
+                  [&entries](const DrawerEntry::Pointer& entry) {
+        entries.insert(entry->key(), entry->value());
+    } );
+    return entries;
+}
+
+Properties::Map Properties::fileAttributes() const
 {
     //Find an OrgFile element that is the parent of this one. If there isn't any, no problem, continue.
     //If there is, query its property values and add it to the map as the default for the element
     //local properties:
     auto const file = findNextHigherUp<OrgFile>(d->element_.data());
     QSharedPointer<OrgFile> pf(file, NilDeleter);
-    PropertiesMap p;
+    Map p;
     if (file) {
-        auto const fileAttributes = findChildren<FileAttributeLine>(pf);
+        auto const fileAttributes = findElements<FileAttributeLine>(pf);
         for(auto const attribute : fileAttributes) {
             p.insert(attribute->key(), attribute->value());
         }

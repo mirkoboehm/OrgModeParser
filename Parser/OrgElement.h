@@ -3,6 +3,7 @@
 
 #include <QCoreApplication>
 #include <QSharedPointer>
+#include <QRegularExpression>
 
 #include "orgmodeparser_export.h"
 
@@ -52,6 +53,7 @@ private:
     Private* d;
 };
 
+//FIXME Check if isMatch could be a template specialization for findElements:
 template <typename T>
 QSharedPointer<T> findElement(OrgElement::Pointer element, const QRegularExpression& pattern) {
     QSharedPointer<T> p = element.dynamicCast<T>();

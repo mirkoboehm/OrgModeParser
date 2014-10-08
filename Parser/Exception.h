@@ -1,6 +1,8 @@
 #ifndef ORGMODE_PARSER_EXCEPTION_H
 #define ORGMODE_PARSER_EXCEPTION_H
 
+#include <QCoreApplication>
+
 #include <stdexcept>
 
 #include <QString>
@@ -22,8 +24,9 @@ private:
 
 class ORGMODEPARSER_EXPORT NotImplementedException : public Exception
 {
+    Q_DECLARE_TR_FUNCTIONS(NotImplementedException)
 public:
-    explicit NotImplementedException(const QString& message);
+    explicit NotImplementedException(const QString& message = tr("Not implemented!"));
 };
 
 class ORGMODEPARSER_EXPORT RuntimeException : public Exception

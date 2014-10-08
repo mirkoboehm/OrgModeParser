@@ -42,7 +42,7 @@ public:
     OrgElement::Pointer parseDrawerLine(const OrgElement::Pointer& parent, const OrgFileContent::Pointer& content) const;
 
     Parser* parser_;
-    Properties::PropertiesMap fileAttributesAfterFirstPass_;
+    Properties::Map fileAttributesAfterFirstPass_;
 
 private:
     QRegularExpressionMatch headlineMatch(const QString& line) const;

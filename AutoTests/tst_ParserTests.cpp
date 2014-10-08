@@ -209,40 +209,6 @@ void ParserTests::testParserAndIdentity_data()
     };
     QTest::newRow("DrawerCornerCases") << FL1("://TestData/Parser/DrawersCornerCases.org") << testDrawerCornerCases;
 
-    //Verify calculation of properties for individual elements:
-    VerificationMethod testDrawerEntries = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
-        //Headline 1 contains a drawer "MyDrawers":
-        auto const headline_1 = findElement<OrgMode::Headline>(element, FL1("headline_1"));
-        QVERIFY(headline_1);
-        const Properties properties1(headline_1);
-        const Properties::Map myDrawers = properties1.drawer(FL1("MyDrawers"));
-        //A drawer entry:
-        QCOMPARE(myDrawers.value(FL1("Monday")), FL1("yellow"));
-        //An empty drawer entry:
-        QVERIFY(myDrawers.value(FL1("Sunday")).contains(FL1("")));
-        //A no-existant drawer entry:
-        QVERIFY(myDrawers.value(FL1("Thursday")).isNull());
-    };
-    QTest::newRow("DrawerEntries") << FL1("://TestData/Parser/DrawersAndProperties.org") << testDrawerEntries;
-
-    //Verify drawers are only detected as children of an element, not in the elements children:
-    VerificationMethod testDrawerInHierarchy = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
-        //Headline 2 does not have a drawer "MyDrawers", but it's child headline_2_1 does:
-        auto const headline_2 = findElement<OrgMode::Headline>(element, FL1("headline_2"));
-        const Properties properties_2(headline_2);
-        try {
-            properties_2.drawer(FL1("MyDrawers"));
-            QFAIL("Retrieving a non-existant drawer should throw an exception!");
-        } catch(const RuntimeException& ex) {
-            qDebug() << qPrintable(ex.message());
-        }
-        auto const headline_2_1 = findElement<OrgMode::Headline>(element, FL1("headline_2_1"));
-        const Properties properties_2_1(headline_2_1);
-        auto const drawer_2_1 = properties_2_1.drawer(FL1("MyDrawers"));
-        QCOMPARE(drawer_2_1.value(FL1("Monday")), FL1("yellow"));
-    };
-    QTest::newRow("DrawerInHierarchy") << FL1("://TestData/Parser/DrawersAndProperties.org") << testDrawerInHierarchy;
-
     VerificationMethod testFindElements = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
         {   //There is one headline that is a direct child of element, headline_1:
             auto const headlines = findElements<Headline>(element, 1);
@@ -270,16 +236,48 @@ void ParserTests::testParserAndIdentity_data()
     QTest::newRow("FindElements") << FL1("://TestData/Parser/ClockEntries.org") << testFindElements;
 
     VerificationMethod testFindElementsFiltered = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
-        qDebug() << endl << qPrintable(element->describe());
-        {   //There is one headline that is a direct child of element, headline_1:
-            auto const nonEmptyClockLines = [](const ClockLine::Pointer& clock) { return clock->duration() > 0; };
-            auto const clockLines = findElements<ClockLine>(element, -1, nonEmptyClockLines);
-            QVERIFY(clockLines.size() == 3);
-            const ClockLine::Pointer clockLine_1_1 = clockLines.first();
-            QCOMPARE(clockLine_1_1->duration(), 600);
-        }
+        //There is one headline that is a direct child of element, headline_1:
+        auto const nonEmptyClockLines = [](const ClockLine::Pointer& clock) { return clock->duration() > 0; };
+        auto const clockLines = findElements<ClockLine>(element, -1, nonEmptyClockLines);
+        QVERIFY(clockLines.size() == 3);
+        const ClockLine::Pointer clockLine_1_1 = clockLines.first();
+        QCOMPARE(clockLine_1_1->duration(), 600);
     };
     QTest::newRow("FindElementsFiltered") << FL1("://TestData/Parser/ClockEntries.org") << testFindElementsFiltered;
+
+    //Verify calculation of properties for individual elements:
+    VerificationMethod testDrawerEntries = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
+        //Headline 1 contains a drawer "MyDrawers":
+        auto const headline_1 = findElement<OrgMode::Headline>(element, FL1("headline_1"));
+        QVERIFY(headline_1);
+        const Properties properties1(headline_1);
+        const Properties::Map myDrawers = properties1.drawer(FL1("MyDrawers"));
+        //A drawer entry:
+        QCOMPARE(myDrawers.value(FL1("Monday")), FL1("yellow"));
+        //An empty drawer entry:
+        QVERIFY(myDrawers.value(FL1("Sunday")).contains(FL1("")));
+        //A no-existant drawer entry:
+        QVERIFY(myDrawers.value(FL1("Thursday")).isNull());
+    };
+    QTest::newRow("DrawerEntries") << FL1("://TestData/Parser/DrawersAndProperties.org") << testDrawerEntries;
+
+    //Verify drawers are only detected as children of an element, not in the elements children:
+    VerificationMethod testDrawerInHierarchy = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
+        //Headline 2 does not have a drawer "MyDrawers", but it's child headline_2_1 does:
+        auto const headline_2 = findElement<OrgMode::Headline>(element, FL1("headline_2"));
+        const Properties properties_2(headline_2);
+        try {
+            properties_2.drawer(FL1("MyDrawers"));
+            QFAIL("Retrieving a non-existant drawer should throw an exception!");
+        } catch(const RuntimeException& ex) {
+            //qDebug() << qPrintable(ex.message());
+        }
+        auto const headline_2_1 = findElement<OrgMode::Headline>(element, FL1("headline_2_1"));
+        const Properties properties_2_1(headline_2_1);
+        auto const drawer_2_1 = properties_2_1.drawer(FL1("MyDrawers"));
+        QCOMPARE(drawer_2_1.value(FL1("Monday")), FL1("yellow"));
+    };
+    QTest::newRow("DrawerInHierarchy") << FL1("://TestData/Parser/DrawersAndProperties.org") << testDrawerInHierarchy;
 
     //FIXME these aren't properties, but attributes.
     //Properties are of the syntax #+PROPERTY: key <value>.
@@ -289,6 +287,7 @@ void ParserTests::testParserAndIdentity_data()
 
     //Verify detection of file-scope properties ("#+PROPERTY: var 123"):
     VerificationMethod testFileScopeProperties = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
+        //qDebug() << endl << qPrintable(element->describe());
         //QFAIL("NI");
     };
     QTest::newRow("FileScopeProperties") << FL1("://TestData/Parser/DrawersAndProperties.org") << testFileScopeProperties;

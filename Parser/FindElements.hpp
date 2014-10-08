@@ -28,6 +28,11 @@ QList<QSharedPointer<T>> findElements(const OrgElement::Pointer& element, int ma
     return findElements<T, decltype(decision)>(element, maxDepth, decision);
 };
 
+template <typename T>
+QList<QSharedPointer<T>> findElements(const OrgElement::Pointer& element) {
+    return findElements<T>(element, -1);
+};
+
 }
 
 #endif // FINDELEMENTS_HPP

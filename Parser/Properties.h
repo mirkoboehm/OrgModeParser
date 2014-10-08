@@ -17,17 +17,18 @@ class ORGMODEPARSER_EXPORT Properties
 {
     Q_DECLARE_TR_FUNCTIONS(Properties)
 public:
-    typedef QMap<QString, QString> PropertiesMap;
+    typedef QMap<QString, QString> Map;
 
     explicit Properties(const OrgElement::Pointer& element);
     ~Properties();
 
     QString property(const QString&) const;
-    PropertiesMap properties() const;
+    Map properties() const;
 
     QString fileAttribute(const QString& key) const;
-    PropertiesMap fileAttributes() const;
+    Map fileAttributes() const;
 
+    Map drawer(const QString& name) const;
 private:
     class Private;
     Private* d;
