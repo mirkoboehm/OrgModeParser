@@ -46,6 +46,7 @@ Properties::~Properties()
 
 QString Properties::property(const QString& key) const
 {
+    const Map attributes(fileAttributes());
     throw NotImplementedException();
 }
 
