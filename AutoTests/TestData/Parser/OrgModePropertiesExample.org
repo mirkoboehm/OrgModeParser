@@ -1,0 +1,25 @@
+#+PROPERTY: NDisks_ALL 1 2 3 4
+#+PROPERTY: var  foo=1
+#+PROPERTY: var+ bar=2
+
+Note: The following examples and the matching tests for them have been
+taken from [[http://orgmode.org/manual/Property-syntax.html][OrgMode Property Syntax]]. 
+
+* CD collection
+  :PROPERTIES:
+  :NDisks_ALL: 1 2 3 4
+  :Publisher_ALL: "Deutsche Grammophon" Philips EMI
+  :END:
+** Classic
+   :PROPERTIES:
+   :GENRES:   Classic
+   :END:
+*** Goldberg Variations
+    :PROPERTIES:
+    :Title:    Goldberg Variations
+    :Composer: J.S. Bach
+    :Artist:   Glen Gould
+    :Publisher: Deutsche Grammophon
+    :NDisks:   1
+    :GENRES+:   Baroque
+    :END:

@@ -5,5 +5,6 @@
         <file>TestData/Parser/Tags.org</file>
         <file>TestData/Parser/DrawersAndProperties.org</file>
         <file>TestData/Parser/DrawersCornerCases.org</file>
+        <file>TestData/Parser/OrgModePropertiesExample.org</file>
     </qresource>
 </RCC>

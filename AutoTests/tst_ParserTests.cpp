@@ -282,15 +282,35 @@ void ParserTests::testParserAndIdentity_data()
     //Verify detection of file-scope properties ("#+PROPERTY: var 123"):
     VerificationMethod testFileScopeProperties = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
         //qDebug() << endl << qPrintable(element->describe());
-        //QFAIL("NI");
+        {   //Verify value of file level property NDisks_ALL:
+            Properties properties(element);
+            QCOMPARE(properties.property(FL1("NDisks_ALL")), FL1("1 2 3 4"));
+        }
+        {   //Verify value of file level property var, assembled over two lines
+            Properties properties(element);
+            QCOMPARE(properties.property(FL1("var")), FL1("foo=1 bar=2"));
+        }
     };
-    QTest::newRow("FileScopeProperties") << FL1("://TestData/Parser/DrawersAndProperties.org") << testFileScopeProperties;
+    QTest::newRow("FileScopeProperties") << FL1("://TestData/Parser/OrgModePropertiesExample.org") << testFileScopeProperties;
 
     //Verify calculation of properties for individual elements:
     VerificationMethod testElementProperties = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
-        //QFAIL("NI");
+        qDebug() << endl << qPrintable(element->describe());
+        {   //Verify values of the properties of the level 3 headlines:
+            auto const goldbergHeadline = findElement<Headline>(element, FL1("Goldberg Variations"));
+            QVERIFY(goldbergHeadline);
+            Properties properties(goldbergHeadline);
+            QCOMPARE(properties.property(FL1("Artist")), FL1("Glen Gould"));
+            QCOMPARE(properties.property(FL1("Composer")), FL1("J.S. Bach"));
+            try { //...a non-existant property
+                properties.property(FL1("I do not exist"));
+                QFAIL("Retrieving a non-existant propertry should throw an exception!");
+            } catch(const RuntimeException& ex) {
+                //qDebug() << qPrintable(ex.message());
+            }
+        }
     };
-    QTest::newRow("ElementProperties") << FL1("://TestData/Parser/DrawersAndProperties.org") << testElementProperties;
+    QTest::newRow("ElementProperties") << FL1("://TestData/Parser/OrgModePropertiesExample.org") << testElementProperties;
 
     //FIXME org-use-property-inheritance as a property parser status?
     //Verify inheritance of properties:
