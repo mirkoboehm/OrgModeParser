@@ -142,11 +142,16 @@ void ParserTests::testParserAndIdentity_data()
         QVERIFY(headline_1);
         Properties properties(headline_1);
         //A file level attribute:
-        QVERIFY(properties.fileAttribute(FL1("DRAWERS")).contains(FL1("MyDrawers")));
+        QCOMPARE(properties.fileAttribute(FL1("DRAWERS")), FL1("MyDrawers"));
         //A file level attribute, but empty:
         QCOMPARE(properties.fileAttribute(FL1("EMPTY_ATTRIBUTE")), FL1(""));
         //A non-existant attribute:
-        QCOMPARE(properties.fileAttribute(FL1("I DO NOT EXIST")), QString());
+        try {
+            properties.fileAttribute(FL1("I DO NOT EXIST"));
+            QFAIL("Querying a non-existant attribute should throw an exception.");
+        } catch (const RuntimeException& ex) {
+            //all good
+        }
     };
     QTest::newRow("FileAttributes") << FL1("://TestData/Parser/DrawersAndProperties.org") << testFileAttributes;
 
@@ -251,13 +256,13 @@ void ParserTests::testParserAndIdentity_data()
         auto const headline_1 = findElement<OrgMode::Headline>(element, FL1("headline_1"));
         QVERIFY(headline_1);
         const Properties properties1(headline_1);
-        const Properties::Map myDrawers = properties1.drawer(FL1("MyDrawers"));
+        const Properties::Vector myDrawers = properties1.drawer(FL1("MyDrawers"));
         //A drawer entry:
-        QCOMPARE(myDrawers.value(FL1("Monday")), FL1("yellow"));
+        QCOMPARE(Properties::attribute(myDrawers, FL1("Monday")), FL1("yellow"));
         //An empty drawer entry:
-        QVERIFY(myDrawers.value(FL1("Sunday")).contains(FL1("")));
+        QCOMPARE(Properties::attribute(myDrawers, FL1("Sunday")), FL1(""));
         //A no-existant drawer entry:
-        QVERIFY(myDrawers.value(FL1("Thursday")).isNull());
+        QVERIFY(Properties::attribute(myDrawers, FL1("Thursday")).isNull());
     };
     QTest::newRow("DrawerEntries") << FL1("://TestData/Parser/DrawersAndProperties.org") << testDrawerEntries;
 
@@ -275,7 +280,7 @@ void ParserTests::testParserAndIdentity_data()
         auto const headline_2_1 = findElement<OrgMode::Headline>(element, FL1("headline_2_1"));
         const Properties properties_2_1(headline_2_1);
         auto const drawer_2_1 = properties_2_1.drawer(FL1("MyDrawers"));
-        QCOMPARE(drawer_2_1.value(FL1("Monday")), FL1("yellow"));
+        QCOMPARE(Properties::attribute(drawer_2_1, FL1("Monday")), FL1("yellow"));
     };
     QTest::newRow("DrawerInHierarchy") << FL1("://TestData/Parser/DrawersAndProperties.org") << testDrawerInHierarchy;
 
