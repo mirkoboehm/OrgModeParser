@@ -10,6 +10,7 @@
 #include "FileAttributeLine.h"
 #include "OrgFile.h"
 #include "Headline.h"
+#include "Attributes.h"
 #include "Properties.h"
 #include "ClockLine.h"
 #include "Exception.h"
@@ -42,7 +43,7 @@ public:
     OrgElement::Pointer parseDrawerLine(const OrgElement::Pointer& parent, const OrgFileContent::Pointer& content) const;
 
     Parser* parser_;
-    Properties::Vector fileAttributesAfterFirstPass_;
+    Attributes::Vector fileAttributesAfterFirstPass_;
 
 private:
     QRegularExpressionMatch headlineMatch(const QString& line) const;
@@ -203,7 +204,7 @@ OrgElement::Pointer Parser::Private::parseDrawerLine(const OrgElement::Pointer &
             content->ungetLine(line);
             return OrgElement::Pointer();
         }
-        const QStringList drawernames = Properties::attribute(fileAttributesAfterFirstPass_,
+        const QStringList drawernames = Attributes::attribute(fileAttributesAfterFirstPass_,
                                                               QString::fromLatin1("DRAWERS")).split(QRegExp(QLatin1String("\\s+")));
         if (drawernames.contains(name)) {
             //This is a drawer
@@ -272,8 +273,8 @@ OrgElement::Pointer Parser::parse(QTextStream *data, const QString &fileName) co
     Q_ASSERT(data);
     const OrgFileContent::Pointer content(new OrgFileContent(data));
     auto const firstPassResults = d->parseOrgFileFirstPass(content, fileName);
-    const Properties properties(firstPassResults.first);
-    d->fileAttributesAfterFirstPass_ = properties.fileAttributes();
+    const Attributes attributes(firstPassResults.first);
+    d->fileAttributesAfterFirstPass_ = attributes.fileAttributes();
     return d->parseOrgFile(firstPassResults.second, fileName);
 }
 

@@ -5,6 +5,7 @@
 
 #include "orgmodeparser_export.h"
 #include <OrgElement.h>
+#include <Attributes.h>
 
 namespace OrgMode {
 
@@ -20,10 +21,6 @@ class ORGMODEPARSER_EXPORT Properties
 {
     Q_DECLARE_TR_FUNCTIONS(Properties)
 public:
-    struct Property {
-        QString key;
-        QString value;
-    };
     typedef QVector<Property> Vector;
 
     explicit Properties(const OrgElement::Pointer& element);
@@ -32,13 +29,8 @@ public:
     QString property(const QString&) const;
     Vector properties() const;
 
-    QString fileAttribute(const QString& key) const;
-    Vector fileAttributes(const QString& key) const;
-    Vector fileAttributes() const;
-
     Vector drawer(const QString& name) const;
 
-    static QString attribute(const Vector& attributes, const QString& key);
 private:
     class Private;
     Private* d;

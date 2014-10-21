@@ -18,6 +18,7 @@ set(OrgModeParser_LIB_SRCS
 # Classes that process OrgElements as visitors:
         Clock.cpp
         Tags.cpp
+        Attributes.cpp
         Properties.cpp
 )
 
