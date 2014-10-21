@@ -78,6 +78,19 @@ Attributes::Vector Attributes::fileAttributes() const
     return attributes;
 }
 
+/** @brief For the element, return the drawer names that are defined. */
+const QStringList Attributes::drawerNames() const
+{
+    try {
+        const QString drawersAttribute = fileAttribute(QString::fromLatin1("DRAWERS"));
+        const QStringList names = drawersAttribute.split(QRegExp(QLatin1String("\\s+")));
+        return names;
+    } catch (const RuntimeException& ex) {
+        // No drawer attribute defined:
+        return QStringList();
+    }
+}
+
 /** @brief Return the value of an attribute identified by name.
  *
  * The first occurance of the attribute is returned.

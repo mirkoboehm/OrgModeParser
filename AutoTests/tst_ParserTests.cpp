@@ -135,6 +135,16 @@ void ParserTests::testParserAndIdentity_data()
     };
     QTest::newRow("AttributeParsing") << FL1("://TestData/Parser/DrawersAndProperties.org") << testAttributeParsing;
 
+    //Verify parsing of drawer names in Attributes:
+    VerificationMethod testDrawerNameParsing = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
+        const Attributes attributes(element);
+        const QStringList drawers = attributes.drawerNames();
+        QCOMPARE(drawers.count(), 2);
+        QVERIFY(drawers.contains(FL1("MyDrawers")));
+        QVERIFY(drawers.contains(FL1("TestDrawer")));
+    };
+    QTest::newRow("DrawerNameParsing") << FL1("://TestData/Parser/DrawersAndProperties.org") << testDrawerNameParsing;
+
     //Verify calculation of attributes at file scope by the Properties class:
     VerificationMethod testFileAttributes = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
         //Headline 1 inherits the attributes from the attributes of the file it is in:

@@ -39,8 +39,9 @@ public:
     Vector fileAttributes(const QString& key) const;
     Vector fileAttributes() const;
 
-    static QString attribute(const Vector& attributes, const QString& key);
+    const QStringList drawerNames() const;
 
+    static QString attribute(const Vector& attributes, const QString& key);
 
 private:
     class Private;
