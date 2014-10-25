@@ -139,9 +139,10 @@ void ParserTests::testParserAndIdentity_data()
     VerificationMethod testDrawerNameParsing = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
         const Attributes attributes(element);
         const QStringList drawers = attributes.drawerNames();
-        QCOMPARE(drawers.count(), 2);
+        QCOMPARE(drawers.count(), 3);
         QVERIFY(drawers.contains(FL1("MyDrawers")));
         QVERIFY(drawers.contains(FL1("TestDrawer")));
+        QVERIFY(drawers.contains(FL1("PROPERTIES")));
     };
     QTest::newRow("DrawerNameParsing") << FL1("://TestData/Parser/DrawersAndProperties.org") << testDrawerNameParsing;
 

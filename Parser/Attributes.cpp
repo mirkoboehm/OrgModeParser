@@ -81,13 +81,14 @@ Attributes::Vector Attributes::fileAttributes() const
 /** @brief For the element, return the drawer names that are defined. */
 const QStringList Attributes::drawerNames() const
 {
+    static const QStringList defaults = QStringList() << QStringLiteral("PROPERTIES");
     try {
         const QString drawersAttribute = fileAttribute(QString::fromLatin1("DRAWERS"));
         const QStringList names = drawersAttribute.split(QRegExp(QLatin1String("\\s+")));
-        return names;
+        return defaults + names;
     } catch (const RuntimeException& ex) {
         // No drawer attribute defined:
-        return QStringList();
+        return defaults;
     }
 }
 
