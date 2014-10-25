@@ -16,6 +16,7 @@
 #include <Exception.h>
 #include <Drawer.h>
 #include <DrawerEntry.h>
+#include <PropertyDrawer.h>
 #include <FindElements.h>
 
 using namespace OrgMode;
@@ -294,6 +295,16 @@ void ParserTests::testParserAndIdentity_data()
         QCOMPARE(Attributes::attribute(drawer_2_1, FL1("Monday")), FL1("yellow"));
     };
     QTest::newRow("DrawerInHierarchy") << FL1("://TestData/Parser/DrawersAndProperties.org") << testDrawerInHierarchy;
+
+    //Verify property drawers are detected:
+    VerificationMethod testPropertyDrawerParsing = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
+        qDebug() << endl << qPrintable(element->describe());
+        auto const headline = findElement<Headline>(element, FL1("CD collection"));
+        QVERIFY(headline);
+        auto const drawers = findElements<PropertyDrawer>(headline, 1);
+        QCOMPARE(drawers.count(), 1);
+    };
+    QTest::newRow("PropertyDrawerParsing") << FL1("://TestData/Parser/OrgModePropertiesExample.org") << testPropertyDrawerParsing;
 
     //Verify detection of file-scope properties ("#+PROPERTY: var 123"):
     VerificationMethod testFileScopeProperties = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {

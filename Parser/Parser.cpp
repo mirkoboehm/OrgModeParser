@@ -17,6 +17,7 @@
 #include "OrgFileContent.h"
 #include "Drawer.h"
 #include "DrawerEntry.h"
+#include "PropertyDrawer.h"
 #include "DrawerClosingEntry.h"
 
 namespace OrgMode {
@@ -208,7 +209,12 @@ OrgElement::Pointer Parser::Private::parseDrawerLine(const OrgElement::Pointer &
         const QStringList drawernames = attributes.drawerNames();
         if (drawernames.contains(name)) {
             //This is a drawer
-            Drawer::Pointer self(new Drawer(line, parent.data()));
+            Drawer::Pointer self;
+            if (name == QLatin1String("PROPERTIES")) {
+                self = PropertyDrawer::Pointer(new PropertyDrawer(line, parent.data()));
+            } else {
+                self = Drawer::Pointer(new Drawer(line, parent.data()));
+            }
             self->setName(name);
             //Parse elements until :END: (complete) or headline (cancel)
             static const QRegularExpression drawerEntryStructure(QStringLiteral("^\\s*:(.+):\\s*(.*)$"));
