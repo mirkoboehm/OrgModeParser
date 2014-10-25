@@ -3,6 +3,8 @@
 
 namespace OrgMode {
 
+static void NilDeleter(OrgElement*) {}
+
 template <typename T, typename Decision>
 QList<QSharedPointer<T>> findElements(const OrgElement::Pointer& element, int maxDepth, Decision d) {
     if (!element) return QList<QSharedPointer<T>>();
@@ -22,6 +24,11 @@ QList<QSharedPointer<T>> findElements(const OrgElement::Pointer& element, int ma
     return matches;
 }
 
+template <typename T, typename Decision>
+QList<QSharedPointer<T>> findElements(OrgElement* element, int maxDepth, Decision d) {
+    return findElements<T>(OrgElement::Pointer(element, NilDeleter), maxDepth, d);
+}
+
 template <typename T>
 QList<QSharedPointer<T>> findElements(const OrgElement::Pointer& element, int maxDepth) {
     auto const decision = [](const QSharedPointer<T>&) { return true; };
@@ -29,8 +36,18 @@ QList<QSharedPointer<T>> findElements(const OrgElement::Pointer& element, int ma
 };
 
 template <typename T>
+QList<QSharedPointer<T>> findElements(OrgElement* element, int maxDepth) {
+    return findElements<T>(OrgElement::Pointer(element, NilDeleter), maxDepth);
+};
+
+template <typename T>
 QList<QSharedPointer<T>> findElements(const OrgElement::Pointer& element) {
     return findElements<T>(element, -1);
+};
+
+template <typename T>
+QList<QSharedPointer<T>> findElements(OrgElement* element) {
+    return findElements<T>(OrgElement::Pointer(element, NilDeleter));
 };
 
 }
