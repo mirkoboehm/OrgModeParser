@@ -47,7 +47,7 @@ QString Attributes::fileAttribute(const QString &key) const
     if (props.isEmpty()) {
         throw RuntimeException(tr("No such attribute: %1").arg(key));
     }
-    return props.first().value;
+    return props.first().value();
 }
 
 Attributes::Vector Attributes::fileAttributes(const QString &key) const
@@ -55,7 +55,7 @@ Attributes::Vector Attributes::fileAttributes(const QString &key) const
     const Vector all(fileAttributes());
     Vector attributes;
     std::copy_if(all.begin(), all.end(), std::back_inserter(attributes),
-                 [key](const Property& prop) { return prop.key == key; } );
+                 [key](const Property& prop) { return prop.key() == key; } );
     return attributes;
 }
 
@@ -70,7 +70,7 @@ Attributes::Vector Attributes::fileAttributes() const
     if (file) {
         auto const fileAttributes = findElements<FileAttributeLine>(pf);
         for(auto const attribute : fileAttributes) {
-            attributes.append( { attribute->key(), attribute->value() } );
+            attributes.append(Property(attribute->key(), attribute->value()));
         }
     }
     return attributes;
@@ -101,8 +101,8 @@ QString Attributes::attribute(const Attributes::Vector &attributes, const QStrin
     //repeatedly.
     //A "ATTRIBUTE+: value to append" syntax is not accepted (tested in OrgMode).
     for(auto const att : attributes) {
-        if (att.key == key) {
-            return att.value;
+        if (att.key() == key) {
+            return att.value();
         }
     }
     return QString();

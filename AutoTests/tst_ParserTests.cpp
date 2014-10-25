@@ -311,7 +311,7 @@ void ParserTests::testParserAndIdentity_data()
 
     //Verify property drawers are detected:
     VerificationMethod testPropertyDrawerEntryParsing = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
-        qDebug() << endl << qPrintable(element->describe());
+        //qDebug() << endl << qPrintable(element->describe());
         auto const headline = findElement<Headline>(element, FL1("CD collection"));
         QVERIFY(headline);
         auto const entries = findElements<PropertyDrawerEntry>(headline, 2);
@@ -322,7 +322,7 @@ void ParserTests::testParserAndIdentity_data()
 
     //Verify detection of file-scope properties ("#+PROPERTY: var 123"):
     VerificationMethod testFileScopeProperties = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
-        //qDebug() << endl << qPrintable(element->describe());
+        qDebug() << endl << qPrintable(element->describe());
         {   //Verify value of file level property NDisks_ALL:
             Properties properties(element);
             QCOMPARE(properties.property(FL1("NDisks_ALL")), FL1("1 2 3 4"));

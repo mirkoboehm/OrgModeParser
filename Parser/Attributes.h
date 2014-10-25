@@ -5,18 +5,10 @@
 #include <QVector>
 
 #include "orgmodeparser_export.h"
+#include <Property.h>
 #include <OrgElement.h>
 
 namespace OrgMode {
-
-/** @brief A helper to handle key-value properties.
- *
- * FIXME Where to keep?
- */
-struct Property {
-    QString key;
-    QString value;
-};
 
 /** @brief Attributes handles file attributes for an OrgElement.
  *

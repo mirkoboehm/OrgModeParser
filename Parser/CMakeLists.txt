@@ -21,6 +21,7 @@ set(OrgModeParser_LIB_SRCS
         Clock.cpp
         Tags.cpp
         Attributes.cpp
+        Property.cpp
         Properties.cpp
 )
 

@@ -8,6 +8,7 @@
 #include <Drawer.h>
 #include <DrawerEntry.h>
 #include <PropertyDrawer.h>
+#include <PropertyDrawerEntry.h>
 #include <FindElements.h>
 
 namespace OrgMode {
@@ -37,16 +38,22 @@ QString Properties::property(const QString& key) const
     Attributes attributes(d->element_);
     const Vector attr(attributes.fileAttributes(QString::fromLatin1("PROPERTY")));
     //Traverse the element chain up to the next OrgFile, collecting property definitions for the specified key on the way:
-    QList<DrawerEntry::Pointer> definitions;
-    //...
-    //Create single list of all definitions that affect the property:
-    QList<PropertyDrawer::Pointer> propertyDrawers;
+    QList<PropertyDrawerEntry::Pointer> propertyDrawerEntries;
     OrgElement* element(d->element_.data());
     while(element) {
-        const QList<PropertyDrawer::Pointer> elementPropertyDrawers = findElements<PropertyDrawer>(element, 1);
-        propertyDrawers << elementPropertyDrawers;
-        element = element->parent();
+        auto const drawers = findElements<PropertyDrawer>(element, 1);
+        for( auto const drawer : drawers) {
+            auto isPropertyEntryForKey = [key](const PropertyDrawerEntry::Pointer& element) {
+                return element->key() == key;
+            };
+            auto const elementPropertyDrawers = findElements<PropertyDrawerEntry>(element, 1, isPropertyEntryForKey);
+            propertyDrawerEntries << elementPropertyDrawers;
+
+        }
+         element = element->parent();
     }
+    //Create single list of all definitions that affect the property:
+    QList<Property> definitions;
     //Calculate property value:
     const QString result = propertyValue(key, attr);
     return result;
@@ -71,14 +78,20 @@ Properties::Vector Properties::drawer(const QString &name) const
     Vector entries;
     std::for_each(entryElements.begin(), entryElements.end(),
                   [&entries](const DrawerEntry::Pointer& entry) {
-        entries.append( { entry->key(), entry->value() } );
+        entries.append(Property(entry->key(), entry->value()));
     } );
     return entries;
 }
 
 QString Properties::propertyValue(const QString &key, const Properties::Vector &definitions)
 {
-    throw NotImplementedException();
+    QString value;
+    for( auto const property : definitions ) {
+        if (property.key() == key) {
+            value = property.value();
+        }
+    }
+    return value;
 }
 
 }
