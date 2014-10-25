@@ -19,8 +19,6 @@ T* findNextHigherUp(OrgElement* element) {
     }
 }
 
-static void NilDeleter(OrgElement*) {}
-
 class Attributes::Private {
 public:
     explicit Private(const OrgElement::Pointer &element)

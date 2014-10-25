@@ -7,6 +7,7 @@
 #include <OrgFile.h>
 #include <Drawer.h>
 #include <DrawerEntry.h>
+#include <PropertyDrawer.h>
 #include <FindElements.h>
 
 namespace OrgMode {
@@ -39,7 +40,13 @@ QString Properties::property(const QString& key) const
     QList<DrawerEntry::Pointer> definitions;
     //...
     //Create single list of all definitions that affect the property:
-    //...
+    QList<PropertyDrawer::Pointer> propertyDrawers;
+    OrgElement* element(d->element_.data());
+    while(element) {
+        const QList<PropertyDrawer::Pointer> elementPropertyDrawers = findElements<PropertyDrawer>(element, 1);
+        propertyDrawers << elementPropertyDrawers;
+        element = element->parent();
+    }
     //Calculate property value:
     const QString result = propertyValue(key, attr);
     return result;

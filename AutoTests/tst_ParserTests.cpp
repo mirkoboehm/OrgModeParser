@@ -303,6 +303,9 @@ void ParserTests::testParserAndIdentity_data()
         QVERIFY(headline);
         auto const drawers = findElements<PropertyDrawer>(headline, 1);
         QCOMPARE(drawers.count(), 1);
+        auto const allPropertyDrawers = findElements<PropertyDrawer>(headline);
+        QCOMPARE(allPropertyDrawers.count(), 3);
+
     };
     QTest::newRow("PropertyDrawerParsing") << FL1("://TestData/Parser/OrgModePropertiesExample.org") << testPropertyDrawerParsing;
 

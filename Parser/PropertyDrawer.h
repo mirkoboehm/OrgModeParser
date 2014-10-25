@@ -12,7 +12,7 @@ class ORGMODEPARSER_EXPORT PropertyDrawer : public Drawer
 {
     Q_DECLARE_TR_FUNCTIONS(PropertyDrawer)
 public:
-    typedef QSharedPointer<Drawer> Pointer;
+    typedef QSharedPointer<PropertyDrawer> Pointer;
 
     explicit PropertyDrawer(OrgElement* parent = 0);
     explicit PropertyDrawer(const QString& line, OrgElement* parent = 0);
