@@ -10,6 +10,7 @@ set(OrgModeParser_LIB_SRCS
         Drawer.cpp
         DrawerEntry.cpp
         PropertyDrawer.cpp
+        PropertyDrawerEntry.cpp
         DrawerClosingEntry.cpp
         OrgLine.cpp
         AttributeLine.cpp

@@ -18,6 +18,7 @@
 #include "Drawer.h"
 #include "DrawerEntry.h"
 #include "PropertyDrawer.h"
+#include "PropertyDrawerEntry.h"
 #include "DrawerClosingEntry.h"
 
 namespace OrgMode {
@@ -211,9 +212,9 @@ OrgElement::Pointer Parser::Private::parseDrawerLine(const OrgElement::Pointer &
             //This is a drawer
             Drawer::Pointer self;
             if (name == QLatin1String("PROPERTIES")) {
-                self = PropertyDrawer::Pointer(new PropertyDrawer(line, parent.data()));
+                self.reset(new PropertyDrawer(line, parent.data()));
             } else {
-                self = Drawer::Pointer(new Drawer(line, parent.data()));
+                self.reset(new Drawer(line, parent.data()));
             }
             self->setName(name);
             //Parse elements until :END: (complete) or headline (cancel)
@@ -237,7 +238,12 @@ OrgElement::Pointer Parser::Private::parseDrawerLine(const OrgElement::Pointer &
                         break;
                     } else {
                         //This is a drawer entry, specifying one key-value pair
-                        const DrawerEntry::Pointer child(new DrawerEntry(line, self.data()));
+                        DrawerEntry::Pointer child;
+                        if (self.dynamicCast<PropertyDrawer>()) {
+                            child.reset(new PropertyDrawerEntry(line, self.data()));
+                        } else {
+                            child.reset(new DrawerEntry(line, self.data()));
+                        }
                         child->setProperty(name, value);
                         self->addChild(child);
                     }

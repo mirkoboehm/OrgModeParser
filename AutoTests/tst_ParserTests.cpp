@@ -17,6 +17,7 @@
 #include <Drawer.h>
 #include <DrawerEntry.h>
 #include <PropertyDrawer.h>
+#include <PropertyDrawerEntry.h>
 #include <FindElements.h>
 
 using namespace OrgMode;
@@ -298,7 +299,6 @@ void ParserTests::testParserAndIdentity_data()
 
     //Verify property drawers are detected:
     VerificationMethod testPropertyDrawerParsing = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
-        qDebug() << endl << qPrintable(element->describe());
         auto const headline = findElement<Headline>(element, FL1("CD collection"));
         QVERIFY(headline);
         auto const drawers = findElements<PropertyDrawer>(headline, 1);
@@ -308,6 +308,17 @@ void ParserTests::testParserAndIdentity_data()
 
     };
     QTest::newRow("PropertyDrawerParsing") << FL1("://TestData/Parser/OrgModePropertiesExample.org") << testPropertyDrawerParsing;
+
+    //Verify property drawers are detected:
+    VerificationMethod testPropertyDrawerEntryParsing = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
+        qDebug() << endl << qPrintable(element->describe());
+        auto const headline = findElement<Headline>(element, FL1("CD collection"));
+        QVERIFY(headline);
+        auto const entries = findElements<PropertyDrawerEntry>(headline, 2);
+        QCOMPARE(entries.count(), 2);
+    };
+    QTest::newRow("PropertyDrawerEntryParsing") << FL1("://TestData/Parser/OrgModePropertiesExample.org")
+                                                << testPropertyDrawerEntryParsing;
 
     //Verify detection of file-scope properties ("#+PROPERTY: var 123"):
     VerificationMethod testFileScopeProperties = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
