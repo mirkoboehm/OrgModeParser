@@ -32,9 +32,17 @@ Properties::~Properties()
 /** @brief Query the specified property for this element. */
 QString Properties::property(const QString& key) const
 {
+    //Collect attribute lines that are propeties:
     Attributes attributes(d->element_);
     const Vector attr(attributes.fileAttributes(QString::fromLatin1("PROPERTY")));
-    throw NotImplementedException();
+    //Traverse the element chain up to the next OrgFile, collecting property definitions for the specified key on the way:
+    QList<DrawerEntry::Pointer> definitions;
+    //...
+    //Create single list of all definitions that affect the property:
+    //...
+    //Calculate property value:
+    const QString result = propertyValue(key, attr);
+    return result;
 }
 
 Properties::Vector Properties::properties() const
@@ -59,6 +67,11 @@ Properties::Vector Properties::drawer(const QString &name) const
         entries.append( { entry->key(), entry->value() } );
     } );
     return entries;
+}
+
+QString Properties::propertyValue(const QString &key, const Properties::Vector &definitions)
+{
+    throw NotImplementedException();
 }
 
 }
