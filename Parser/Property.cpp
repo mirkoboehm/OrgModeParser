@@ -22,24 +22,31 @@ public:
     Property::Operation operation;
 };
 
-Property::Property()
-    : Property(QString(), QString())
-{
-}
-
 Property::Property(const QString &key, const QString &value, Operation op)
     : d(new Private(key, value, op))
 {
 }
 
+Property::Property()
+    : Property(QString(), QString())
+{
+}
+
 Property::Property(const Property& other)
-    : Property(other.key(), other.value())
+    : Property(other.key(), other.value(), other.operation())
 {
 }
 
 Property::~Property()
 {
-    delete d; d = 0;
+}
+
+Property& Property::operator=(const Property &other)
+{
+    if (this != &other) {
+        *d = *(other.d);
+    }
+    return *this;
 }
 
 bool Property::operator==(const Property& other) const

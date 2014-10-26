@@ -99,7 +99,8 @@ void ParserTests::testPropertyOperations()
     //The default is to "define" a property
     Property prop1(key, value1);
     //A second property that adds a value:
-    Property prop2(key, value2, Property::Property_Add);
+    Property prop2;
+    prop2 = Property(key, value2, Property::Property_Add); //Use the assignment operator
 
     Property result(key, value2);
     QCOMPARE(result.key(), key);

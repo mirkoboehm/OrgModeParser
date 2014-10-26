@@ -2,6 +2,8 @@
 #define PROPERTY_H
 
 #include <QMetaType>
+#include <memory>
+
 #include <QString>
 
 #include "orgmodeparser_export.h"
@@ -22,6 +24,7 @@ public:
     Property(const Property& other);
     ~Property();
     bool operator==(const Property& other) const;
+    Property& operator=(const Property&);
 
     bool isValid() const;
     void apply(const Property& token);
@@ -37,7 +40,7 @@ public:
 
 private:
     class Private;
-    Private* d;
+    std::unique_ptr<Private> d;
 };
 
 }
