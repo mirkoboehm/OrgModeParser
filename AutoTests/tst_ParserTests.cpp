@@ -36,6 +36,7 @@ private Q_SLOTS:
     void testOrgFileContent();
     void testParseAttributesAsProperty_data();
     void testParseAttributesAsProperty();
+    void testPropertyOperations();
     void testParserAndIdentity_data();
     void testParserAndIdentity();
 };
@@ -86,6 +87,31 @@ void ParserTests::testParseAttributesAsProperty()
 
     const Property output = Properties::parseAttributeAsProperty(input);
     QCOMPARE(output, result);
+}
+
+void ParserTests::testPropertyOperations()
+{
+    const QString key(FL1("TEST"));
+    const QString value1(FL1("A"));
+    const QString value2(FL1("B"));
+    const QString added(FL1("A B"));
+
+    //The default is to "define" a property
+    Property prop1(key, value1);
+    //A second property that adds a value:
+    Property prop2(key, value2, Property::Property_Add);
+
+    Property result(key, value2);
+    QCOMPARE(result.key(), key);
+    QCOMPARE(result.value(), value2);
+    //By defining a property, it's value is replaced:
+    result.apply(prop1);
+    QCOMPARE(result.key(), key);
+    QCOMPARE(result.value(), value1);
+    //prop2 adds a value to the existing value:
+    result.apply(prop2);
+    QCOMPARE(result.key(), key);
+    QCOMPARE(result.value(), added);
 }
 
 void ParserTests::testParserAndIdentity_data()

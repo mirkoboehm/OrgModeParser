@@ -24,6 +24,7 @@ public:
     bool operator==(const Property& other) const;
 
     bool isValid() const;
+    void apply(const Property& token);
 
     QString key() const;
     void setKey(const QString& key);

@@ -1,3 +1,4 @@
+#include "Exception.h"
 #include "Property.h"
 
 namespace OrgMode {
@@ -49,6 +50,19 @@ bool Property::operator==(const Property& other) const
 bool Property::isValid() const
 {
     return !key().isEmpty();
+}
+
+void Property::apply(const Property &token)
+{
+    if (token.operation() == Property::Property_Define) {
+        d->key = token.key();
+        d->value = token.value();
+    } else if (token.operation() == Property::Property_Add) {
+        d->key = token.key();
+        d->value = QString::fromLatin1("%1 %2").arg(d->value).arg(token.value());
+    } else {
+        Q_ASSERT_X(false, Q_FUNC_INFO, "Unsupported operation!");
+    }
 }
 
 QString Property::key() const
