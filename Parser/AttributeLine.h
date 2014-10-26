@@ -4,6 +4,7 @@
 #include <QCoreApplication>
 
 #include <OrgElement.h>
+#include <Property.h>
 #include "orgmodeparser_export.h"
 
 namespace OrgMode {
@@ -16,7 +17,8 @@ public:
     explicit AttributeLine(const QString& line, OrgElement* parent = 0);
     ~AttributeLine();
 
-    void setProperty(const QString& key, const QString& value);
+    void setProperty(const Property& property);
+    Property property() const;
     QString key() const;
     QString value() const;
 

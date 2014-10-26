@@ -20,6 +20,7 @@ public:
 
 protected:
     QString mnemonic() const override;
+    QString description() const override;
 
 private:
     class Private;

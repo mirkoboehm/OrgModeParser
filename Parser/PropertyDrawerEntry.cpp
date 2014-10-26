@@ -28,4 +28,12 @@ QString PropertyDrawerEntry::mnemonic() const
     return tr("PrpDEntr");
 }
 
+QString PropertyDrawerEntry::description() const
+{
+    return tr("%1: %2 %3")
+            .arg(property().key())
+            .arg(property().operation() == Property::Property_Define ? tr("SET") : tr("ADD"))
+            .arg(property().value());
+}
+
 }

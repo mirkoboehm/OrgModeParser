@@ -43,7 +43,12 @@ Property::~Property()
 
 bool Property::operator==(const Property& other) const
 {
-    return *d == *other.d;
+  return *d == *other.d;
+}
+
+bool Property::isValid() const
+{
+    return !key().isEmpty();
 }
 
 QString Property::key() const

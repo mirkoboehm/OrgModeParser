@@ -23,6 +23,8 @@ public:
     ~Property();
     bool operator==(const Property& other) const;
 
+    bool isValid() const;
+
     QString key() const;
     void setKey(const QString& key);
 

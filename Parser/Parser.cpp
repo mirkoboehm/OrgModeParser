@@ -175,7 +175,7 @@ OrgElement::Pointer Parser::Private::parseFileAttributeLine(const OrgElement::Po
         const QString value = match.captured(2);
         if (!key.isEmpty()) {
             auto self = new FileAttributeLine(line, parent.data());
-            self->setProperty(key, value);
+            self->setProperty(Property(key, value));
             return OrgElement::Pointer(self);
         }
     }
@@ -226,14 +226,14 @@ OrgElement::Pointer Parser::Private::parseDrawerLine(const OrgElement::Pointer &
                     content->ungetLines(lines);
                     return OrgElement::Pointer();
                 }
-                auto const drawerMatch = drawerEntryStructure.match(line);
-                if (drawerMatch.hasMatch()) {
-                    const QString name = drawerMatch.captured(1);
-                    const QString value = drawerMatch.captured(2).trimmed();
+                auto const drawerEntryMatch = drawerEntryStructure.match(line);
+                if (drawerEntryMatch.hasMatch()) {
+                    const QString name = drawerEntryMatch.captured(1);
+                    const QString value = drawerEntryMatch.captured(2).trimmed();
                     if (name == QStringLiteral("END")) {
                         //The end element, add it to the drawer, return
                         const DrawerClosingEntry::Pointer child(new DrawerClosingEntry(line, self.data()));
-                        child->setProperty(name, value);
+                        child->setProperty(Property(name, value));
                         self->addChild(child);
                         break;
                     } else {
@@ -244,7 +244,8 @@ OrgElement::Pointer Parser::Private::parseDrawerLine(const OrgElement::Pointer &
                         } else {
                             child.reset(new DrawerEntry(line, self.data()));
                         }
-                        child->setProperty(name, value);
+                        //FIXME For property drawer entries, determine Property::Operation.
+                        child->setProperty(Property(name, value));
                         self->addChild(child);
                     }
                 } else {
