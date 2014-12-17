@@ -3,7 +3,7 @@
 
 namespace OrgMode {
 
-static void NilDeleter(OrgElement*) {}
+static inline void NilDeleter(OrgElement*) {}
 
 template <typename T, typename Decision>
 QList<QSharedPointer<T>> findElements(const OrgElement::Pointer& element, int maxDepth, Decision d) {
