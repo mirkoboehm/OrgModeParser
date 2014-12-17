@@ -21,6 +21,11 @@ Property::Property(const QString &key, const QString &value)
     d->value = value;
 }
 
+Property::Property(const Property& other)
+    : Property(other.key(), other.value())
+{
+}
+
 Property::~Property()
 {
     delete d; d = 0;

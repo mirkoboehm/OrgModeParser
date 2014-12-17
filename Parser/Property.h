@@ -18,6 +18,7 @@ public:
 
     Property();
     explicit Property(const QString& key, const QString& value);
+    Property(const Property& other);
     ~Property();
 
     QString key() const;
