@@ -94,4 +94,19 @@ QString Properties::propertyValue(const QString &key, const Properties::Vector &
     return value;
 }
 
+Property Properties::parseAttributeAsProperty(const Property& attribute)
+{
+    qDebug() << attribute.key() << attribute.operation() << attribute.value();
+    const QRegularExpression re(QString::fromLatin1("^(\\w+)\\s(.+)$"));
+    auto const match = re.match(attribute.value());
+    if (match.hasMatch()) {
+        Property result;
+        result.setKey(match.captured(1));
+        result.setValue(match.captured(2));
+        result.setOperation(Property::Property_Define); //TODO
+        return result;
+    }
+    return Property();
+}
+
 }

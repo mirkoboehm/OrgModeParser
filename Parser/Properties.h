@@ -32,6 +32,7 @@ public:
     Vector drawer(const QString& name) const;
 
     static QString propertyValue(const QString& key, const Vector& definitions);
+    static Property parseAttributeAsProperty(const Property& attribute);
 private:
     class Private;
     Private* d;
