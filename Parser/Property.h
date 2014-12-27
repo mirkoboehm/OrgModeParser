@@ -1,6 +1,7 @@
 #ifndef PROPERTY_H
 #define PROPERTY_H
 
+#include <QMetaType>
 #include <QString>
 
 #include "orgmodeparser_export.h"
@@ -17,9 +18,10 @@ public:
     };
 
     Property();
-    explicit Property(const QString& key, const QString& value);
+    explicit Property(const QString& key, const QString& value, Operation op = Property_Define);
     Property(const Property& other);
     ~Property();
+    bool operator==(const Property& other) const;
 
     QString key() const;
     void setKey(const QString& key);
@@ -36,5 +38,7 @@ private:
 };
 
 }
+
+Q_DECLARE_METATYPE(OrgMode::Property)
 
 #endif // PROPERTY_H

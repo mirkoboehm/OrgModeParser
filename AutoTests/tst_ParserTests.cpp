@@ -34,6 +34,8 @@ public:
 
 private Q_SLOTS:
     void testOrgFileContent();
+    void testParseAttributesAsProperty_data();
+    void testParseAttributesAsProperty();
     void testParserAndIdentity_data();
     void testParserAndIdentity();
 };
@@ -59,6 +61,25 @@ void ParserTests::testOrgFileContent()
     QCOMPARE(content.getLine(), line2);
     QCOMPARE(content.getLine(), line1);
     QVERIFY(content.atEnd());
+}
+
+void ParserTests::testParseAttributesAsProperty_data()
+{
+    QTest::addColumn<Property>("input");
+    QTest::addColumn<Property>("result");
+
+    QTest::newRow("NDisks_ALL")
+            << Property(FL1("PROPERTY"), FL1("NDisks_ALL 1 2 3 4"))
+            << Property(FL1("NDisks_ALL"), FL1("1 2 3 4"));
+}
+
+void ParserTests::testParseAttributesAsProperty()
+{
+    QFETCH(Property, input);
+    QFETCH(Property, result);
+
+    const Property output = Properties::parseAttributeAsProperty(input);
+    QCOMPARE(output, result);
 }
 
 void ParserTests::testParserAndIdentity_data()

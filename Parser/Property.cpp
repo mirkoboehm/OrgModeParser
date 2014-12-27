@@ -4,9 +4,21 @@ namespace OrgMode {
 
 class Property::Private {
 public:
-    Property::Operation operation = Property::Property_Define;
+    Private(QString key_, QString value_, Property::Operation operation_)
+        : key(key_)
+        , value(value_)
+        , operation(operation_)
+    {}
+
+    bool operator==(const Private& other) const {
+        return key == other.key
+                && value == other.value
+                && operation == other.operation;
+    }
+
     QString key;
     QString value;
+    Property::Operation operation;
 };
 
 Property::Property()
@@ -14,11 +26,9 @@ Property::Property()
 {
 }
 
-Property::Property(const QString &key, const QString &value)
-    : d(new Private)
+Property::Property(const QString &key, const QString &value, Operation op)
+    : d(new Private(key, value, op))
 {
-    d->key = key;
-    d->value = value;
 }
 
 Property::Property(const Property& other)
@@ -29,6 +39,11 @@ Property::Property(const Property& other)
 Property::~Property()
 {
     delete d; d = 0;
+}
+
+bool Property::operator==(const Property& other) const
+{
+    return *d == *other.d;
 }
 
 QString Property::key() const
