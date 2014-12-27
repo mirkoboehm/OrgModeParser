@@ -71,6 +71,12 @@ void ParserTests::testParseAttributesAsProperty_data()
     QTest::newRow("NDisks_ALL")
             << Property(FL1("PROPERTY"), FL1("NDisks_ALL 1 2 3 4"))
             << Property(FL1("NDisks_ALL"), FL1("1 2 3 4"));
+    QTest::newRow("var")
+            << Property(FL1("PROPERTY"), FL1("var  foo=1"))
+            << Property(FL1("var"), FL1("foo=1"));
+    QTest::newRow("var+")
+            << Property(FL1("PROPERTY"), FL1("var+ bar=2"))
+            << Property(FL1("var"), FL1("bar=2"), Property::Property_Add);
 }
 
 void ParserTests::testParseAttributesAsProperty()
