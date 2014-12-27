@@ -96,13 +96,15 @@ QString Properties::propertyValue(const QString &key, const Properties::Vector &
 
 Property Properties::parseAttributeAsProperty(const Property& attribute)
 {
-    const QRegularExpression re(QString::fromLatin1("^(\\w+)\\s+(\\w.*)$"));
+    const QRegularExpression re(QString::fromLatin1("^(\\w+)(\\+{0,1})\\s+(\\w.*)$"));
     auto const match = re.match(attribute.value());
     if (match.hasMatch()) {
         Property result;
         result.setKey(match.captured(1));
-        result.setValue(match.captured(2));
-        result.setOperation(Property::Property_Define); //TODO
+        if (match.captured(2) == QLatin1String("+")) {
+            result.setOperation(Property::Property_Add);
+        }
+        result.setValue(match.captured(3));
         return result;
     }
     return Property();
