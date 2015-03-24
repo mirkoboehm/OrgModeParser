@@ -53,9 +53,16 @@ QString Properties::property(const QString& key) const
          element = element->parent();
     }
     //Create single list of all definitions that affect the property:
-    QList<Property> definitions;
+    Vector definitions;
+    for( const Property prop : attr ) {
+        Property property  = parseAttributeAsProperty(prop);
+        definitions << property;
+    }
+    for( auto const entry : propertyDrawerEntries ) {
+        definitions << Property();
+    }
     //Calculate property value:
-    const QString result = propertyValue(key, attr);
+    const QString result = propertyValue(key, definitions);
     return result;
 }
 
@@ -85,13 +92,13 @@ Properties::Vector Properties::drawer(const QString &name) const
 
 QString Properties::propertyValue(const QString &key, const Properties::Vector &definitions)
 {
-    QString value;
+    Property value;
     for( auto const property : definitions ) {
         if (property.key() == key) {
-            value = property.value();
+            value.apply(property);
         }
     }
-    return value;
+    return value.value();
 }
 
 Property Properties::parseAttributeAsProperty(const Property& attribute)
