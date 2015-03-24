@@ -46,20 +46,25 @@ QString Properties::property(const QString& key) const
             auto isPropertyEntryForKey = [key](const PropertyDrawerEntry::Pointer& element) {
                 return element->key() == key;
             };
-            auto const elementPropertyDrawers = findElements<PropertyDrawerEntry>(element, 1, isPropertyEntryForKey);
+            auto const elementPropertyDrawers = findElements<PropertyDrawerEntry>(drawer, 1, isPropertyEntryForKey);
             propertyDrawerEntries << elementPropertyDrawers;
 
         }
-         element = element->parent();
+        element = element->parent();
     }
     //Create single list of all definitions that affect the property:
     Vector definitions;
     for( const Property prop : attr ) {
         Property property  = parseAttributeAsProperty(prop);
-        definitions << property;
+        if (property.key() == key) {
+            definitions << property;
+        }
     }
     for( auto const entry : propertyDrawerEntries ) {
-        definitions << Property();
+        definitions << entry->property();
+    }
+    if (definitions.isEmpty()) {
+        throw RuntimeException(tr("Undefined property %1").arg(key));
     }
     //Calculate property value:
     const QString result = propertyValue(key, definitions);
