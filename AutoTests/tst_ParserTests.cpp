@@ -359,7 +359,6 @@ void ParserTests::testParserAndIdentity_data()
         QCOMPARE(drawers.count(), 1);
         auto const allPropertyDrawers = findElements<PropertyDrawer>(headline);
         QCOMPARE(allPropertyDrawers.count(), 3);
-
     };
     QTest::newRow("PropertyDrawerParsing") << FL1("://TestData/Parser/OrgModePropertiesExample.org") << testPropertyDrawerParsing;
 
@@ -408,9 +407,8 @@ void ParserTests::testParserAndIdentity_data()
     //FIXME org-use-property-inheritance as a property parser status?
     //Verify inheritance of properties:
     VerificationMethod testPropertyInheritance = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
+        //qDebug() << endl << qPrintable(element->describe());
         {   //At the file level, the GENRES property is not defined:
-            return;
-            qDebug() << endl << qPrintable(element->describe());
             auto const orgFiles = findElements<OrgFile>(element);
             QCOMPARE(orgFiles.count(), 1);
             Properties properties(orgFiles.first());
@@ -433,6 +431,7 @@ void ParserTests::testParserAndIdentity_data()
         }
         {   //At the "Classic" level, the GENRES property is defined:
             auto const headline = findElement<Headline>(element, FL1("Classic"));
+            QVERIFY(headline);
             Properties properties(headline);
             const QString value = properties.property(FL1("GENRES"));
             QCOMPARE(value, FL1("Classic"));
@@ -444,7 +443,7 @@ void ParserTests::testParserAndIdentity_data()
             QCOMPARE(value, FL1("Classic Baroque"));
         }
     };
-    QTest::newRow("PropertyInheritance") << FL1("://TestData/Parser/DrawersAndProperties.org") << testPropertyInheritance;
+    QTest::newRow("PropertyInheritance") << FL1("://TestData/Parser/OrgModePropertiesExample.org") << testPropertyInheritance;
 }
 
 void ParserTests::testParserAndIdentity()

@@ -47,8 +47,7 @@ QString Properties::property(const QString& key) const
                 return element->key() == key;
             };
             auto const elementPropertyDrawers = findElements<PropertyDrawerEntry>(drawer, 1, isPropertyEntryForKey);
-            propertyDrawerEntries << elementPropertyDrawers;
-
+            propertyDrawerEntries = elementPropertyDrawers + propertyDrawerEntries;
         }
         element = element->parent();
     }

@@ -239,13 +239,18 @@ OrgElement::Pointer Parser::Private::parseDrawerLine(const OrgElement::Pointer &
                     } else {
                         //This is a drawer entry, specifying one key-value pair
                         DrawerEntry::Pointer child;
+                        Property property(name, value);
                         if (self.dynamicCast<PropertyDrawer>()) {
+                            //Property drawer entries may extend existing values:
+                            if (name.endsWith(QLatin1Char('+'))) {
+                                property.setKey(name.mid(0, name.length() -1));
+                                property.setOperation(Property::Property_Add);
+                            }
                             child.reset(new PropertyDrawerEntry(line, self.data()));
                         } else {
                             child.reset(new DrawerEntry(line, self.data()));
                         }
-                        //FIXME For property drawer entries, determine Property::Operation.
-                        child->setProperty(Property(name, value));
+                        child->setProperty(property);
                         self->addChild(child);
                     }
                 } else {
