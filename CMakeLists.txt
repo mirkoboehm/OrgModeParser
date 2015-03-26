@@ -16,4 +16,5 @@ set(REQUIRED_QT_VERSION 5.2.0)
 find_package(Qt5Core ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE)
 add_subdirectory(Parser)
 add_subdirectory(AutoTests)
+add_subdirectory(Demos/ClockTimeDemo)
 
