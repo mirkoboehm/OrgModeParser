@@ -14,6 +14,7 @@ public:
 
 private:
     OrgMode::OrgElement::Pointer toplevel_;
+
 };
 
 #endif // CLOCKTIMESUMMARY_H

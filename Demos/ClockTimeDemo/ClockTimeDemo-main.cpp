@@ -23,6 +23,13 @@ int main(int argc, char *argv[])
     const int secondsClockedToday = clocktime.secondsClockedToday();
     const int hours = secondsClockedToday / 3600;
     const int minutes = (secondsClockedToday - hours*3600) / 60;
-    const QString clockedTimeToday(a.translate("main", "%1:%2h").arg(hours).arg(minutes, 2, 10, QChar::fromLatin1('0')));
-    wcerr << clockedTimeToday.toStdWString() << endl;
+    const int secondsClockedThisWeek = clocktime.secondsClockedThisWeek();
+    const int whours = secondsClockedThisWeek / 3600;
+    const int wminutes = (secondsClockedThisWeek - whours*3600) / 60;
+    const QString clockedTime(a.translate("main", "|%1:%2|%3:%4|")
+            .arg(hours, 3, 10, QChar::fromLatin1(' '))
+            .arg(minutes, 2, 10, QChar::fromLatin1('0'))
+            .arg(whours, 3, 10, QChar::fromLatin1(' '))
+            .arg(wminutes, 2, 10, QChar::fromLatin1('0')));
+    wcerr << clockedTime.toStdWString() << endl;
 }
