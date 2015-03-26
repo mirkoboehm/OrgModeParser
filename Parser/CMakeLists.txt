@@ -29,3 +29,4 @@ set(OrgModeParser_LIB_SRCS
 add_library(OrgModeParser ${OrgModeParser_LIB_SRCS})
 generate_export_header(OrgModeParser BASE_NAME OrgModeParser)
 target_link_libraries(OrgModeParser PUBLIC Qt5::Core)
+install(TARGETS OrgModeParser ${INSTALL_TARGETS_DEFAULT_ARGS})
