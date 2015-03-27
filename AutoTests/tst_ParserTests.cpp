@@ -9,6 +9,7 @@
 #include <OrgFile.h>
 #include <Clock.h>
 #include <ClockLine.h>
+#include <IncompleteClockLine.h>
 #include <Tags.h>
 #include <OrgLine.h>
 #include <FileAttributeLine.h>
@@ -137,13 +138,19 @@ void ParserTests::testParserAndIdentity_data()
 
     //Verify that CLOCK: lines are detected, parsed, and the numbers calculated and aggregated up the tree:
     VerificationMethod testClockEntries = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
-        //Headline 1.1 contians one clock entry:
-        auto const headline = findElement<OrgMode::Headline>(element, QLatin1String("headline_1_1"));
+        //Headline 1.1 contains one clock entry:
         QCOMPARE(Clock(findElement<OrgMode::Headline>(element, QLatin1String("headline_1_1"))).duration(), 10 * 60);
         //Headline 1.2 contains two clock entries that need to be accumulated:
         QCOMPARE(Clock(findElement<OrgMode::Headline>(element, QLatin1String("headline_1_2"))).duration(), 20 * 60);
         //Headline 1 is the parent of 1.1 and 1.2 and should have their times added up:
         QCOMPARE(Clock(findElement<OrgMode::Headline>(element, QLatin1String("headline_1"))).duration(), 30 * 60);
+        //Verify parsing of the incomplete clock line that starts at 14:30 (child of headline_1_2)
+        auto const headline_1_2 = findElement<OrgMode::Headline>(element, QLatin1String("headline_1_2"));
+        QVERIFY(headline_1_2);
+        auto const complete = findElements<OrgMode::ClockLine>(headline_1_2);
+        QCOMPARE(complete.size(), 2); // complete clock lines are also incomplete clock lines
+        auto const allClockLines = findElements<OrgMode::IncompleteClockLine>(headline_1_2);
+        QCOMPARE(complete.size(), 3); // complete clock lines are also incomplete clock lines
     };
     QTest::newRow("ClockEntries") << FL1("://TestData/Parser/ClockEntries.org") << testClockEntries;
 

@@ -11,4 +11,6 @@ Hello, this Org file tests the parsing of clock entries
 ** headline_1_2
    CLOCK: [2014-09-20 Sat 14:10]--[2014-09-20 Sat 14:15] =>  0:05
    CLOCK: [2014-09-20 Sat 14:15]--[2014-09-20 Sat 14:30]
-   And this headline contributes 20 minutes to the total.
+   CLOCK: [2014-09-20 Sat 14:30]
+   And this headline contributes 20 minutes to the total. It also has an 
+   incomplete clock line that starts at 14:30.
