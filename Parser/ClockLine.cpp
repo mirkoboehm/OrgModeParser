@@ -48,7 +48,7 @@ int ClockLine::duration() const
 
 bool ClockLine::isElementValid() const
 {
-    return !line().isEmpty(); // not enough, only valid if times could be parsed
+    return startTime().isValid() && endTime().isValid() && endTime() >= startTime();
 }
 
 QString ClockLine::mnemonic() const

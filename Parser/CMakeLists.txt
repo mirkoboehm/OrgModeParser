@@ -17,6 +17,7 @@ set(OrgModeParser_LIB_SRCS
         FileAttributeLine.cpp
         Headline.cpp
         ClockLine.cpp
+        IncompleteClockLine.cpp
 # Classes that process OrgElements as visitors:
         Clock.cpp
         Tags.cpp

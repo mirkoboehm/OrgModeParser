@@ -11,6 +11,7 @@ namespace OrgMode {
 
 class ORGMODEPARSER_EXPORT ClockLine : public OrgElement
 {
+    Q_DECLARE_TR_FUNCTIONS(ClockLine)
 public:
     typedef QSharedPointer<ClockLine> Pointer;
 
