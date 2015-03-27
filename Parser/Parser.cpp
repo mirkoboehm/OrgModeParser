@@ -144,20 +144,34 @@ OrgElement::Pointer Parser::Private::parseOrgLine(const OrgElement::Pointer &par
 
 OrgElement::Pointer Parser::Private::parseClockLine(const OrgElement::Pointer& parent, const OrgFileContent::Pointer& content) const
 {
-    static const QRegularExpression clockLineStructure(QStringLiteral("^(\\s*)CLOCK:\\s*\\[(.+)\\]--\\[(.+)\\]"));
+    static const QRegularExpression clockLineOpeningStructure(QStringLiteral("^(\\s*)CLOCK:\\s*\\[([- A-Z a-z 0-9 :]+)\\](.*)$"));
     const QString line = content->getLine();
-    auto const match = clockLineStructure.match(line);
+    auto const match = clockLineOpeningStructure.match(line);
     if (match.hasMatch()) {
         auto const format = QString::fromLatin1("yyyy-MM-dd ddd hh:mm");
         auto const startText = match.captured(2);
         const QDateTime start = QDateTime::fromString(startText, format);
-        auto const endText = match.captured(3);
-        const QDateTime end = QDateTime::fromString(endText, format);
-        if (start.isValid() && end.isValid()) {
-            auto self = ClockLine::Pointer(new ClockLine(line, parent.data()));
-            self->setStartTime(start);
-            self->setEndTime(end);
-            return self;
+        if (start.isValid()) {
+            static const QRegularExpression clockLineStructure(QStringLiteral("^--\\[([- A-Z a-z 0-9 :]+)\\]"));
+            const QString remainder = match.captured(3);
+            auto const fullmatch = clockLineStructure.match(remainder);
+            //update regex, match the rest
+            if (fullmatch.hasMatch()) {
+                auto const endText = fullmatch.captured(1);
+                const QDateTime end = QDateTime::fromString(endText, format);
+                if (end.isValid()) {
+                    //Closed clock entry
+                    auto self = ClockLine::Pointer(new ClockLine(line, parent.data()));
+                    self->setStartTime(start);
+                    self->setEndTime(end);
+                    return self;
+                }
+            } else {
+                //Incomplete clock entry
+                auto self = IncompleteClockLine::Pointer(new IncompleteClockLine(line, parent.data()));
+                self->setStartTime(start);
+                return self;
+            }
         }
     }
     content->ungetLine(line);

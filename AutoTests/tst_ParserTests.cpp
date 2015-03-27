@@ -147,10 +147,23 @@ void ParserTests::testParserAndIdentity_data()
         //Verify parsing of the incomplete clock line that starts at 14:30 (child of headline_1_2)
         auto const headline_1_2 = findElement<OrgMode::Headline>(element, QLatin1String("headline_1_2"));
         QVERIFY(headline_1_2);
-        auto const complete = findElements<OrgMode::ClockLine>(headline_1_2);
+        auto complete = findElements<OrgMode::ClockLine>(headline_1_2);
         QCOMPARE(complete.size(), 2); // complete clock lines are also incomplete clock lines
-        auto const allClockLines = findElements<OrgMode::IncompleteClockLine>(headline_1_2);
-        QCOMPARE(complete.size(), 3); // complete clock lines are also incomplete clock lines
+        auto allClockLines = findElements<OrgMode::IncompleteClockLine>(headline_1_2);
+        QCOMPARE(allClockLines.size(), 3); // complete clock lines are also incomplete clock lines
+        //Compute difference between the two sets of elements:
+        QVector<QSharedPointer<OrgMode::OrgElement>> difference(qMax(allClockLines.size(), complete.size()));
+        std::sort(allClockLines.begin(), allClockLines.end());
+        std::sort(complete.begin(), complete.end());
+        auto it = std::set_difference(allClockLines.begin(), allClockLines.end(),
+                                      complete.begin(), complete.end(), difference.begin());
+        difference.resize(it - difference.begin());
+        //Verify:
+        QVERIFY(difference.size()==1);
+        QVERIFY(!difference.at(0).dynamicCast<OrgMode::ClockLine>());
+        auto const incomplete = difference.at(0).dynamicCast<OrgMode::IncompleteClockLine>();
+        QVERIFY(incomplete);
+        QCOMPARE(incomplete->startTime(), QDateTime(QDate(2014, 9, 20), QTime(14, 30)));
     };
     QTest::newRow("ClockEntries") << FL1("://TestData/Parser/ClockEntries.org") << testClockEntries;
 
