@@ -2,15 +2,30 @@
 
 namespace OrgMode {
 
+class IncompleteClockLine::Private {
+public:
+    QDateTime start_;
+};
+
 IncompleteClockLine::IncompleteClockLine(const QString &line, OrgElement *parent)
-    : ClockLine(line, parent)
-    , d(0)
+    : OrgElement(line, parent)
+    , d(new Private)
 {
 }
 
 IncompleteClockLine::IncompleteClockLine(OrgElement *parent)
     : IncompleteClockLine(QString(), parent)
 {
+}
+
+void IncompleteClockLine::setStartTime(const QDateTime &start)
+{
+    d->start_ = start;
+}
+
+QDateTime IncompleteClockLine::startTime() const
+{
+    return d->start_;
 }
 
 bool OrgMode::IncompleteClockLine::isElementValid() const

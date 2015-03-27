@@ -5,30 +5,19 @@ namespace OrgMode {
 
 class ClockLine::Private {
 public:
-    QDateTime start_;
     QDateTime end_;
 };
 
 ClockLine::ClockLine(const QString &line, OrgElement *parent)
-    : OrgElement(line, parent)
+    : IncompleteClockLine(line, parent)
     , d(new Private)
 {
 
 }
 
 ClockLine::ClockLine(OrgElement *parent)
-    : OrgElement(QString(), parent)
+    : ClockLine(QString(), parent)
 {
-}
-
-void ClockLine::setStartTime(const QDateTime &start)
-{
-    d->start_ = start;
-}
-
-QDateTime ClockLine::startTime() const
-{
-    return d->start_;
 }
 
 void ClockLine::setEndTime(const QDateTime &end)
@@ -43,7 +32,7 @@ QDateTime ClockLine::endTime() const
 
 int ClockLine::duration() const
 {
-    return d->start_.secsTo(d->end_);
+    return startTime().secsTo(d->end_);
 }
 
 bool ClockLine::isElementValid() const

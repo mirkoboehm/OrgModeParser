@@ -138,6 +138,7 @@ void ParserTests::testParserAndIdentity_data()
     //Verify that CLOCK: lines are detected, parsed, and the numbers calculated and aggregated up the tree:
     VerificationMethod testClockEntries = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
         //Headline 1.1 contians one clock entry:
+        auto const headline = findElement<OrgMode::Headline>(element, QLatin1String("headline_1_1"));
         QCOMPARE(Clock(findElement<OrgMode::Headline>(element, QLatin1String("headline_1_1"))).duration(), 10 * 60);
         //Headline 1.2 contains two clock entries that need to be accumulated:
         QCOMPARE(Clock(findElement<OrgMode::Headline>(element, QLatin1String("headline_1_2"))).duration(), 20 * 60);

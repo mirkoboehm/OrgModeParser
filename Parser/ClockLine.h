@@ -4,12 +4,13 @@
 #include <QCoreApplication>
 #include <QDateTime>
 
-#include <OrgElement.h>
+#include <IncompleteClockLine.h>
+
 #include "orgmodeparser_export.h"
 
 namespace OrgMode {
 
-class ORGMODEPARSER_EXPORT ClockLine : public OrgElement
+class ORGMODEPARSER_EXPORT ClockLine : public IncompleteClockLine
 {
     Q_DECLARE_TR_FUNCTIONS(ClockLine)
 public:
@@ -17,9 +18,6 @@ public:
 
     explicit ClockLine(const QString& line, OrgElement* parent = 0);
     explicit ClockLine(OrgElement* parent = 0);
-
-    void setStartTime(const QDateTime& start);
-    QDateTime startTime() const;
 
     void setEndTime(const QDateTime& end);
     QDateTime endTime() const;
