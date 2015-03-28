@@ -12,7 +12,11 @@ public:
     int secondsClockedToday() const;
     int secondsClockedThisWeek() const;
 
+    void report(bool promptMode, int columns);
+
 private:
+    QString hoursAndMinutes(int seconds);
+
     OrgMode::OrgElement::Pointer toplevel_;
 
 };

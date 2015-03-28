@@ -1,14 +1,17 @@
 #include <numeric>
+#include <iostream>
 
 #include <QTextStream>
 #include <QFile>
 #include <QtDebug>
+#include <QDateTime>
 
 #include <OrgFile.h>
 #include <OrgElement.h>
 #include <Parser.h>
 #include <Exception.h>
 #include <ClockLine.h>
+#include <Headline.h>
 #include <FindElements.h>
 
 #include "ClockTimeSummary.h"
@@ -63,4 +66,68 @@ int ClockTimeSummary::secondsClockedThisWeek() const
     auto const clocklines = findElements<ClockLine>(toplevel_, -1, isThisWeek);
     return accumulate(begin(clocklines), end(clocklines), 0,
                       [](int i, const ClockLine::Pointer& clock) { return i + clock->duration(); } );
+}
+
+template <typename T>
+T* findParent(OrgElement* element)
+{
+    if (!element) return 0;
+    auto castedElement = dynamic_cast<T*>(element);
+    if (castedElement) {
+        return castedElement;
+    } else {
+        return findParent<T>(element->parent());
+    }
+}
+
+void ClockTimeSummary::report(bool promptMode, int columns)
+{
+    //The data to report:
+    QString currentlyClockedTime = tr("--:--");
+    QString currentTask = tr("...");
+    QString clockedTime;
+    //Find all clocklines that are incomplete (not closed):
+    auto const notCompleted = [](const IncompleteClockLine::Pointer& element) {
+        return element.dynamicCast<ClockLine>() == 0;
+    };
+    auto incompleteClocklines = findElements<IncompleteClockLine>(toplevel_, -1, notCompleted);
+    //Sort by start time, to determine the latest task that was started:
+    auto const startedLater = [](const IncompleteClockLine::Pointer& left, const IncompleteClockLine::Pointer& right) {
+        return left->startTime() > right->startTime();
+    };
+    sort(incompleteClocklines.begin(), incompleteClocklines.end(), startedLater);
+    //Find the headline associated with the youngest unclosed clock line:
+    if (!incompleteClocklines.isEmpty()) {
+        auto const lastInitiatedClockline = incompleteClocklines.at(0);
+        Headline* headline = findParent<Headline>(lastInitiatedClockline->parent());
+        //Prepare the bits of the report that deal with the current task:
+        if (headline) {
+            const int secondsToNow = lastInitiatedClockline->startTime().secsTo(QDateTime::currentDateTime());
+            currentlyClockedTime = hoursAndMinutes(secondsToNow);
+            currentTask = headline->caption();
+        }
+    }
+    //Prepare the display of the running time today and this week:
+    clockedTime=tr("%1/%2").arg(hoursAndMinutes(secondsClockedToday())).arg(hoursAndMinutes(secondsClockedThisWeek()));
+    const QString line = tr("%1: %3 %2").arg(currentlyClockedTime).arg(clockedTime);
+    const int remainingChars = columns - line.length() + 2; //add space for the %3 placeholder
+    if (currentTask.length() > remainingChars) {
+        currentTask = tr("%1...").arg(currentTask.mid(0, remainingChars-3));
+    }
+    const QString output = line.arg(currentTask, -remainingChars, QChar::fromLatin1(' '));
+    wcout << output.toStdWString();
+    if (!promptMode) {
+        wcout << endl;
+    }
+}
+
+QString ClockTimeSummary::hoursAndMinutes(int seconds)
+{
+    const QChar fillChar(QChar::fromLatin1('0'));
+    const int hours = seconds / 3600;
+    const int minutes = (seconds - hours*3600) / 60;
+    const QString time(tr("%1:%2")
+                       .arg(hours, 2, 10, fillChar)
+                       .arg(minutes, 2, 10, fillChar));
+    return time;
 }
