@@ -11,6 +11,7 @@
 #include <Parser.h>
 #include <Exception.h>
 #include <ClockLine.h>
+#include <CompletedClockLine.h>
 #include <Headline.h>
 #include <FindElements.h>
 
@@ -38,16 +39,16 @@ ClockTimeSummary::ClockTimeSummary(const QStringList &orgfiles, QObject *parent)
 int ClockTimeSummary::secondsClockedToday() const
 {
     auto const today = QDate::currentDate();
-    auto const isToday = [today](const ClockLine::Pointer& line) {
+    auto const isToday = [today](const CompletedClockLine::Pointer& line) {
         if (line->startTime().date() == today || line->endTime().date() == today) {
             return true;
         } else {
             return false;
         }
     };
-    auto const todaysClockLines = findElements<ClockLine>(toplevel_, -1, isToday);
+    auto const todaysClockLines = findElements<CompletedClockLine>(toplevel_, -1, isToday);
     return accumulate(begin(todaysClockLines), end(todaysClockLines), 0,
-                           [](int i, const ClockLine::Pointer& clock) { return i + clock->duration(); } );
+                           [](int i, const CompletedClockLine::Pointer& clock) { return i + clock->duration(); } );
 }
 
 int ClockTimeSummary::secondsClockedThisWeek() const
@@ -55,7 +56,7 @@ int ClockTimeSummary::secondsClockedThisWeek() const
     auto const today = QDate::currentDate();
     auto const monday = today.addDays(1-today.dayOfWeek());
     auto const sunday = monday.addDays(7);
-    auto const isThisWeek = [monday, sunday](const ClockLine::Pointer& line) {
+    auto const isThisWeek = [monday, sunday](const CompletedClockLine::Pointer& line) {
         if ((line->startTime().date() >= monday && line->startTime().date() <= sunday)
                 || (line->endTime().date() >=monday && line->startTime().date() <= sunday)) {
             return true;
@@ -63,9 +64,9 @@ int ClockTimeSummary::secondsClockedThisWeek() const
             return false;
         }
     };
-    auto const clocklines = findElements<ClockLine>(toplevel_, -1, isThisWeek);
+    auto const clocklines = findElements<CompletedClockLine>(toplevel_, -1, isThisWeek);
     return accumulate(begin(clocklines), end(clocklines), 0,
-                      [](int i, const ClockLine::Pointer& clock) { return i + clock->duration(); } );
+                      [](int i, const CompletedClockLine::Pointer& clock) { return i + clock->duration(); } );
 }
 
 template <typename T>
@@ -87,18 +88,18 @@ void ClockTimeSummary::report(bool promptMode, int columns)
     QString currentTask = tr("...");
     QString clockedTime;
     //Find all clocklines that are incomplete (not closed):
-    auto const notCompleted = [](const IncompleteClockLine::Pointer& element) {
-        return element.dynamicCast<ClockLine>() == 0;
+    auto const notCompleted = [](const ClockLine::Pointer& element) {
+        return element.dynamicCast<CompletedClockLine>() == 0;
     };
-    auto incompleteClocklines = findElements<IncompleteClockLine>(toplevel_, -1, notCompleted);
+    auto clocklines = findElements<ClockLine>(toplevel_, -1, notCompleted);
     //Sort by start time, to determine the latest task that was started:
-    auto const startedLater = [](const IncompleteClockLine::Pointer& left, const IncompleteClockLine::Pointer& right) {
+    auto const startedLater = [](const ClockLine::Pointer& left, const ClockLine::Pointer& right) {
         return left->startTime() > right->startTime();
     };
-    sort(incompleteClocklines.begin(), incompleteClocklines.end(), startedLater);
+    sort(clocklines.begin(), clocklines.end(), startedLater);
     //Find the headline associated with the youngest unclosed clock line:
-    if (!incompleteClocklines.isEmpty()) {
-        auto const lastInitiatedClockline = incompleteClocklines.at(0);
+    if (!clocklines.isEmpty()) {
+        auto const lastInitiatedClockline = clocklines.at(0);
         Headline* headline = findParent<Headline>(lastInitiatedClockline->parent());
         //Prepare the bits of the report that deal with the current task:
         if (headline) {
