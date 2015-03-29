@@ -12,7 +12,7 @@
 #include "Headline.h"
 #include "Attributes.h"
 #include "Properties.h"
-#include "ClockLine.h"
+#include "CompletedClockLine.h"
 #include "Exception.h"
 #include "OrgFileContent.h"
 #include "Drawer.h"
@@ -161,7 +161,7 @@ OrgElement::Pointer Parser::Private::parseClockLine(const OrgElement::Pointer& p
                 const QDateTime end = QDateTime::fromString(endText, format);
                 if (end.isValid()) {
                     //Closed clock entry
-                    auto self = ClockLine::Pointer(new ClockLine(line, parent.data()));
+                    auto self = CompletedClockLine::Pointer(new CompletedClockLine(line, parent.data()));
                     self->setStartTime(start);
                     self->setEndTime(end);
                     return self;

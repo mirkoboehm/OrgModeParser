@@ -1,7 +1,7 @@
 #include <Exception.h>
 
 #include "Clock.h"
-#include "ClockLine.h"
+#include "CompletedClockLine.h"
 
 namespace OrgMode {
 
@@ -25,7 +25,7 @@ int Clock::duration() const
 int Clock::Private::subduration(OrgElement::Pointer element)
 {
     int subtotal = 0;
-    ClockLine* clockLine = dynamic_cast<ClockLine*>(element.data());
+    CompletedClockLine* clockLine = dynamic_cast<CompletedClockLine*>(element.data());
     if (clockLine) {
         subtotal += clockLine->duration();
     }

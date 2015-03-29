@@ -10,14 +10,14 @@
 
 namespace OrgMode {
 
-class ORGMODEPARSER_EXPORT ClockLine : public IncompleteClockLine
+class ORGMODEPARSER_EXPORT CompletedClockLine : public IncompleteClockLine
 {
     Q_DECLARE_TR_FUNCTIONS(ClockLine)
 public:
-    typedef QSharedPointer<ClockLine> Pointer;
+    typedef QSharedPointer<CompletedClockLine> Pointer;
 
-    explicit ClockLine(const QString& line, OrgElement* parent = 0);
-    explicit ClockLine(OrgElement* parent = 0);
+    explicit CompletedClockLine(const QString& line, OrgElement* parent = 0);
+    explicit CompletedClockLine(OrgElement* parent = 0);
 
     void setEndTime(const QDateTime& end);
     QDateTime endTime() const;

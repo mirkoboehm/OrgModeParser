@@ -1,51 +1,50 @@
-#include "ClockLine.h"
-
+#include "CompletedClockLine.h"
 
 namespace OrgMode {
 
-class ClockLine::Private {
+class CompletedClockLine::Private {
 public:
     QDateTime end_;
 };
 
-ClockLine::ClockLine(const QString &line, OrgElement *parent)
+CompletedClockLine::CompletedClockLine(const QString &line, OrgElement *parent)
     : IncompleteClockLine(line, parent)
     , d(new Private)
 {
 
 }
 
-ClockLine::ClockLine(OrgElement *parent)
-    : ClockLine(QString(), parent)
+CompletedClockLine::CompletedClockLine(OrgElement *parent)
+    : CompletedClockLine(QString(), parent)
 {
 }
 
-void ClockLine::setEndTime(const QDateTime &end)
+void CompletedClockLine::setEndTime(const QDateTime &end)
 {
     d->end_ = end;
 }
 
-QDateTime ClockLine::endTime() const
+QDateTime CompletedClockLine::endTime() const
 {
     return d->end_;
 }
 
-int ClockLine::duration() const
+int CompletedClockLine::duration() const
 {
     return startTime().secsTo(d->end_);
 }
 
-bool ClockLine::isElementValid() const
+bool CompletedClockLine::isElementValid() const
 {
     return startTime().isValid() && endTime().isValid() && endTime() >= startTime();
 }
 
-QString ClockLine::mnemonic() const
+QString CompletedClockLine::mnemonic() const
 {
     return tr("Clock");
 }
 
-QString ClockLine::description() const
+QString CompletedClockLine::description() const
 {
     auto const seconds = duration();
     return tr("%1:%2 (%3-%4)")

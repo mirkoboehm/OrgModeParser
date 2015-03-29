@@ -8,7 +8,7 @@
 #include <Writer.h>
 #include <OrgFile.h>
 #include <Clock.h>
-#include <ClockLine.h>
+#include <CompletedClockLine.h>
 #include <IncompleteClockLine.h>
 #include <Tags.h>
 #include <OrgLine.h>
@@ -148,7 +148,7 @@ void ParserTests::testParserAndIdentity_data()
         //Verify parsing of the incomplete clock line that starts at 14:30 (child of headline_1_2)
         auto const headline_1_2 = findElement<Headline>(element, QLatin1String("headline_1_2"));
         QVERIFY(headline_1_2);
-        auto complete = findElements<ClockLine>(headline_1_2);
+        auto complete = findElements<CompletedClockLine>(headline_1_2);
         QCOMPARE(complete.size(), 2); // complete clock lines are also incomplete clock lines
         auto all = findElements<IncompleteClockLine>(headline_1_2);
         QCOMPARE(all.size(), 3); // complete clock lines are also incomplete clock lines
@@ -159,7 +159,7 @@ void ParserTests::testParserAndIdentity_data()
         set_difference(all.begin(), all.end(), complete.begin(), complete.end(), back_inserter(difference));
         //Verify:
         QVERIFY(difference.size()==1);
-        QVERIFY(!difference.at(0).dynamicCast<ClockLine>());
+        QVERIFY(!difference.at(0).dynamicCast<CompletedClockLine>());
         auto const incomplete = difference.at(0).dynamicCast<IncompleteClockLine>();
         QVERIFY(incomplete);
         QCOMPARE(incomplete->startTime(), QDateTime(QDate(2014, 9, 20), QTime(14, 30)));
@@ -329,10 +329,10 @@ void ParserTests::testParserAndIdentity_data()
 
     VerificationMethod testFindElementsFiltered = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
         //There is one headline that is a direct child of element, headline_1:
-        auto const nonEmptyClockLines = [](const ClockLine::Pointer& clock) { return clock->duration() > 0; };
-        auto const clockLines = findElements<ClockLine>(element, -1, nonEmptyClockLines);
+        auto const nonEmptyClockLines = [](const CompletedClockLine::Pointer& clock) { return clock->duration() > 0; };
+        auto const clockLines = findElements<CompletedClockLine>(element, -1, nonEmptyClockLines);
         QVERIFY(clockLines.size() == 3);
-        const ClockLine::Pointer clockLine_1_1 = clockLines.first();
+        const CompletedClockLine::Pointer clockLine_1_1 = clockLines.first();
         QCOMPARE(clockLine_1_1->duration(), 600);
     };
     QTest::newRow("FindElementsFiltered") << FL1("://TestData/Parser/ClockEntries.org") << testFindElementsFiltered;
