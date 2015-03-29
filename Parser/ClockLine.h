@@ -7,14 +7,14 @@
 
 namespace OrgMode {
 
-class ORGMODEPARSER_EXPORT IncompleteClockLine : public OrgElement
+class ORGMODEPARSER_EXPORT ClockLine : public OrgElement
 {
-    Q_DECLARE_TR_FUNCTIONS(IncompleteClockLine)
+    Q_DECLARE_TR_FUNCTIONS(ClockLine)
 public:
-    typedef QSharedPointer<IncompleteClockLine> Pointer;
+    typedef QSharedPointer<ClockLine> Pointer;
 
-    explicit IncompleteClockLine(const QString& line, OrgElement* parent = 0);
-    explicit IncompleteClockLine(OrgElement* parent = 0);
+    explicit ClockLine(const QString& line, OrgElement* parent = 0);
+    explicit ClockLine(OrgElement* parent = 0);
 
     void setStartTime(const QDateTime& start);
     QDateTime startTime() const;

@@ -8,7 +8,7 @@ public:
 };
 
 CompletedClockLine::CompletedClockLine(const QString &line, OrgElement *parent)
-    : IncompleteClockLine(line, parent)
+    : ClockLine(line, parent)
     , d(new Private)
 {
 

@@ -9,7 +9,7 @@
 #include <OrgFile.h>
 #include <Clock.h>
 #include <CompletedClockLine.h>
-#include <IncompleteClockLine.h>
+#include <ClockLine.h>
 #include <Tags.h>
 #include <OrgLine.h>
 #include <FileAttributeLine.h>
@@ -150,7 +150,7 @@ void ParserTests::testParserAndIdentity_data()
         QVERIFY(headline_1_2);
         auto complete = findElements<CompletedClockLine>(headline_1_2);
         QCOMPARE(complete.size(), 2); // complete clock lines are also incomplete clock lines
-        auto all = findElements<IncompleteClockLine>(headline_1_2);
+        auto all = findElements<ClockLine>(headline_1_2);
         QCOMPARE(all.size(), 3); // complete clock lines are also incomplete clock lines
         //Store the difference between the two sets of elements in a vector:
         sort(all.begin(), all.end());
@@ -160,7 +160,7 @@ void ParserTests::testParserAndIdentity_data()
         //Verify:
         QVERIFY(difference.size()==1);
         QVERIFY(!difference.at(0).dynamicCast<CompletedClockLine>());
-        auto const incomplete = difference.at(0).dynamicCast<IncompleteClockLine>();
+        auto const incomplete = difference.at(0).dynamicCast<ClockLine>();
         QVERIFY(incomplete);
         QCOMPARE(incomplete->startTime(), QDateTime(QDate(2014, 9, 20), QTime(14, 30)));
     };

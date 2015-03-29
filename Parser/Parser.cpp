@@ -12,6 +12,7 @@
 #include "Headline.h"
 #include "Attributes.h"
 #include "Properties.h"
+#include "ClockLine.h"
 #include "CompletedClockLine.h"
 #include "Exception.h"
 #include "OrgFileContent.h"
@@ -168,7 +169,7 @@ OrgElement::Pointer Parser::Private::parseClockLine(const OrgElement::Pointer& p
                 }
             } else {
                 //Incomplete clock entry
-                auto self = IncompleteClockLine::Pointer(new IncompleteClockLine(line, parent.data()));
+                auto self = ClockLine::Pointer(new ClockLine(line, parent.data()));
                 self->setStartTime(start);
                 return self;
             }

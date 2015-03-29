@@ -4,15 +4,15 @@
 #include <QCoreApplication>
 #include <QDateTime>
 
-#include <IncompleteClockLine.h>
+#include <ClockLine.h>
 
 #include "orgmodeparser_export.h"
 
 namespace OrgMode {
 
-class ORGMODEPARSER_EXPORT CompletedClockLine : public IncompleteClockLine
+class ORGMODEPARSER_EXPORT CompletedClockLine : public ClockLine
 {
-    Q_DECLARE_TR_FUNCTIONS(ClockLine)
+    Q_DECLARE_TR_FUNCTIONS(CompletedClockLine)
 public:
     typedef QSharedPointer<CompletedClockLine> Pointer;
 
