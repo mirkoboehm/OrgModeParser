@@ -26,7 +26,11 @@ set(OrgModeParser_LIB_SRCS
         Properties.cpp
 )
 
-add_library(OrgModeParser ${OrgModeParser_LIB_SRCS})
-generate_export_header(OrgModeParser BASE_NAME OrgModeParser)
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
+add_library(OrgModeParser SHARED ${OrgModeParser_LIB_SRCS})
+generate_export_header(OrgModeParser)
 target_link_libraries(OrgModeParser PUBLIC Qt5::Core)
-install(TARGETS OrgModeParser ${INSTALL_TARGETS_DEFAULT_ARGS})
+target_include_directories(OrgModeParser PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
+target_include_directories(OrgModeParser PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+install(TARGETS OrgModeParser DESTINATION lib)
