@@ -2,4 +2,5 @@
 add_executable(OrgModeParser_ClockTimeDemo ClockTimeDemo-main.cpp ClockTimeSummary.cpp)
 target_link_libraries(OrgModeParser_ClockTimeDemo OrgModeParser)
 set_target_properties(OrgModeParser_ClockTimeDemo PROPERTIES MACOSX_BUNDLE FALSE)
+set_property(TARGET OrgModeParser_ClockTimeDemo PROPERTY CXX_STANDARD 11)
 install(TARGETS OrgModeParser_ClockTimeDemo DESTINATION bin)
