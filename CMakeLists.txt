@@ -17,7 +17,7 @@ IF (GIT_RESULT EQUAL 0)
 ELSE ()
     MESSAGE(FATAL_ERROR "Cannot determine OrgModeParser version from git!")
 ENDIF ()
-
+add_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII)
 add_subdirectory(Parser)
 add_subdirectory(AutoTests)
 add_subdirectory(Demos/ClockTimeDemo)
