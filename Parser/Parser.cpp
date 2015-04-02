@@ -50,6 +50,7 @@ public:
 
 private:
     QRegularExpressionMatch headlineMatch(const QString& line) const;
+    QDateTime parseTimeStamp(const QString& text) const;
 };
 
 Parser::Private::ParseRunOutput Parser::Private::parseOrgFileFirstPass(const OrgFileContent::Pointer &content,
@@ -149,9 +150,8 @@ OrgElement::Pointer Parser::Private::parseClockLine(const OrgElement::Pointer& p
     const QString line = content->getLine();
     auto const match = clockLineOpeningStructure.match(line);
     if (match.hasMatch()) {
-        auto const format = QString::fromLatin1("yyyy-MM-dd ddd hh:mm");
         auto const startText = match.captured(2);
-        const QDateTime start = QDateTime::fromString(startText, format);
+        const QDateTime start = parseTimeStamp(startText);
         if (start.isValid()) {
             static const QRegularExpression clockLineStructure(QStringLiteral("^--\\[([- A-Z a-z 0-9 :]+)\\]"));
             const QString remainder = match.captured(3);
@@ -159,7 +159,7 @@ OrgElement::Pointer Parser::Private::parseClockLine(const OrgElement::Pointer& p
             //update regex, match the rest
             if (fullmatch.hasMatch()) {
                 auto const endText = fullmatch.captured(1);
-                const QDateTime end = QDateTime::fromString(endText, format);
+                const QDateTime end = parseTimeStamp(endText);
                 if (end.isValid()) {
                     //Closed clock entry
                     auto self = CompletedClockLine::Pointer(new CompletedClockLine(line, parent.data()));
@@ -288,6 +288,12 @@ QRegularExpressionMatch Parser::Private::headlineMatch(const QString &line) cons
     static const QRegularExpression beginningOfHeadline(QStringLiteral("^([*]+)\\s+(.*)$"));
     auto const match = beginningOfHeadline.match(line);
     return match;
+}
+
+QDateTime Parser::Private::parseTimeStamp(const QString &text) const
+{
+    static const QString format = QString::fromLatin1("yyyy-MM-dd ddd hh:mm");
+    return QDateTime::fromString(text, format);
 }
 
 Parser::Parser(QObject *parent)
