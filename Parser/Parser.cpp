@@ -290,10 +290,48 @@ QRegularExpressionMatch Parser::Private::headlineMatch(const QString &line) cons
     return match;
 }
 
+namespace {
+
+class ConversionException : public RuntimeException
+{
+public:
+    ConversionException() : RuntimeException(QString()) {}
+};
+
+int qstring_toint(const QString& value) {
+    bool ok;
+    const int result = value.toInt(&ok);
+    if (!ok) {
+        throw ConversionException();
+    }
+    return result;
+}
+
+}
+
 QDateTime Parser::Private::parseTimeStamp(const QString &text) const
 {
     static const QString format = QString::fromLatin1("yyyy-MM-dd ddd hh:mm");
-    return QDateTime::fromString(text, format);
+    static const int formatLength = format.length();
+    //test is of format "yyyy-MM-dd ddd hh:mm"
+    //Using QDateTime::fromString(text, "yyyy-MM-dd ddd hh:mm") causes repeated calls to libicu and is rather slow
+    //Instead, the strings will be parsed directly:
+    const QString input = text.trimmed(); // don't break on leading or trailing whitespace
+    if (input.length() != formatLength) {
+        return QDateTime();
+    }
+    try {
+        const int year = qstring_toint(input.mid(0, 4));
+        const int month = qstring_toint(input.mid(5, 2));
+        const int day = qstring_toint(input.mid(8, 2));
+        const int hours = qstring_toint(input.mid(15, 2));
+        const int minutes = qstring_toint(input.mid(18, 2));
+        const QTime time(hours, minutes);
+        const QDate date(year, month, day);
+        return QDateTime(date, time);
+    } catch (const ConversionException&) {
+        return QDateTime();
+    }
 }
 
 Parser::Parser(QObject *parent)
