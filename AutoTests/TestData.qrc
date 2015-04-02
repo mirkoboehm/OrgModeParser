@@ -7,4 +7,7 @@
         <file>TestData/Parser/DrawersCornerCases.org</file>
         <file>TestData/Parser/OrgModePropertiesExample.org</file>
     </qresource>
+    <qresource prefix="/Benchmarks">
+        <file>TestData/Benchmarks/BenchmarkClocklines.org</file>
+    </qresource>
 </RCC>

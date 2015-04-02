@@ -41,6 +41,8 @@ private Q_SLOTS:
     void testPropertyOperations();
     void testParserAndIdentity_data();
     void testParserAndIdentity();
+
+    void benchmarkParseClocklines();
 };
 
 QString FL1(const char* text) {
@@ -516,6 +518,19 @@ void ParserTests::testParserAndIdentity()
         method(input, output, element);
     }  catch(Exception& ex) {
         QFAIL(qPrintable(ex.message()));
+    }
+}
+
+void ParserTests::benchmarkParseClocklines()
+{
+    const QString filename = FL1(":/Benchmarks/TestData/Benchmarks/BenchmarkClocklines.org");
+    QFile orgFile(filename);
+    QVERIFY(orgFile.open(QIODevice::ReadOnly));
+    QTextStream stream(&orgFile);
+    QBENCHMARK {
+        Parser parser;
+        const OrgElement::Pointer element = parser.parse(&stream, filename);
+        Q_UNUSED(element);
     }
 }
 
