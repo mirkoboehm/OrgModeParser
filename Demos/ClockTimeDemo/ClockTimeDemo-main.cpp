@@ -6,6 +6,7 @@
 
 #include <Exception.h>
 #include "ClockTimeSummary.h"
+#include <Parser.h>
 
 using namespace OrgMode;
 using namespace std;
@@ -14,7 +15,7 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
     QCoreApplication::setApplicationName(a.translate("main", "OrgModeParser clock time demo"));
-    QCoreApplication::setApplicationVersion(a.translate("main", "1.0"));
+    QCoreApplication::setApplicationVersion(OrgMode::version());
     QCommandLineParser parser;
     try {
         parser.setApplicationDescription(a.translate("main", "Clock time demo for the OrgModeParser."));

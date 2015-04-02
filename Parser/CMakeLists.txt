@@ -26,6 +26,8 @@ set(OrgModeParser_LIB_SRCS
         Properties.cpp
 )
 
+CONFIGURE_FILE( OrgModeParser.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/OrgModeParserCMake.h )
+
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 add_library(OrgModeParser SHARED ${OrgModeParser_LIB_SRCS})

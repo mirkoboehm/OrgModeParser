@@ -24,6 +24,7 @@ private:
     Private* d;
 };
 
+QString ORGMODEPARSER_EXPORT version();
 }
 
 #endif // PARSER_H
