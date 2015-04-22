@@ -105,7 +105,7 @@ void ClockTimeSummary::report(bool promptMode, int columns)
         if (headline) {
             const int secondsToNow = lastInitiatedClockline->startTime().secsTo(QDateTime::currentDateTime());
             currentlyClockedTime = hoursAndMinutes(secondsToNow);
-            currentTask = headline->caption();
+            currentTask = headline->caption().simplified();
         }
     }
     //Prepare the display of the running time today and this week:
