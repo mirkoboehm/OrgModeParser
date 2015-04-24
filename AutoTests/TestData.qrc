@@ -6,6 +6,7 @@
         <file>TestData/Parser/DrawersAndProperties.org</file>
         <file>TestData/Parser/DrawersCornerCases.org</file>
         <file>TestData/Parser/OrgModePropertiesExample.org</file>
+        <file>TestData/Parser/WeirdClockEntries.org</file>
     </qresource>
     <qresource prefix="/Benchmarks">
         <file>TestData/Benchmarks/BenchmarkClocklines.org</file>

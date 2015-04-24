@@ -1,0 +1,48 @@
+* headline_1
+  This section contains headlines that span from one day or week into
+  the next, or include daylight saving time switches. The outcome that
+  /Emacs/ produces is displayed in the  clock tables below. The test
+  verifies that OrgModeParser calculates the same way. 
+** headline_1_1
+   CLOCK: [2015-03-26 Thu 23:00]--[2015-03-27 Fri 01:30] =>  2:30
+   One hour on Thursday, 1.5 on Friday.
+** headline_1_2
+   CLOCK: [2015-03-29 Sun 23:00]--[2015-03-30 Mon 01:30] =>  2:30
+   One hour on Sunday, 1.5 on Monday.
+** headline_1_3
+   CLOCK: [2015-03-28 Sat 18:00]--[2015-03-29 Sun 06:00] => 11:00
+   In Germany, Sat March 28, 2015 marks the switch to CEST. Because of
+   that, the above clock entry only spans 11 hours. How does OrgMode
+   know which regional regulations apply?
+
+#+BEGIN: clocktable :block 2015-w13 :scope file 
+#+CAPTION: Clock summary at [2015-04-24 Fri 16:15], for week 2015-W13.
+| Headline         | Time    |       |
+|------------------+---------+-------|
+| *Total time*     | *14:30* |       |
+|------------------+---------+-------|
+| headline_2       | 14:30   |       |
+| \__ headline_2_1 |         |  2:30 |
+| \__ headline_2_2 |         |  1:00 |
+| \__ headline_2_3 |         | 11:00 |
+#+END:
+
+#+BEGIN: clocktable :block 2015-03-27 :scope file 
+#+CAPTION: Clock summary at [2015-04-24 Fri 16:16], for Friday, March 27, 2015.
+| Headline         | Time   |      |
+|------------------+--------+------|
+| *Total time*     | *1:30* |      |
+|------------------+--------+------|
+| headline_2       | 1:30   |      |
+| \__ headline_2_1 |        | 1:30 |
+#+END:
+
+#+BEGIN: clocktable :block 2015-03-26 :scope file 
+#+CAPTION: Clock summary at [2015-04-24 Fri 16:16], for Thursday, March 26, 2015.
+| Headline         | Time   |      |
+|------------------+--------+------|
+| *Total time*     | *1:00* |      |
+|------------------+--------+------|
+| headline_2       | 1:00   |      |
+| \__ headline_2_1 |        | 1:00 |
+#+END:

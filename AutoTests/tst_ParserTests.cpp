@@ -302,13 +302,13 @@ void ParserTests::testParserAndIdentity_data()
     VerificationMethod testFindElements = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
         {   //There is one headline that is a direct child of element, headline_1:
             auto const headlines = findElements<Headline>(element, 1);
-            QVERIFY(headlines.size() == 1);
+            QCOMPARE(headlines.size(), 1);
             const Headline::Pointer headline_1 = headlines.first();
             QCOMPARE(headline_1->caption(), FL1("headline_1"));
         }
         {   //At maxdepth 2, there are 3 headlines:
             auto const headlines = findElements<Headline>(element, 2);
-            QVERIFY(headlines.size() == 3);
+            QCOMPARE(headlines.size(), 3);
             const Headline::Pointer headline_1_2 = headlines.at(2);
             QCOMPARE(headline_1_2->caption(), FL1("headline_1_2"));
         }
@@ -318,7 +318,7 @@ void ParserTests::testParserAndIdentity_data()
         }
         {   //At maxdepth 0, there one OrgFile:
             auto const orgFiles = findElements<OrgFile>(element, 0);
-            QVERIFY(orgFiles.size() == 1);
+            QCOMPARE(orgFiles.size(), 1);
             const OrgFile::Pointer orgFile = orgFiles.first();
             QCOMPARE(orgFile->fileName(), FL1("://TestData/Parser/ClockEntries.org"));
         }
