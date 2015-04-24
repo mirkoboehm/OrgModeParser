@@ -10,6 +10,8 @@
 
 namespace OrgMode {
 
+class TimeInterval;
+
 class ORGMODEPARSER_EXPORT CompletedClockLine : public ClockLine
 {
     Q_DECLARE_TR_FUNCTIONS(CompletedClockLine)
@@ -23,6 +25,7 @@ public:
     QDateTime endTime() const;
 
     int duration() const;
+    int durationWithinInterval(const TimeInterval& interval) const;
 
 protected:
     bool isElementValid() const override;

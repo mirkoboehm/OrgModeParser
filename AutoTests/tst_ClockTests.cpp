@@ -24,8 +24,6 @@ private Q_SLOTS:
     void testAccumulateForWeek();
 };
 
-
-
 void ClockTests::testTimeIntervals()
 {
     const QDate today(2015, 4, 24);
@@ -82,7 +80,7 @@ void ClockTests::testAccumulateForDay()
         QCOMPARE(clock.duration(), 60 * 150); //150 minutes
         const QDate mar26(2015, 3, 26);
         const QDate mar27(mar26.addDays(1));
-        //QCOMPARE(clock.duration(TimeInterval(mar26, mar27)), 60 * 60); //60 minutes on March 26
+        QCOMPARE(clock.duration(TimeInterval(mar26, mar27)), 60 * 60); //60 minutes on March 26
     } catch(Exception& ex) {
         QFAIL(qPrintable(ex.message()));
     }

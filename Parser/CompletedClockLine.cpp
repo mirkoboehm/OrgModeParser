@@ -1,4 +1,5 @@
 #include "CompletedClockLine.h"
+#include "TimeInterval.h"
 
 namespace OrgMode {
 
@@ -32,6 +33,16 @@ QDateTime CompletedClockLine::endTime() const
 int CompletedClockLine::duration() const
 {
     return startTime().secsTo(d->end_);
+}
+
+int CompletedClockLine::durationWithinInterval(const TimeInterval &interval) const
+{
+    const TimeInterval me(startTime(), endTime()());
+    const TimeInterval intersection(me.intersection(interval));
+
+    const QDateTime start(qMax(startTime(), interval.start()));
+    const QDateTime end(qMin(endTime(), interval.end()));
+    return start.secsTo(end);
 }
 
 bool CompletedClockLine::isElementValid() const

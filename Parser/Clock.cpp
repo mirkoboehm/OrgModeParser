@@ -7,7 +7,7 @@ namespace OrgMode {
 
 class Clock::Private {
 public:
-    int subduration(OrgElement::Pointer element);
+    int subduration(const TimeInterval & interval, OrgElement::Pointer element);
     OrgElement::Pointer element_;
 };
 
@@ -19,18 +19,23 @@ Clock::Clock(OrgElement::Pointer element)
 
 int Clock::duration() const
 {
-    return d->subduration(d->element_);
+    return duration(TimeInterval());
 }
 
-int Clock::Private::subduration(OrgElement::Pointer element)
+int Clock::duration(const TimeInterval& interval) const
+{
+    return d->subduration(interval, d->element_);
+}
+
+int Clock::Private::subduration(const TimeInterval& interval, OrgElement::Pointer element)
 {
     int subtotal = 0;
     CompletedClockLine* clockLine = dynamic_cast<CompletedClockLine*>(element.data());
     if (clockLine) {
-        subtotal += clockLine->duration();
+        subtotal += clockLine->durationWithinInterval(interval);
     }
     for (auto child : element->children()) {
-        subtotal += subduration(child);
+        subtotal += subduration(interval, child);
     }
     return subtotal;
 }
