@@ -15,6 +15,16 @@ set_property(TARGET OrgModeParser_ParserTests PROPERTY CXX_STANDARD 11)
 
 ########### next target ###############
 
+set(ClockTests_SRCS tst_ClockTests.cpp TestHelpers.cpp ${TestDataResources_SRCS})
+add_executable(OrgModeParser_ClockTests ${ClockTests_SRCS})
+target_link_libraries(OrgModeParser_ClockTests Qt5::Test OrgModeParser)
+target_include_directories(OrgModeParser_ClockTests PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
+add_test(OrgModeParser_ClockTests OrgModeParser_ClockTests)
+set_target_properties(OrgModeParser_ClockTests PROPERTIES MACOSX_BUNDLE FALSE)
+set_property(TARGET OrgModeParser_ClockTests PROPERTY CXX_STANDARD 11)
+
+########### next target ###############
+
 set(Benchmarks_SRCS tst_Benchmarks.cpp TestHelpers.cpp ${TestDataResources_SRCS})
 add_executable(OrgModeParser_Benchmarks ${Benchmarks_SRCS})
 target_link_libraries(OrgModeParser_Benchmarks Qt5::Test OrgModeParser)
