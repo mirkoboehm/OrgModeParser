@@ -24,6 +24,8 @@ set(OrgModeParser_LIB_SRCS
         Attributes.cpp
         Property.cpp
         Properties.cpp
+# Value classes
+        TimeInterval.cpp
 )
 
 CONFIGURE_FILE( OrgModeParser.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/OrgModeParserCMake.h )
