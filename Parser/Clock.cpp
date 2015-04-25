@@ -17,11 +17,6 @@ Clock::Clock(OrgElement::Pointer element)
     d->element_ = element;
 }
 
-int Clock::duration() const
-{
-    return duration(TimeInterval());
-}
-
 int Clock::duration(const TimeInterval& interval) const
 {
     return d->subduration(interval, d->element_);

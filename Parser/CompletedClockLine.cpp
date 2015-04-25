@@ -37,12 +37,9 @@ int CompletedClockLine::duration() const
 
 int CompletedClockLine::durationWithinInterval(const TimeInterval &interval) const
 {
-    const TimeInterval me(startTime(), endTime()());
+    const TimeInterval me(startTime(), endTime());
     const TimeInterval intersection(me.intersection(interval));
-
-    const QDateTime start(qMax(startTime(), interval.start()));
-    const QDateTime end(qMin(endTime(), interval.end()));
-    return start.secsTo(end);
+    return intersection.start().secsTo(intersection.end());
 }
 
 bool CompletedClockLine::isElementValid() const

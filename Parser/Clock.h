@@ -15,11 +15,9 @@ class ORGMODEPARSER_EXPORT Clock
 public:
     explicit Clock(OrgElement::Pointer element);
 
-    /** Recursively calculate the duration of all clock entries within element's subtree. */
-    int duration() const;
     /** Recursively calculate the duration of all clock entries within element's subtree,
      *  bounded by the specified interval. */
-    int duration(const TimeInterval& interval) const;
+    int duration(const TimeInterval& interval = TimeInterval()) const;
 private:
     class Private;
     Private* d;
