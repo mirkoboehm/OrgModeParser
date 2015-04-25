@@ -33,29 +33,38 @@ void ClockTests::testTimeIntervals()
     const QDateTime seven(today, QTime(7,0));
     const QDateTime eight(today, QTime(8,0));
     const QDateTime nine(today, QTime(9,0));
-    //simple case: two closed intervals that overlap:
+    // 1) simple case: two closed intervals that overlap:
     const TimeInterval sixToEight(six, eight);
     const TimeInterval sevenToNine(seven, nine);
     const TimeInterval sevenToEight(seven, eight);
     QCOMPARE(sixToEight.intersection(sevenToNine), sevenToEight);
     QCOMPARE(sevenToNine.intersection(sixToEight), sevenToEight);
-    //more complicated: open intervals
+    // 2) more complicated: one side open intervals
     const TimeInterval toEight(QDateTime(), eight);
     const TimeInterval fromSeven(seven);
     QCOMPARE(toEight.intersection(fromSeven), sevenToEight);
     QCOMPARE(fromSeven.intersection(toEight), sevenToEight);
-    //non-intersecting intervals
+    // 3) one side open intervals in the same direction
+    const TimeInterval fromEight(eight);
+    QCOMPARE(fromSeven.intersection(fromEight), fromEight);
+    QCOMPARE(fromEight.intersection(fromSeven), fromEight);
+    const TimeInterval toSeven(QDateTime(), seven);
+    QCOMPARE(toEight.intersection(toSeven), toSeven);
+    QCOMPARE(toSeven.intersection(toEight), toSeven);
+    // 4) non-intersecting intervals: results in empty interval starting at upper interval
     const TimeInterval sixToSeven(six, seven);
     const TimeInterval eightToNine(eight, nine);
-    QCOMPARE(sixToSeven.intersection(eightToNine), TimeInterval());
-    QCOMPARE(eightToNine.intersection(sixToSeven), TimeInterval());
-    //touching, but non-intersecting intervals:
-    QCOMPARE(sixToSeven.intersection(sevenToEight), TimeInterval());
-    QCOMPARE(sevenToEight.intersection(sixToSeven), TimeInterval());
-    //invalid intervals on one side
-    QCOMPARE(sixToEight.intersection(TimeInterval()), TimeInterval());
-    QCOMPARE(TimeInterval().intersection(sixToEight), TimeInterval());
+    const TimeInterval eightToEight(eight, eight);
+    QCOMPARE(sixToSeven.intersection(eightToNine), eightToEight);
+    QCOMPARE(eightToNine.intersection(sixToSeven), eightToEight);
+    // 5) intersection with an unbound (both sides open) interval
+    QCOMPARE(sixToSeven.intersection(TimeInterval()), sixToSeven);
+    QCOMPARE(TimeInterval().intersection(sixToSeven), sixToSeven);
     QCOMPARE(TimeInterval().intersection(TimeInterval()), TimeInterval());
+    // 6) touching, but non-intersecting intervals:
+    const TimeInterval sevenToSeven(seven, seven);
+    QCOMPARE(sixToSeven.intersection(sevenToEight), sevenToSeven);
+    QCOMPARE(sevenToEight.intersection(sixToSeven), sevenToSeven);
 }
 
 void ClockTests::testAccumulateForDay()

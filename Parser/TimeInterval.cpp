@@ -40,24 +40,23 @@ QDateTime TimeInterval::end() const
 
 bool TimeInterval::isValid() const
 {
-    return start().isValid() || end().isValid();
+    //FIXME test!
+
+    return start() >= end() || !start().isValid() || !end().isValid();
 }
 
 TimeInterval TimeInterval::intersection(const TimeInterval &other) const
 {
-    if (!isValid() || !other.isValid()) return TimeInterval();
+    if (other == TimeInterval()) return *this;
+    if (*this == TimeInterval()) return other;
 
     const QDateTime s(qMax(start().isValid() ? start() : other.start(),
                            other.start().isValid() ? other.start() : start()));
     const QDateTime e(qMin(end().isValid() ? end() : other.end(),
                            other.end().isValid() ? other.end() : end()));
 
-    qDebug() << s << e;
-    if (s >= e) {
-        return TimeInterval();
-    } else {
-        return TimeInterval(s, e);
-    }
+    const QDateTime eLowerBound = e.isValid() ? qMax(e, s) : e;
+    return TimeInterval(s, eLowerBound);
 }
 
 bool OrgMode::operator==(const TimeInterval &left, const TimeInterval &right)
