@@ -39,7 +39,7 @@ int CompletedClockLine::durationWithinInterval(const TimeInterval &interval) con
 {
     const TimeInterval me(startTime(), endTime());
     const TimeInterval intersection(me.intersection(interval));
-    return intersection.start().secsTo(intersection.end());
+    return intersection.duration();
 }
 
 bool CompletedClockLine::isElementValid() const
