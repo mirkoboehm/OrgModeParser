@@ -1,3 +1,5 @@
+#include <limits>
+
 #include <QtDebug>
 #include <QDateTime>
 
@@ -42,7 +44,7 @@ bool TimeInterval::isValid() const
 {
     //FIXME test!
 
-    return start() >= end() || !start().isValid() || !end().isValid();
+    return start() <= end() || !start().isValid() || !end().isValid();
 }
 
 TimeInterval TimeInterval::intersection(const TimeInterval &other) const
@@ -57,6 +59,13 @@ TimeInterval TimeInterval::intersection(const TimeInterval &other) const
 
     const QDateTime eLowerBound = e.isValid() ? qMax(e, s) : e;
     return TimeInterval(s, eLowerBound);
+}
+
+int TimeInterval::duration() const
+{
+    if (!isValid()) return 0;
+    if (!start().isValid() || !end().isValid()) return std::numeric_limits<int>::max();
+    return start().secsTo(end());
 }
 
 bool OrgMode::operator==(const TimeInterval &left, const TimeInterval &right)

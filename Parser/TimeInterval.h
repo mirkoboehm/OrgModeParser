@@ -47,6 +47,13 @@ public:
      */
     TimeInterval intersection(const TimeInterval& other) const;
 
+    /** The duration of the interval in seconds.
+     *
+     * @return Zero, for empty intervals.
+     * @return std::numeric_limits<int>::max(), for undefined durations, those of open intervals.
+     * @return Seconds, for valid intervals.
+     */
+    int duration() const;
 private:
     class Private;
     Private* d;
