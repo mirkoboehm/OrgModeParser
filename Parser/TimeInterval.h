@@ -31,8 +31,9 @@ public:
     bool isValid() const;
     /** Return the intersection of two intervals.
      *
-     * The intersection of two intervals is the common subset of the two intervals. Here are some
-     * examples (assume items are in alphabetical order, a < b:
+     * The intersection of two intervals is the common subset of the two intervals.
+     * The intersection of two non-overlapping intervals is an empty interval starting at the upper interval.
+     * Here are some examples (assume items are in alphabetical order, a < b:
      *
      * 1) ([a, c[).intersection([b, d[)  = [b, c[
      * 2) ([*, c[).intersection([b, *[)  = [b, c[
@@ -43,6 +44,7 @@ public:
      *    ([*, *[).intersection([*, *[)  = [*, *[
      * 6) ([a, b[).intersection([b, c[)  = [b, b[
      *    ([b, c[).intersection([a, b[)  = [b, b[
+     *
      * @see ClockTests::testTimeIntervals()
      */
     TimeInterval intersection(const TimeInterval& other) const;

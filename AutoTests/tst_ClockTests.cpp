@@ -41,6 +41,7 @@ class ClockTests : public QObject
     Q_OBJECT
 
 private Q_SLOTS:
+    void testTimeIntervals_data();
     void testTimeIntervals();
     void testTimeIntervalsIsValid_data();
     void testTimeIntervalsIsValid();
@@ -50,29 +51,34 @@ private Q_SLOTS:
     void testAccumulateForWeek();
 };
 
+void ClockTests::testTimeIntervals_data()
+{
+    QTest::addColumn<TimeInterval>("left");
+    QTest::addColumn<TimeInterval>("right");
+    QTest::addColumn<TimeInterval>("intersection");
+    QTest::newRow("1: two closed intervals that overlap") << sixToEight << sevenToNine << sevenToEight;
+    QTest::newRow("1: two closed intervals that overlap, reversed") << sevenToNine << sixToEight << sevenToEight;
+    QTest::newRow("2: one side open intervals") << toEight << fromSeven << sevenToEight;
+    QTest::newRow("2: one side open intervals, reversed") << fromSeven << toEight << sevenToEight;
+    QTest::newRow("3: two intervals open on the same side, open end") << fromSeven << fromEight << fromEight;
+    QTest::newRow("3: two intervals open on the same side, open end, reversed") << fromEight << fromSeven << fromEight;
+    QTest::newRow("3: two intervals open on the same side, open start") << toEight << toSeven << toSeven;
+    QTest::newRow("3: two intervals open on the same side, open start, reversed") << toSeven << toEight << toSeven;
+    QTest::newRow("4: non-intersecting intervals") << sixToSeven << eightToNine << eightToEight;
+    QTest::newRow("4: non-intersecting intervals, reversed") << eightToNine << sixToSeven << eightToEight;
+    QTest::newRow("5: intersection with an unbound interval") << sixToSeven << TimeInterval() << sixToSeven;
+    QTest::newRow("5: intersection with an unbound interval, reversed") << TimeInterval() << sixToSeven << sixToSeven;
+    QTest::newRow("5: intersection of two unbound intervals") << TimeInterval() << TimeInterval() << TimeInterval();
+    QTest::newRow("6: touching, but non-intersecting intervals") << sixToSeven << sevenToEight << sevenToSeven;
+    QTest::newRow("6: touching, but non-intersecting intervals, reversed") << sevenToEight << sixToSeven << sevenToSeven;
+}
+
 void ClockTests::testTimeIntervals()
 {
-    // 1) simple case: two closed intervals that overlap:
-    QCOMPARE(sixToEight.intersection(sevenToNine), sevenToEight);
-    QCOMPARE(sevenToNine.intersection(sixToEight), sevenToEight);
-    // 2) more complicated: one side open intervals
-    QCOMPARE(toEight.intersection(fromSeven), sevenToEight);
-    QCOMPARE(fromSeven.intersection(toEight), sevenToEight);
-    // 3) one side open intervals in the same direction
-    QCOMPARE(fromSeven.intersection(fromEight), fromEight);
-    QCOMPARE(fromEight.intersection(fromSeven), fromEight);
-    QCOMPARE(toEight.intersection(toSeven), toSeven);
-    QCOMPARE(toSeven.intersection(toEight), toSeven);
-    // 4) non-intersecting intervals: results in empty interval starting at upper interval
-    QCOMPARE(sixToSeven.intersection(eightToNine), eightToEight);
-    QCOMPARE(eightToNine.intersection(sixToSeven), eightToEight);
-    // 5) intersection with an unbound (both sides open) interval
-    QCOMPARE(sixToSeven.intersection(TimeInterval()), sixToSeven);
-    QCOMPARE(TimeInterval().intersection(sixToSeven), sixToSeven);
-    QCOMPARE(TimeInterval().intersection(TimeInterval()), TimeInterval());
-    // 6) touching, but non-intersecting intervals:
-    QCOMPARE(sixToSeven.intersection(sevenToEight), sevenToSeven);
-    QCOMPARE(sevenToEight.intersection(sixToSeven), sevenToSeven);
+    QFETCH(TimeInterval, left);
+    QFETCH(TimeInterval, right);
+    QFETCH(TimeInterval, intersection);
+    QCOMPARE(left.intersection(right), intersection);
 }
 
 void ClockTests::testTimeIntervalsIsValid_data()
