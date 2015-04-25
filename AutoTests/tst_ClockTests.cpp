@@ -32,6 +32,9 @@ const TimeInterval sixToSeven(six, seven);
 const TimeInterval eightToNine(eight, nine);
 const TimeInterval eightToEight(eight, eight);
 const TimeInterval sevenToSeven(seven, seven);
+const TimeInterval eightToSeven(eight, seven); //invalid!
+
+Q_DECLARE_METATYPE(TimeInterval);
 
 class ClockTests : public QObject
 {
@@ -39,6 +42,8 @@ class ClockTests : public QObject
 
 private Q_SLOTS:
     void testTimeIntervals();
+    void testTimeIntervalsIsValid_data();
+    void testTimeIntervalsIsValid();
     void testTimeIntervalDurations_data();
     void testTimeIntervalDurations();
     void testAccumulateForDay();
@@ -70,18 +75,36 @@ void ClockTests::testTimeIntervals()
     QCOMPARE(sevenToEight.intersection(sixToSeven), sevenToSeven);
 }
 
-Q_DECLARE_METATYPE(TimeInterval);
+void ClockTests::testTimeIntervalsIsValid_data()
+{
+    QTest::addColumn<TimeInterval>("interval");
+    QTest::addColumn<bool>("valid");
+
+    QTest::newRow("seven to eight")    << sevenToEight     << true;
+    QTest::newRow("eight to seven")    << eightToSeven     << false;
+    QTest::newRow("eight to eight")    << eightToEight     << true;
+    QTest::newRow("to eight")          << toEight          << true;
+    QTest::newRow("from eight")        << fromEight        << true;
+    QTest::newRow("open interval")     << TimeInterval()   << true;
+}
+
+void ClockTests::testTimeIntervalsIsValid()
+{
+    QFETCH(TimeInterval, interval);
+    QFETCH(bool, valid);
+    QCOMPARE(interval.isValid(), valid);
+}
 
 void ClockTests::testTimeIntervalDurations_data()
 {
     QTest::addColumn<TimeInterval>("interval");
     QTest::addColumn<int>("duration");
 
-    QTest::newRow("empty interval")     << sevenToSeven     << 0;
-    QTest::newRow("eight to nine")      << eightToNine      << 60 * 60; // one hour
-    QTest::newRow("from eight")         << fromEight        << std::numeric_limits<int>::max();
-    QTest::newRow("to eight")           << toEight          << std::numeric_limits<int>::max();
-    QTest::newRow("open interval")      << TimeInterval()   << std::numeric_limits<int>::max();
+    QTest::newRow("empty interval")    << sevenToSeven     << 0;
+    QTest::newRow("eight to nine")     << eightToNine      << 60 * 60; // one hour
+    QTest::newRow("from eight")        << fromEight        << std::numeric_limits<int>::max();
+    QTest::newRow("to eight")          << toEight          << std::numeric_limits<int>::max();
+    QTest::newRow("open interval")     << TimeInterval()   << std::numeric_limits<int>::max();
 }
 
 void ClockTests::testTimeIntervalDurations()

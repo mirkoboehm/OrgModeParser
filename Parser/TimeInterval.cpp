@@ -42,8 +42,6 @@ QDateTime TimeInterval::end() const
 
 bool TimeInterval::isValid() const
 {
-    //FIXME test!
-
     return start() <= end() || !start().isValid() || !end().isValid();
 }
 
