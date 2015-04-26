@@ -1,4 +1,4 @@
-* headline_1
+* TODO headline_1
   This section contains headlines that span from one day or week into
   the next, or include daylight saving time switches. The outcome that
   /Emacs/ produces is displayed in the  clock tables below. The test
@@ -16,33 +16,33 @@
    know which regional regulations apply?
 
 #+BEGIN: clocktable :block 2015-w13 :scope file 
-#+CAPTION: Clock summary at [2015-04-24 Fri 16:15], for week 2015-W13.
-| Headline         | Time    |       |
-|------------------+---------+-------|
-| *Total time*     | *14:30* |       |
-|------------------+---------+-------|
-| headline_2       | 14:30   |       |
-| \__ headline_2_1 |         |  2:30 |
-| \__ headline_2_2 |         |  1:00 |
-| \__ headline_2_3 |         | 11:00 |
+#+CAPTION: Clock summary at [2015-04-26 Sun 13:11], for week 2015-W13.
+| Headline           | Time    |       |
+|--------------------+---------+-------|
+| *Total time*       | *14:30* |       |
+|--------------------+---------+-------|
+| TODO headline_1    | 14:30   |       |
+| \     headline_1_1 |         |  2:30 |
+| \     headline_1_2 |         |  1:00 |
+| \     headline_1_3 |         | 11:00 |
 #+END:
 
 #+BEGIN: clocktable :block 2015-03-27 :scope file 
-#+CAPTION: Clock summary at [2015-04-24 Fri 16:16], for Friday, March 27, 2015.
-| Headline         | Time   |      |
-|------------------+--------+------|
-| *Total time*     | *1:30* |      |
-|------------------+--------+------|
-| headline_2       | 1:30   |      |
-| \__ headline_2_1 |        | 1:30 |
+#+CAPTION: Clock summary at [2015-04-26 Sun 12:49], for Friday, March 27, 2015.
+| Headline           | Time   |      |
+|--------------------+--------+------|
+| *Total time*       | *1:30* |      |
+|--------------------+--------+------|
+| TODO headline_1    | 1:30   |      |
+| \     headline_1_1 |        | 1:30 |
 #+END:
 
 #+BEGIN: clocktable :block 2015-03-26 :scope file 
-#+CAPTION: Clock summary at [2015-04-24 Fri 16:16], for Thursday, March 26, 2015.
-| Headline         | Time   |      |
-|------------------+--------+------|
-| *Total time*     | *1:00* |      |
-|------------------+--------+------|
-| headline_2       | 1:00   |      |
-| \__ headline_2_1 |        | 1:00 |
+#+CAPTION: Clock summary at [2015-04-26 Sun 12:49], for Thursday, March 26, 2015.
+| Headline           | Time   |      |
+|--------------------+--------+------|
+| *Total time*       | *1:00* |      |
+|--------------------+--------+------|
+| TODO headline_1    | 1:00   |      |
+| \     headline_1_1 |        | 1:00 |
 #+END:

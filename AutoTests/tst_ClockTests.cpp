@@ -6,6 +6,7 @@
 #include <QDateTime>
 #include <QTextStream>
 
+#include <OrgElement.h>
 #include <Parser.h>
 #include <Headline.h>
 #include <Clock.h>
@@ -47,8 +48,8 @@ private Q_SLOTS:
     void testTimeIntervalsIsValid();
     void testTimeIntervalDurations_data();
     void testTimeIntervalDurations();
-    void testAccumulateForDay();
-    void testAccumulateForWeek();
+    void testAccumulateForInterval_data();
+    void testAccumulateForInterval();
 };
 
 void ClockTests::testTimeIntervals_data()
@@ -120,29 +121,46 @@ void ClockTests::testTimeIntervalDurations()
     QCOMPARE(interval.duration(), duration);
 }
 
-void ClockTests::testAccumulateForDay()
+void ClockTests::testAccumulateForInterval_data()
+{
+    QTest::addColumn<QString>("headline");
+    QTest::addColumn<TimeInterval>("interval");
+    QTest::addColumn<int>("duration");
+    QTest::addColumn<int>("total");
+
+    const QDate mar26(2015, 3, 26);
+    const QDate mar27(mar26.addDays(1));
+    const QDate mar23(2015, 3, 23); //Monday
+    const QDate mar30(mar23.addDays(7)); //Monday a week later
+    const TimeInterval wk13(mar23, mar30);
+    QTest::newRow("headline_1_1") << FL1("headline_1_1") << TimeInterval(mar26, mar27) << 60 * 60 << 60 * 150;
+    QTest::newRow("headline_1_2") << FL1("headline_1_2") << wk13 << 60 * 60 << 60 * 150;
+    QTest::newRow("headline_1_3 DST switch") << FL1("headline_1_3") << wk13 << 60 * 60 * 11 << 60 * 60 * 11;
+    QTest::newRow("headline_1 full week") << FL1("headline_1") << wk13 << 52200 << 57600; //14:30h, 15:15h total
+}
+
+void ClockTests::testAccumulateForInterval()
 {
     const QString filename = FL1("://TestData/Parser/WeirdClockEntries.org");
     QFile input(filename);
     QVERIFY(input.open(QIODevice::ReadOnly));
     QTextStream stream(&input);
     Parser parser;
+    auto const element = parser.parse(&stream, filename);
     try {
-        auto const element = parser.parse(&stream, filename);
-        auto const headline_1_1 = findElement<Headline>(element, FL1("headline_1_1"));
-        QVERIFY(headline_1_1);
-        Clock clock(headline_1_1);
-        QCOMPARE(clock.duration(), 60 * 150); //150 minutes
-        const QDate mar26(2015, 3, 26);
-        const QDate mar27(mar26.addDays(1));
-        QCOMPARE(clock.duration(TimeInterval(mar26, mar27)), 60 * 60); //60 minutes on March 26
+        QFETCH(QString, headline);
+        QFETCH(TimeInterval, interval);
+        QFETCH(int, duration);
+        QFETCH(int, total);
+
+        auto const headlineElement = findElement<Headline>(element, headline);
+        QVERIFY(headlineElement);
+        Clock clock(headlineElement);
+        QCOMPARE(clock.duration(), total);
+        QCOMPARE(clock.duration(interval), duration);
     } catch(Exception& ex) {
         QFAIL(qPrintable(ex.message()));
     }
-}
-
-void ClockTests::testAccumulateForWeek()
-{
 }
 
 QTEST_APPLESS_MAIN(ClockTests)
