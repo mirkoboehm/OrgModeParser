@@ -8,6 +8,8 @@
 
 #include <OrgFile.h>
 #include <OrgElement.h>
+#include <TimeInterval.h>
+#include <Clock.h>
 #include <Parser.h>
 #include <Exception.h>
 #include <ClockLine.h>
@@ -39,34 +41,18 @@ ClockTimeSummary::ClockTimeSummary(const QStringList &orgfiles, QObject *parent)
 int ClockTimeSummary::secondsClockedToday() const
 {
     auto const today = QDate::currentDate();
-    auto const isToday = [today](const CompletedClockLine::Pointer& line) {
-        if (line->startTime().date() == today || line->endTime().date() == today) {
-            return true;
-        } else {
-            return false;
-        }
-    };
-    auto const todaysClockLines = findElements<CompletedClockLine>(toplevel_, -1, isToday);
-    return accumulate(begin(todaysClockLines), end(todaysClockLines), 0,
-                           [](int i, const CompletedClockLine::Pointer& clock) { return i + clock->duration(); } );
+    const TimeInterval day(today, today.addDays(1));
+    const Clock clock(toplevel_);
+    return clock.duration(day);
 }
 
 int ClockTimeSummary::secondsClockedThisWeek() const
 {
     auto const today = QDate::currentDate();
     auto const monday = today.addDays(1-today.dayOfWeek());
-    auto const sunday = monday.addDays(7);
-    auto const isThisWeek = [monday, sunday](const CompletedClockLine::Pointer& line) {
-        if ((line->startTime().date() >= monday && line->startTime().date() <= sunday)
-                || (line->endTime().date() >=monday && line->startTime().date() <= sunday)) {
-            return true;
-        } else {
-            return false;
-        }
-    };
-    auto const clocklines = findElements<CompletedClockLine>(toplevel_, -1, isThisWeek);
-    return accumulate(begin(clocklines), end(clocklines), 0,
-                      [](int i, const CompletedClockLine::Pointer& clock) { return i + clock->duration(); } );
+    const TimeInterval week(monday, monday.addDays(7));
+    const Clock clock(toplevel_);
+    return clock.duration(week);
 }
 
 template <typename T>
