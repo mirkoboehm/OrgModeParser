@@ -17,6 +17,10 @@ IF (GIT_RESULT EQUAL 0)
 ELSE ()
     MESSAGE(FATAL_ERROR "Cannot determine OrgModeParser version from git!")
 ENDIF ()
+
+SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
 add_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII)
 add_subdirectory(Parser)
 add_subdirectory(AutoTests)
