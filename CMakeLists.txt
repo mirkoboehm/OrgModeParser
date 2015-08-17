@@ -1,5 +1,5 @@
 project(OrgModeParser)
-cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.2.0 FATAL_ERROR)
 include(GenerateExportHeader)
 find_package(Qt5Core 5.3.0 REQUIRED NO_MODULE)
 enable_testing()
