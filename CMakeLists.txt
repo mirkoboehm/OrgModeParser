@@ -24,5 +24,6 @@ SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 add_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII)
 add_subdirectory(Parser)
 add_subdirectory(AutoTests)
+add_subdirectory(Demos/TODOCounter)
 add_subdirectory(Tools/ClockTimeSummary)
 

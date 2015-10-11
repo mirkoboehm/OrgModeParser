@@ -1,0 +1,6 @@
+# Build definition for the TODO counter demo:
+add_executable(OrgModeParser_TODOCounterDemo TODOCounter.cpp)
+target_link_libraries(OrgModeParser_TODOCounterDemo OrgModeParser)
+set_target_properties(OrgModeParser_TODOCounterDemo PROPERTIES MACOSX_BUNDLE FALSE)
+set_property(TARGET OrgModeParser_TODOCounterDemo PROPERTY CXX_STANDARD 11)
+install(TARGETS OrgModeParser_TODOCounterDemo DESTINATION bin)
