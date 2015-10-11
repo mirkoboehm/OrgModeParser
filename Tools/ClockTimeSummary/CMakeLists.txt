@@ -1,0 +1,6 @@
+# Build definition for the clock time summary tool:
+add_executable(OrgModeParser_ClockTimeSummary ClockTimeSummary-main.cpp ClockTimeSummary.cpp)
+target_link_libraries(OrgModeParser_ClockTimeSummary OrgModeParser)
+set_target_properties(OrgModeParser_ClockTimeSummary PROPERTIES MACOSX_BUNDLE FALSE)
+set_property(TARGET OrgModeParser_ClockTimeSummary PROPERTY CXX_STANDARD 11)
+install(TARGETS OrgModeParser_ClockTimeSummary DESTINATION bin)
