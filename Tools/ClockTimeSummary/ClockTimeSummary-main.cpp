@@ -32,11 +32,11 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
-    QCoreApplication::setApplicationName(a.translate("main", "OrgModeParser clock time demo"));
+    QCoreApplication::setApplicationName(a.translate("main", "OrgModeParser clock time summary"));
     QCoreApplication::setApplicationVersion(OrgMode::version());
     QCommandLineParser parser;
     try {
-        parser.setApplicationDescription(a.translate("main", "Clock time demo for the OrgModeParser."));
+        parser.setApplicationDescription(a.translate("main", "Clock time summary tool, part of OrgModeParser."));
         parser.addHelpOption();
         parser.addVersionOption();
         QCommandLineOption columnsOption(QStringList() << QStringLiteral("c") << QStringLiteral("columns"),
