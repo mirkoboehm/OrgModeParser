@@ -345,7 +345,7 @@ void ParserTests::testParserAndIdentity_data()
     VerificationMethod testFindElementsFiltered = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
         //There is one headline that is a direct child of element, headline_1:
         auto const nonEmptyClockLines = [](const CompletedClockLine::Pointer& clock) { return clock->duration() > 0; };
-        auto const clockLines = findElements<CompletedClockLine>(element, -1, nonEmptyClockLines);
+        auto const clockLines = findElements<CompletedClockLine>(element, nonEmptyClockLines);
         QVERIFY(clockLines.size() == 3);
         const CompletedClockLine::Pointer clockLine_1_1 = clockLines.first();
         QCOMPARE(clockLine_1_1->duration(), 600);

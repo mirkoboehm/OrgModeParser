@@ -63,7 +63,7 @@ QString Properties::property(const QString& key) const
             auto isPropertyEntryForKey = [key](const PropertyDrawerEntry::Pointer& element) {
                 return element->key() == key;
             };
-            auto const elementPropertyDrawers = findElements<PropertyDrawerEntry>(drawer, 1, isPropertyEntryForKey);
+            auto const elementPropertyDrawers = findElements<PropertyDrawerEntry>(drawer, isPropertyEntryForKey, 1);
             propertyDrawerEntries = elementPropertyDrawers + propertyDrawerEntries;
         }
         element = element->parent();
@@ -97,7 +97,7 @@ Properties::Vector Properties::drawer(const QString &name) const
     auto const decision = [name](const Drawer::Pointer& drawer) -> bool {
         return name == drawer->name();
     };
-    auto const drawers = findElements<Drawer>(d->element_, 1, decision);
+    auto const drawers = findElements<Drawer>(d->element_, decision, 1);
     if (drawers.isEmpty()) {
         throw RuntimeException(tr("No drawer named %1 found!").arg(name));
     }

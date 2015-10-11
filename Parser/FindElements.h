@@ -33,34 +33,22 @@ namespace OrgMode {
   * To search for all kinds of OrgMode elements, use OrgElement as the type to search for.
   */
 template <typename T, typename Decision>
-QList<QSharedPointer<T>> findElements(const OrgElement::Pointer& element, int maxDepth, Decision d);
+QList<QSharedPointer<T>> findElements(const OrgElement::Pointer& element, Decision d, int maxDepth = -1);
 
 /** @brief Find all elements of a specific type, starting from element, up to maxDepth edges deep, where decision returns true.
   *
   * To search for all kinds of OrgMode elements, use OrgElement as the type to search for.
   */
 template <typename T, typename Decision>
-QList<QSharedPointer<T>> findElements(OrgElement*, int maxDepth, Decision d);
+QList<QSharedPointer<T>> findElements(OrgElement*, Decision d, int maxDepth = -1);
 
 /** @brief Find all elements of a specific type, starting from element, up to maxDepth edges deep. */
 template <typename T>
-QList<QSharedPointer<T>> findElements(const OrgElement::Pointer& element, int maxDepth);
-
-/** @brief Find all elements of a specific type, starting from element. */
-template <typename T>
-QList<QSharedPointer<T>> findElements(const OrgElement::Pointer& element);
+QList<QSharedPointer<T>> findElements(const OrgElement::Pointer& element, int maxDepth = -1);
 
 /** @brief Find all elements of a specific type, starting from element, up to maxDepth edges deep. */
 template <typename T>
-QList<QSharedPointer<T>> findElements(OrgElement* element, int maxDepth);
-
-/** @brief Find all elements of a specific type, starting from element. */
-template <typename T>
-QList<QSharedPointer<T>> findElements(const OrgElement::Pointer& element);
-
-/** @brief Find all elements of a specific type, starting from element. */
-template <typename T>
-QList<QSharedPointer<T>> findElements(OrgElement* element);
+QList<QSharedPointer<T>> findElements(OrgElement* element, int maxDepth = -1);
 
 }
 

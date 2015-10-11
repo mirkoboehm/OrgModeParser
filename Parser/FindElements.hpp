@@ -6,7 +6,7 @@ namespace OrgMode {
 static inline void NilDeleter(OrgElement*) {}
 
 template <typename T, typename Decision>
-QList<QSharedPointer<T>> findElements(const OrgElement::Pointer& element, int maxDepth, Decision d) {
+QList<QSharedPointer<T>> findElements(const OrgElement::Pointer& element, Decision d, int maxDepth) {
     if (!element) return QList<QSharedPointer<T>>();
 
     QList<QSharedPointer<T>> matches;
@@ -19,35 +19,25 @@ QList<QSharedPointer<T>> findElements(const OrgElement::Pointer& element, int ma
     }
     if (maxDepth == 0) return matches;
     for(auto const child : element->children()) {
-        matches.append(findElements<T>(child, maxDepth - 1, d));
+        matches.append(findElements<T>(child, d, maxDepth - 1));
     }
     return matches;
 }
 
 template <typename T, typename Decision>
-QList<QSharedPointer<T>> findElements(OrgElement* element, int maxDepth, Decision d) {
+QList<QSharedPointer<T>> findElements(OrgElement* element, Decision d, int maxDepth) {
     return findElements<T>(OrgElement::Pointer(element, NilDeleter), maxDepth, d);
 }
 
 template <typename T>
 QList<QSharedPointer<T>> findElements(const OrgElement::Pointer& element, int maxDepth) {
     auto const decision = [](const QSharedPointer<T>&) { return true; };
-    return findElements<T, decltype(decision)>(element, maxDepth, decision);
+    return findElements<T, decltype(decision)>(element, decision, maxDepth);
 };
 
 template <typename T>
 QList<QSharedPointer<T>> findElements(OrgElement* element, int maxDepth) {
     return findElements<T>(OrgElement::Pointer(element, NilDeleter), maxDepth);
-};
-
-template <typename T>
-QList<QSharedPointer<T>> findElements(const OrgElement::Pointer& element) {
-    return findElements<T>(element, -1);
-};
-
-template <typename T>
-QList<QSharedPointer<T>> findElements(OrgElement* element) {
-    return findElements<T>(OrgElement::Pointer(element, NilDeleter));
 };
 
 }

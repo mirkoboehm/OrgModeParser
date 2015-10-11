@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     auto isTODO = [](const Headline::Pointer& element) {
         return element->caption().startsWith(QStringLiteral("TODO"));
     };
-    auto const todos = findElements<Headline>(orgfile, -1, isTODO);
+    auto const todos = findElements<Headline>(orgfile, isTODO);
     wcout << "Number of TODOs: " << todos.count() << endl;
 
 }

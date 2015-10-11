@@ -94,7 +94,7 @@ void ClockTimeSummary::report(bool promptMode, int columns)
     auto const notCompleted = [](const ClockLine::Pointer& element) {
         return element.dynamicCast<CompletedClockLine>() == 0;
     };
-    auto clocklines = findElements<ClockLine>(toplevel_, -1, notCompleted);
+    auto clocklines = findElements<ClockLine>(toplevel_, notCompleted);
     //Sort by start time, to determine the latest task that was started:
     auto const startedLater = [](const ClockLine::Pointer& left, const ClockLine::Pointer& right) {
         return left->startTime() > right->startTime();
