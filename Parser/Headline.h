@@ -34,6 +34,7 @@ class ORGMODEPARSER_EXPORT Headline : public OrgElement
     Q_DECLARE_TR_FUNCTIONS(Headline)
 public:
     typedef QSharedPointer<Headline> Pointer;
+    typedef QList<Pointer> List;
     typedef std::set<QString> Tags;
 
     explicit Headline(const QString& line, OrgElement* parent = 0);
