@@ -18,13 +18,14 @@
 #include <Exception.h>
 
 #include "Clock.h"
+#include "Headline.h"
 #include "CompletedClockLine.h"
 
 namespace OrgMode {
 
 class Clock::Private {
 public:
-    int subduration(const TimeInterval & interval, OrgElement::Pointer element);
+    int subduration(const TimeInterval & interval, OrgElement::Pointer element, bool withChildren, int depth = 0);
     OrgElement::Pointer element_;
 };
 
@@ -36,18 +37,29 @@ Clock::Clock(OrgElement::Pointer element)
 
 int Clock::duration(const TimeInterval& interval) const
 {
-    return d->subduration(interval, d->element_);
+    return d->subduration(interval, d->element_, true);
 }
 
-int Clock::Private::subduration(const TimeInterval& interval, OrgElement::Pointer element)
+int Clock::itemDuration(const TimeInterval &interval) const
+{
+    return d->subduration(interval, d->element_, false);
+}
+
+int Clock::Private::subduration(const TimeInterval& interval, OrgElement::Pointer element, bool withChildren, int depth)
 {
     int subtotal = 0;
+    if (depth > 0 && withChildren == false) {
+        Headline* headline = dynamic_cast<Headline*>(element.data());
+        if (headline) {
+            return subtotal;
+        }
+    }
     CompletedClockLine* clockLine = dynamic_cast<CompletedClockLine*>(element.data());
     if (clockLine) {
         subtotal += clockLine->durationWithinInterval(interval);
     }
     for (auto child : element->children()) {
-        subtotal += subduration(interval, child);
+        subtotal += subduration(interval, child, withChildren, depth+1);
     }
     return subtotal;
 }

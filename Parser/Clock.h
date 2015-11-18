@@ -35,6 +35,13 @@ public:
     /** Recursively calculate the duration of all clock entries within element's subtree,
      *  bounded by the specified interval. */
     int duration(const TimeInterval& interval = TimeInterval()) const;
+
+    /** Calculate the duration of all clock entries for element.
+     *
+     * This function does not recurse into child headlines.
+     */
+    int itemDuration(const TimeInterval& interval = TimeInterval()) const;
+
 private:
     class Private;
     Private* d;
