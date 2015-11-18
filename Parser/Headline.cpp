@@ -69,6 +69,12 @@ void Headline::setTags(const Headline::Tags &tags)
     d->tags_ = tags;
 }
 
+bool OrgMode::Headline::hasTag(const QString &tag)
+{
+    return d->tags_.find(tag) != d->tags_.end();
+
+}
+
 bool Headline::isElementValid() const
 {
     return level() > 0;

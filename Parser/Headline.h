@@ -46,6 +46,7 @@ public:
 
     Tags tags() const;
     void setTags(const Tags& tags);
+    bool hasTag(const QString& tag);
 
     bool isMatch(const QRegularExpression& pattern) const override;
 
