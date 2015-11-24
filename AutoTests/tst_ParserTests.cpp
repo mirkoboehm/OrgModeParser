@@ -282,6 +282,11 @@ void ParserTests::testParserAndIdentity_data()
         auto const mondayEntry = findElement<DrawerEntry>(headline_1, FL1("Monday"));
         QVERIFY(mondayEntry);
         QCOMPARE(mondayEntry->value(), FL1("yellow"));
+        //Verify value of the "Saturday"entry, it contains a colon:
+        auto const saturdayEntry = findElement<DrawerEntry>(headline_1, FL1("Saturday"));
+        QVERIFY(saturdayEntry);
+        QCOMPARE(saturdayEntry->value(), FL1("party: going commando"));
+        QCOMPARE(saturdayEntry->key(), FL1("Saturday"));
         //Verify value of the "Sunday" entry, it is empty:
         auto const sundayEntry = findElement<DrawerEntry>(headline_1, FL1("Sunday"));
         QVERIFY(sundayEntry);

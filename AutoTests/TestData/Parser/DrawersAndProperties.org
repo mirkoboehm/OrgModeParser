@@ -10,7 +10,7 @@ This Org file contains examples for drawers and property drawers.
   :Wednesday: polka dots
   Hm, where is the curiously missing Thursday entry?
   :Friday:   hawaiian trunks
-  :Saturday: party, going commando
+  :Saturday: party: going commando
   :Sunday:   
   Not wearing any drawers on Sunday. It is still a valid drawer entry
   with an empty value. Drawers can also have entries that are just
