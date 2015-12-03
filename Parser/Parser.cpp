@@ -252,7 +252,8 @@ OrgElement::Pointer Parser::Private::parseDrawerLine(const OrgElement::Pointer &
             }
             self->setName(name);
             //Parse elements until :END: (complete) or headline (cancel)
-            static const QRegularExpression drawerEntryStructure(QStringLiteral("^\\s*:(.+):\\s*(.*)$"));
+            static const QRegularExpression drawerEntryStructure(QStringLiteral("^\\s*:(.+?):\\s*(.*)$"));
+            Q_ASSERT(drawerEntryStructure.isValid());
             while(!content->atEnd()) {
                 const QString line = content->getLine();
                 if (headlineMatch(line).hasMatch()) {
