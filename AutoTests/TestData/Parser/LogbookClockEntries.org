@@ -1,0 +1,19 @@
+* TODO headline_1
+  This file contains clock lines stored in logbook drawers.
+** headline_1_1
+   :LOGBOOK:
+   CLOCK: [2016-09-30 Fri 13:38]--[2016-09-30 Fri 16:18] =>  2:40
+   :END:
+   A clock line.
+** headline_1_2
+   :LOGBOOK:
+   CLOCK: [2016-09-30 Fri 16:18]
+   :END:
+   An incomplete clock line.
+** headline_1_3
+   :LOGBOOK:
+   CLOCK: [2016-09-30 Fri 13:38]--[2016-09-30 Fri 16:18] =>  2:40
+   CLOCK: [2016-09-30 Fri 16:18]
+   :END:
+   CLOCK: [2016-09-30 Fri 10:00]--[2016-09-30 Fri 11:18] =>  1:18
+   A mixed logbook. 

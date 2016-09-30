@@ -52,7 +52,7 @@ const TimeInterval eightToEight(eight, eight);
 const TimeInterval sevenToSeven(seven, seven);
 const TimeInterval eightToSeven(eight, seven); //invalid!
 
-Q_DECLARE_METATYPE(TimeInterval);
+Q_DECLARE_METATYPE(TimeInterval)
 
 class ClockTests : public QObject
 {

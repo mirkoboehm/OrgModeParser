@@ -484,6 +484,12 @@ void ParserTests::testParserAndIdentity_data()
         }
     };
     QTest::newRow("PropertyInheritance") << FL1("://TestData/Parser/OrgModePropertiesExample.org") << testPropertyInheritance;
+
+    //Test clock lines that are kept in logbook drawers:
+    VerificationMethod testLogBookDrawerClockLines = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
+        qDebug() << endl << qPrintable(element->describe());
+    };
+    QTest::newRow("LogBookDrawerClockLines") << FL1("://TestData/Parser/LogbookClockEntries.org") << testLogBookDrawerClockLines;
 }
 
 void ParserTests::testParserAndIdentity()
