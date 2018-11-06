@@ -6,4 +6,11 @@ before_script:
 
 build:
   script:
-    - echo "Hello World!"
+    - mkdir build && cd build/
+    - cmake ..
+    - make
+
+test:
+  script:
+    - cd build/ && make test
+
