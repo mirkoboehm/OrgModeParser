@@ -10,6 +10,9 @@ before_script:
 
 compile:
   stage: build
+  artifacts:
+    paths:
+      - build
   script:
     - mkdir build && cd build/
     - cmake ..
@@ -17,7 +20,10 @@ compile:
 
 test:
   stage: test
+  dependencies:
+    - compile
   script:
     - ls
     - pwd
+    - cd build
     - make test
