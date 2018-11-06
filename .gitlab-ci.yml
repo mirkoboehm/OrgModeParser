@@ -12,5 +12,5 @@ build:
 
 test:
   script:
-    - cd build/ && make test
+    - make test
 
