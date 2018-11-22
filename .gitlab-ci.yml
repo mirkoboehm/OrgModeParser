@@ -1,13 +1,12 @@
 image: ubuntu:latest
 
-tags:
-  - node
-
 before_script:
   - sed -i~orig -e 's/# deb-src/deb-src/' /etc/apt/sources.list
   - apt-get update -qq && apt-get build-dep -qq qtcreator && apt-get install -qq cmake git
 
 compile:
+  tags:
+    - node
   script:
     - mkdir build && cd build/
     - cmake ..
