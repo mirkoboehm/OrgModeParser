@@ -46,7 +46,7 @@ Headline::Headline(OrgElement* parent)
 
 Headline::~Headline()
 {
-    delete d; d = 0;
+    delete d; d = nullptr;
 }
 
 QString Headline::caption() const
@@ -69,7 +69,17 @@ void Headline::setTags(const Headline::Tags &tags)
     d->tags_ = tags;
 }
 
-bool OrgMode::Headline::hasTag(const QString &tag)
+void Headline::addTag(const QString &tag)
+{
+    d->tags_.insert(tag);
+}
+
+void Headline::removeTag(const QString &tag)
+{
+    d->tags_.erase(tag);
+}
+
+bool OrgMode::Headline::hasTag(const QString &tag) const
 {
     return d->tags_.find(tag) != d->tags_.end();
 

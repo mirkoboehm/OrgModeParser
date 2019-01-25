@@ -37,16 +37,18 @@ public:
     typedef QList<Pointer> List;
     typedef std::set<QString> Tags;
 
-    explicit Headline(const QString& line, OrgElement* parent = 0);
-    explicit Headline(OrgElement* parent = 0);
-    ~Headline();
+    explicit Headline(const QString& line, OrgElement* parent = nullptr);
+    explicit Headline(OrgElement* parent = nullptr);
+    ~Headline() override;
 
     QString caption() const;
     void setCaption(const QString& caption);
 
     Tags tags() const;
     void setTags(const Tags& tags);
-    bool hasTag(const QString& tag);
+    void addTag(const QString& tag);
+    void removeTag(const QString& tag);
+    bool hasTag(const QString& tag) const;
 
     bool isMatch(const QRegularExpression& pattern) const override;
 

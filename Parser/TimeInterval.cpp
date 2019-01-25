@@ -62,7 +62,7 @@ bool TimeInterval::isValid() const
     return start() <= end() || !start().isValid() || !end().isValid();
 }
 
-TimeInterval TimeInterval::intersection(const TimeInterval &other) const
+TimeInterval TimeInterval::intersection(const OrgMode::TimeInterval &other) const
 {
     if (other == TimeInterval()) return *this;
     if (*this == TimeInterval()) return other;
@@ -83,7 +83,7 @@ int TimeInterval::duration() const
     return start().secsTo(end());
 }
 
-bool OrgMode::operator==(const TimeInterval &left, const TimeInterval &right)
+bool OrgMode::operator==(const TimeInterval &left, const OrgMode::TimeInterval &right)
 {
     return left.start() == right.start() && left.end() == right.end();
 }
