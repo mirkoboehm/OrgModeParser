@@ -72,7 +72,7 @@ public:
      * @return std::numeric_limits<int>::max(), for undefined durations, those of open intervals.
      * @return Seconds, for valid intervals.
      */
-    int duration() const;
+    long duration() const;
 private:
     class Private;
     Private* d;

@@ -31,9 +31,9 @@ class ORGMODEPARSER_EXPORT DrawerEntry : public AttributeLine
 public:
     typedef QSharedPointer<DrawerEntry> Pointer;
 
-    explicit DrawerEntry(OrgElement* parent = 0);
-    explicit DrawerEntry(const QString& line, OrgElement* parent = 0);
-    ~DrawerEntry();
+    explicit DrawerEntry(OrgElement* parent = nullptr);
+    explicit DrawerEntry(const QString& line, OrgElement* parent = nullptr);
+    ~DrawerEntry() override;
 
 protected:
     QString mnemonic() const override;

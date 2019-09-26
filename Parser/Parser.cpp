@@ -154,7 +154,7 @@ OrgElement::Pointer Parser::Private::parseOrgElement(const OrgElement::Pointer &
 
 OrgElement::Pointer Parser::Private::parseOrgLine(const OrgElement::Pointer &parent, const OrgFileContent::Pointer &content) const
 {
-    Q_UNUSED(parent);
+    Q_UNUSED(parent)
     if (content->atEnd()) {
         return OrgElement::Pointer();
     }
@@ -221,7 +221,7 @@ OrgElement::Pointer Parser::Private::parseFileAttributeLine(const OrgElement::Po
 QStringList collectLines(const OrgElement::Pointer& element) {
     QStringList lines;
     lines << element->line();
-    for(const OrgElement::Pointer child : element->children()) {
+    for(auto const& child : element->children()) {
         lines << collectLines(child);
     }
     return lines;
@@ -362,7 +362,7 @@ Parser::Parser(QObject *parent)
 
 Parser::~Parser()
 {
-    delete d; d = 0;
+    delete d; d = nullptr;
 }
 
 OrgElement::Pointer Parser::parse(QTextStream *data, const QString &fileName) const

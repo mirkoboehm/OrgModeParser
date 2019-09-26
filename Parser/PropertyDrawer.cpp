@@ -36,7 +36,7 @@ PropertyDrawer::PropertyDrawer(const QString &line, OrgElement *parent)
 
 PropertyDrawer::~PropertyDrawer()
 {
-    delete d; d = 0;
+    delete d; d = nullptr;
 }
 
 QString PropertyDrawer::mnemonic() const

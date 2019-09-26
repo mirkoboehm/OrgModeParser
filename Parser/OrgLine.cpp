@@ -26,7 +26,7 @@ OrgLine::OrgLine(OrgElement *parent)
 
 OrgLine::OrgLine(const QString &line, OrgElement *parent)
     : OrgElement(line, parent)
-    , d(0)
+    , d(nullptr)
 {
 }
 

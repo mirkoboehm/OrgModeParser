@@ -34,7 +34,7 @@ class ORGMODEPARSER_EXPORT OrgFileContent
 public:
     typedef QSharedPointer<OrgFileContent> Pointer;
 
-    explicit OrgFileContent(QTextStream* data = 0);
+    explicit OrgFileContent(QTextStream* data = nullptr);
 
     QString getLine();
     void ungetLine(const QString& line);

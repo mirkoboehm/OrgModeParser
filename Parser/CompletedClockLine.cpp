@@ -47,7 +47,7 @@ QDateTime CompletedClockLine::endTime() const
     return d->end_;
 }
 
-int CompletedClockLine::duration() const
+long CompletedClockLine::duration() const
 {
     return startTime().secsTo(d->end_);
 }

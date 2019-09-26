@@ -25,14 +25,14 @@ namespace OrgMode {
 
 template <typename T>
 T* findNextHigherUp(OrgElement* element) {
-    if (!element) return 0;
+    if (!element) return nullptr;
     T* p = dynamic_cast<T*>(element);
     if (p) {
         return p;
     } else if (element->parent()) {
         return findNextHigherUp<T>(element->parent());
     } else {
-        return 0;
+        return nullptr;
     }
 }
 
@@ -52,7 +52,7 @@ Attributes::Attributes(const OrgElement::Pointer &element)
 
 Attributes::~Attributes()
 {
-    delete d; d = 0;
+    delete d; d = nullptr;
 }
 
 /** @brief Return the value of a file attribute.
@@ -86,7 +86,7 @@ Attributes::Vector Attributes::fileAttributes() const
     Vector attributes;
     if (file) {
         auto const fileAttributes = findElements<FileAttributeLine>(pf);
-        for(auto const attribute : fileAttributes) {
+        for(auto const& attribute : fileAttributes) {
             attributes.append(Property(attribute->key(), attribute->value()));
         }
     }
@@ -101,7 +101,7 @@ const QStringList Attributes::drawerNames() const
         const QString drawersAttribute = fileAttribute(QString::fromLatin1("DRAWERS"));
         const QStringList names = drawersAttribute.split(QRegExp(QLatin1String("\\s+")));
         return defaults + names;
-    } catch (const RuntimeException& ex) {
+    } catch (const RuntimeException&) {
         // No drawer attribute defined:
         return defaults;
     }
@@ -117,7 +117,7 @@ QString Attributes::attribute(const Attributes::Vector &attributes, const QStrin
     //We assume attributes are identified by their name. The exception is #+PROPERTY:, which can occur
     //repeatedly.
     //A "ATTRIBUTE+: value to append" syntax is not accepted (tested in OrgMode).
-    for(auto const att : attributes) {
+    for(auto const& att : attributes) {
         if (att.key() == key) {
             return att.value();
         }

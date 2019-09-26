@@ -32,8 +32,8 @@ public:
     typedef QSharedPointer<OrgFile> Pointer;
     typedef QList<Pointer> List;
 
-    explicit OrgFile(OrgElement* parent = 0);
-    ~OrgFile();
+    explicit OrgFile(OrgElement* parent = nullptr);
+    ~OrgFile() override;
 
     void setFileName(const QString& fileName);
     QString fileName() const;

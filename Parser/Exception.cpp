@@ -25,7 +25,7 @@ Exception::Exception(const QString& message)
 {
 }
 
-Exception::~Exception() throw () {}
+Exception::~Exception() noexcept {}
 
 QString Exception::message() const
 {

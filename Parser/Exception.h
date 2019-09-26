@@ -32,7 +32,7 @@ class ORGMODEPARSER_EXPORT Exception : public std::runtime_error
 {
 public:
     explicit Exception(const QString& message);
-    ~Exception() throw();
+    ~Exception() noexcept;
     QString message() const;
 
 private:

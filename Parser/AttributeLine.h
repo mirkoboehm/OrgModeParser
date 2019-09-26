@@ -30,9 +30,9 @@ class ORGMODEPARSER_EXPORT AttributeLine : public OrgElement
 {
     Q_DECLARE_TR_FUNCTIONS(AttributeLine)
 public:
-    explicit AttributeLine(OrgElement* parent = 0);
-    explicit AttributeLine(const QString& line, OrgElement* parent = 0);
-    ~AttributeLine();
+    explicit AttributeLine(OrgElement* parent = nullptr);
+    explicit AttributeLine(const QString& line, OrgElement* parent = nullptr);
+    ~AttributeLine() override;
 
     void setProperty(const Property& property);
     Property property() const;

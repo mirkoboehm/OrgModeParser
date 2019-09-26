@@ -53,7 +53,7 @@ void OrgFileContent::ungetLines(const QStringList &lines)
 
 bool OrgFileContent::atEnd() const
 {
-    return lines_.isEmpty() && (data_ == 0 || data_->atEnd());
+    return lines_.isEmpty() && (data_ == nullptr || data_->atEnd());
 }
 
 }

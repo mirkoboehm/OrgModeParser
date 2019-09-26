@@ -40,8 +40,8 @@ public:
     typedef QSharedPointer<OrgElement> Pointer;
     typedef QList<Pointer> List;
 
-    explicit OrgElement(const QString& line, OrgElement* parent = 0);
-    explicit OrgElement(OrgElement* parent = 0);
+    explicit OrgElement(const QString& line, OrgElement* parent = nullptr);
+    explicit OrgElement(OrgElement* parent = nullptr);
     virtual ~OrgElement();
     bool isValid() const;
     void setParent(OrgElement* parent);

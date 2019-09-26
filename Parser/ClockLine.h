@@ -30,8 +30,8 @@ class ORGMODEPARSER_EXPORT ClockLine : public OrgElement
 public:
     typedef QSharedPointer<ClockLine> Pointer;
 
-    explicit ClockLine(const QString& line, OrgElement* parent = 0);
-    explicit ClockLine(OrgElement* parent = 0);
+    explicit ClockLine(const QString& line, OrgElement* parent = nullptr);
+    explicit ClockLine(OrgElement* parent = nullptr);
 
     void setStartTime(const QDateTime& start);
     QDateTime startTime() const;

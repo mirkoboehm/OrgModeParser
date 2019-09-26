@@ -45,7 +45,7 @@ OrgElement::OrgElement(OrgElement* parent)
 
 OrgElement::~OrgElement()
 {
-    delete d; d = 0;
+    delete d; d = nullptr;
 }
 
 bool OrgElement::isValid() const
@@ -108,7 +108,7 @@ QString OrgElement::describe() const
             .arg(mnemonic(), 8)
             .arg(level(), 3)
             .arg(description());
-     for( auto const child : children()) {
+     for(auto const& child : children()) {
          result += child->describe();
      }
      return result;

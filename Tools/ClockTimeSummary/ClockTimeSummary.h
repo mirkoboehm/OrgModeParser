@@ -25,14 +25,14 @@ class ClockTimeSummary : public QObject
 {
     Q_OBJECT
 public:
-    explicit ClockTimeSummary(const QStringList& orgfiles, QObject *parent = 0);
+    explicit ClockTimeSummary(const QStringList& orgfiles, QObject *parent = nullptr);
     int secondsClockedToday() const;
     int secondsClockedThisWeek() const;
 
     void report(bool promptMode, int columns);
 
 private:
-    QString hoursAndMinutes(int seconds);
+    QString hoursAndMinutes(long seconds);
 
     OrgMode::OrgElement::Pointer toplevel_;
 

@@ -35,13 +35,13 @@ class ORGMODEPARSER_EXPORT CompletedClockLine : public ClockLine
 public:
     typedef QSharedPointer<CompletedClockLine> Pointer;
 
-    explicit CompletedClockLine(const QString& line, OrgElement* parent = 0);
-    explicit CompletedClockLine(OrgElement* parent = 0);
+    explicit CompletedClockLine(const QString& line, OrgElement* parent = nullptr);
+    explicit CompletedClockLine(OrgElement* parent = nullptr);
 
     void setEndTime(const QDateTime& end);
     QDateTime endTime() const;
 
-    int duration() const;
+    long duration() const;
     int durationWithinInterval(const TimeInterval& interval) const;
 
 protected:

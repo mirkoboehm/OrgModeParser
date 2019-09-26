@@ -48,7 +48,7 @@ void Benchmarks::benchmarkParseClocklines()
     QBENCHMARK {
         Parser parser;
         const OrgElement::Pointer element = parser.parse(&stream, filename);
-        Q_UNUSED(element);
+        Q_UNUSED(element)
     }
 }
 

@@ -31,8 +31,8 @@ class ORGMODEPARSER_EXPORT Drawer : public OrgElement
 public:
     typedef QSharedPointer<Drawer> Pointer;
 
-    explicit Drawer(OrgElement* parent = 0);
-    explicit Drawer(const QString& line, OrgElement* parent = 0);
+    explicit Drawer(OrgElement* parent = nullptr);
+    explicit Drawer(const QString& line, OrgElement* parent = nullptr);
     ~Drawer();
 
     QString name() const;

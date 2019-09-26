@@ -251,7 +251,7 @@ void ParserTests::testParserAndIdentity_data()
         try {
             attributes.fileAttribute(FL1("I DO NOT EXIST"));
             QFAIL("Querying a non-existant attribute should throw an exception.");
-        } catch (const RuntimeException& ex) {
+        } catch (const RuntimeException&) {
             //all good
         }
     };
@@ -293,7 +293,7 @@ void ParserTests::testParserAndIdentity_data()
         QCOMPARE(sundayEntry->value(), FL1(""));
         //Check for a non-existant entry:
         auto const thursdayEntry = findElement<DrawerEntry>(headline_1, FL1("Thursday"));
-        QVERIFY(thursdayEntry == 0);
+        QVERIFY(thursdayEntry == nullptr);
     };
     QTest::newRow("DrawerParsing") << FL1("://TestData/Parser/DrawersAndProperties.org") << testDrawerParsing;
 
@@ -381,7 +381,7 @@ void ParserTests::testParserAndIdentity_data()
         try {
             properties_2.drawer(FL1("MyDrawers"));
             QFAIL("Retrieving a non-existant drawer should throw an exception!");
-        } catch(const RuntimeException& ex) {
+        } catch(const RuntimeException&) {
             //qDebug() << qPrintable(ex.message());
         }
         auto const headline_2_1 = findElement<Headline>(element, FL1("headline_2_1"));
@@ -437,7 +437,7 @@ void ParserTests::testParserAndIdentity_data()
             try { //...a non-existant property
                 properties.property(FL1("I do not exist"));
                 QFAIL("Retrieving a non-existant propertry should throw an exception!");
-            } catch(const RuntimeException& ex) {
+            } catch(const RuntimeException&) {
                 //qDebug() << qPrintable(ex.message());
             }
         }
@@ -455,7 +455,7 @@ void ParserTests::testParserAndIdentity_data()
             try { //...a non-existant property
                 properties.property(FL1("GENRES"));
                 QFAIL("Retrieving a non-existant propertry should throw an exception!");
-            } catch(const RuntimeException& ex) {
+            } catch(const RuntimeException&) {
                 //qDebug() << qPrintable(ex.message());
             }
         }
@@ -465,7 +465,7 @@ void ParserTests::testParserAndIdentity_data()
             try { //...a non-existant property
                 properties.property(FL1("GENRES"));
                 QFAIL("Retrieving a non-existant propertry should throw an exception!");
-            } catch(const RuntimeException& ex) {
+            } catch(const RuntimeException&) {
                 //qDebug() << qPrintable(ex.message());
             }
         }

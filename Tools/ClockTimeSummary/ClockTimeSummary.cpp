@@ -75,7 +75,7 @@ int ClockTimeSummary::secondsClockedThisWeek() const
 template <typename T>
 T* findParent(OrgElement* element)
 {
-    if (!element) return 0;
+    if (!element) return nullptr;
     auto castedElement = dynamic_cast<T*>(element);
     if (castedElement) {
         return castedElement;
@@ -92,7 +92,7 @@ void ClockTimeSummary::report(bool promptMode, int columns)
     QString clockedTime;
     //Find all clocklines that are incomplete (not closed):
     auto const notCompleted = [](const ClockLine::Pointer& element) {
-        return element.dynamicCast<CompletedClockLine>() == 0;
+        return element.dynamicCast<CompletedClockLine>() == nullptr;
     };
     auto clocklines = findElements<ClockLine>(toplevel_, notCompleted);
     //Sort by start time, to determine the latest task that was started:
@@ -106,7 +106,7 @@ void ClockTimeSummary::report(bool promptMode, int columns)
         Headline* headline = findParent<Headline>(lastInitiatedClockline->parent());
         //Prepare the bits of the report that deal with the current task:
         if (headline) {
-            const int secondsToNow = lastInitiatedClockline->startTime().secsTo(QDateTime::currentDateTime());
+            const long secondsToNow = lastInitiatedClockline->startTime().secsTo(QDateTime::currentDateTime());
             currentlyClockedTime = hoursAndMinutes(secondsToNow);
             currentTask = headline->caption().simplified();
         }
@@ -125,11 +125,11 @@ void ClockTimeSummary::report(bool promptMode, int columns)
     }
 }
 
-QString ClockTimeSummary::hoursAndMinutes(int seconds)
+QString ClockTimeSummary::hoursAndMinutes(long seconds)
 {
     const QChar fillChar(QChar::fromLatin1('0'));
-    const int hours = seconds / 3600;
-    const int minutes = (seconds - hours*3600) / 60;
+    const long hours = seconds / 3600;
+    const long minutes = (seconds - hours*3600) / 60;
     const QString time(tr("%1:%2")
                        .arg(hours, 2, 10, fillChar)
                        .arg(minutes, 2, 10, fillChar));

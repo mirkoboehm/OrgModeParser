@@ -45,7 +45,7 @@ Properties::Properties(const OrgElement::Pointer &element)
 
 Properties::~Properties()
 {
-    delete d; d = 0;
+    delete d; d = nullptr;
 }
 
 /** @brief Query the specified property for this element. */
@@ -59,7 +59,7 @@ QString Properties::property(const QString& key) const
     OrgElement* element(d->element_.data());
     while(element) {
         auto const drawers = findElements<PropertyDrawer>(element, 1);
-        for( auto const drawer : drawers) {
+        for(auto const& drawer : drawers) {
             auto isPropertyEntryForKey = [key](const PropertyDrawerEntry::Pointer& element) {
                 return element->key() == key;
             };
@@ -70,13 +70,13 @@ QString Properties::property(const QString& key) const
     }
     //Create single list of all definitions that affect the property:
     Vector definitions;
-    for( const Property prop : attr ) {
+    for(auto const& prop : attr) {
         Property property  = parseAttributeAsProperty(prop);
         if (property.key() == key) {
             definitions << property;
         }
     }
-    for( auto const entry : propertyDrawerEntries ) {
+    for( auto const& entry : propertyDrawerEntries ) {
         definitions << entry->property();
     }
     if (definitions.isEmpty()) {
@@ -114,7 +114,7 @@ Properties::Vector Properties::drawer(const QString &name) const
 QString Properties::propertyValue(const QString &key, const Properties::Vector &definitions)
 {
     Property value;
-    for( auto const property : definitions ) {
+    for( auto const& property : definitions ) {
         if (property.key() == key) {
             value.apply(property);
         }

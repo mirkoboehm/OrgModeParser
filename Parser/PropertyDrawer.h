@@ -31,9 +31,9 @@ class ORGMODEPARSER_EXPORT PropertyDrawer : public Drawer
 public:
     typedef QSharedPointer<PropertyDrawer> Pointer;
 
-    explicit PropertyDrawer(OrgElement* parent = 0);
-    explicit PropertyDrawer(const QString& line, OrgElement* parent = 0);
-    ~PropertyDrawer();
+    explicit PropertyDrawer(OrgElement* parent = nullptr);
+    explicit PropertyDrawer(const QString& line, OrgElement* parent = nullptr);
+    ~PropertyDrawer() override;
 
 protected:
     QString mnemonic() const override;

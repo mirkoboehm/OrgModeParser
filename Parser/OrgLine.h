@@ -29,9 +29,9 @@ class ORGMODEPARSER_EXPORT OrgLine : public OrgElement
 {
     Q_DECLARE_TR_FUNCTIONS(OrgLine)
 public:
-    explicit OrgLine(OrgElement* parent = 0);
-    explicit OrgLine(const QString& line, OrgElement* parent = 0);
-    ~OrgLine();
+    explicit OrgLine(OrgElement* parent = nullptr);
+    explicit OrgLine(const QString& line, OrgElement* parent = nullptr);
+    ~OrgLine() override;
 
 protected:
     bool isElementValid() const override;

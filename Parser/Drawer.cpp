@@ -37,7 +37,7 @@ Drawer::Drawer(const QString &line, OrgElement *parent)
 
 Drawer::~Drawer()
 {
-    delete d; d = 0;
+    delete d; d = nullptr;
 }
 
 QString Drawer::name() const

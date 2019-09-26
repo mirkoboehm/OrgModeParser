@@ -29,9 +29,12 @@ class ORGMODEPARSER_EXPORT FileAttributeLine : public AttributeLine
 {
     Q_DECLARE_TR_FUNCTIONS(FileAttributeLine)
 public:
-    explicit FileAttributeLine(OrgElement* parent = 0);
-    explicit FileAttributeLine(const QString& line, OrgElement* parent = 0);
-    ~FileAttributeLine();
+    typedef QSharedPointer<FileAttributeLine> Pointer;
+    typedef QList<Pointer> List;
+
+    explicit FileAttributeLine(OrgElement* parent = nullptr);
+    explicit FileAttributeLine(const QString& line, OrgElement* parent = nullptr);
+    ~FileAttributeLine() override;
 
 protected:
     QString mnemonic() const override;

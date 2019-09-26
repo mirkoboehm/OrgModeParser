@@ -36,7 +36,7 @@ FileAttributeLine::FileAttributeLine(const QString &line, OrgElement *parent)
 
 FileAttributeLine::~FileAttributeLine()
 {
-    delete d; d = 0;
+    delete d; d = nullptr;
 }
 
 QString FileAttributeLine::mnemonic() const

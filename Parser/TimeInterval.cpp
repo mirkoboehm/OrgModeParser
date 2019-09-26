@@ -76,7 +76,7 @@ TimeInterval TimeInterval::intersection(const OrgMode::TimeInterval &other) cons
     return TimeInterval(s, eLowerBound);
 }
 
-int TimeInterval::duration() const
+long TimeInterval::duration() const
 {
     if (!isValid()) return 0;
     if (!start().isValid() || !end().isValid()) return std::numeric_limits<int>::max();

@@ -31,9 +31,9 @@ class DrawerClosingEntry : public DrawerEntry
 public:
     typedef QSharedPointer<DrawerClosingEntry> Pointer;
 
-    explicit DrawerClosingEntry(OrgElement* parent = 0);
-    explicit DrawerClosingEntry(const QString& line, OrgElement* parent = 0);
-    ~DrawerClosingEntry();
+    explicit DrawerClosingEntry(OrgElement* parent = nullptr);
+    explicit DrawerClosingEntry(const QString& line, OrgElement* parent = nullptr);
+    ~DrawerClosingEntry() override;
 
 protected:
     QString mnemonic() const override;

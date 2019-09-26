@@ -38,7 +38,7 @@ AttributeLine::AttributeLine(const QString &line, OrgElement *parent)
 
 AttributeLine::~AttributeLine()
 {
-    delete d; d = 0;
+    delete d; d = nullptr;
 }
 
 void AttributeLine::setProperty(const Property &property)

@@ -36,7 +36,7 @@ DrawerEntry::DrawerEntry(const QString &line, OrgMode::OrgElement *parent)
 
 OrgMode::DrawerEntry::~DrawerEntry()
 {
-    delete d; d = 0;
+    delete d; d = nullptr;
 }
 
 QString OrgMode::DrawerEntry::mnemonic() const

@@ -32,7 +32,7 @@ OrgFile::OrgFile(OrgElement *parent)
 
 OrgFile::~OrgFile()
 {
-    delete d; d = 0;
+    delete d; d = nullptr;
 }
 
 void OrgFile::setFileName(const QString &fileName)
