@@ -18,6 +18,8 @@
 #ifndef ORGELEMENT_H
 #define ORGELEMENT_H
 
+#include <memory>
+
 #include <QCoreApplication>
 #include <QSharedPointer>
 #include <QRegularExpression>
@@ -40,9 +42,15 @@ public:
     typedef QSharedPointer<OrgElement> Pointer;
     typedef QList<Pointer> List;
 
-    explicit OrgElement(const QString& line, OrgElement* parent = nullptr);
     explicit OrgElement(OrgElement* parent = nullptr);
+    explicit OrgElement(const QString& line, OrgElement* parent = nullptr);
+
+    OrgElement(const OrgElement&);
+    OrgElement& operator=(const OrgElement&);
+    OrgElement(OrgElement&&);
+    OrgElement& operator=(OrgElement&&);
     virtual ~OrgElement();
+
     bool isValid() const;
     void setParent(OrgElement* parent);
     OrgElement* parent() const;
@@ -66,8 +74,8 @@ protected:
     virtual QString description() const = 0;
 
 private:
-    class Private;
-    Private* d;
+    struct Private;
+    std::unique_ptr<Private> d;
 };
 
 //FIXME Check if isMatch could be a template specialization for findElements:

@@ -32,21 +32,26 @@ public:
     QString line_;
 };
 
+OrgElement::OrgElement(OrgElement* parent)
+    : d(new Private(parent))
+{
+}
+
 OrgElement::OrgElement(const QString &line, OrgElement *parent)
     : OrgElement(parent)
 {
     setLine(line);
 }
 
-OrgElement::OrgElement(OrgElement* parent)
-    : d(new Private(parent))
+OrgElement& OrgElement::operator=(const OrgElement& other)
 {
+    *d = *other.d;
+    return *this;
 }
 
-OrgElement::~OrgElement()
-{
-    delete d; d = nullptr;
-}
+OrgElement::OrgElement(OrgElement && other) = default;
+OrgElement& OrgElement::operator=(OrgElement &&other) = default;
+OrgElement::~OrgElement() = default;
 
 bool OrgElement::isValid() const
 {
