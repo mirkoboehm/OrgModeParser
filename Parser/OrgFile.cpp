@@ -30,10 +30,15 @@ OrgFile::OrgFile(OrgElement *parent)
 {
 }
 
-OrgFile::~OrgFile()
+OrgFile& OrgFile::operator=(const OrgFile& other)
 {
-    delete d; d = nullptr;
+    *d = *other.d;
+    return *this;
 }
+
+OrgFile::OrgFile(OrgFile && other) = default;
+OrgFile& OrgFile::operator=(OrgFile &&other) = default;
+OrgFile::~OrgFile() = default;
 
 void OrgFile::setFileName(const QString &fileName)
 {

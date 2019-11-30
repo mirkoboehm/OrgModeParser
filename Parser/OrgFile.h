@@ -18,6 +18,8 @@
 #ifndef ORGFILE_H
 #define ORGFILE_H
 
+#include <memory>
+
 #include <QCoreApplication>
 
 #include <OrgElement.h>
@@ -33,6 +35,10 @@ public:
     typedef QList<Pointer> List;
 
     explicit OrgFile(OrgElement* parent = nullptr);
+    OrgFile(const OrgFile&) = delete;
+    OrgFile& operator=(const OrgFile&);
+    OrgFile(OrgFile&&);
+    OrgFile& operator=(OrgFile&&);
     ~OrgFile() override;
 
     void setFileName(const QString& fileName);
@@ -43,8 +49,8 @@ protected:
     QString mnemonic() const override;
     QString description() const override;
 private:
-    class Private;
-    Private* d;
+    struct Private;
+    std::unique_ptr<Private> d;
 };
 
 }
