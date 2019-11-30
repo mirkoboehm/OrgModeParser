@@ -36,10 +36,9 @@ AttributeLine::AttributeLine(const QString &line, OrgElement *parent)
 {
 }
 
-AttributeLine::~AttributeLine()
-{
-    delete d; d = nullptr;
-}
+AttributeLine::AttributeLine(AttributeLine && other) = default;
+AttributeLine& AttributeLine::operator=(AttributeLine &&other) = default;
+AttributeLine::~AttributeLine() = default;
 
 void AttributeLine::setProperty(const Property &property)
 {

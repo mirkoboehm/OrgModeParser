@@ -34,8 +34,6 @@ public:
     explicit OrgLine(OrgElement* parent = nullptr);
     explicit OrgLine(const QString& line, OrgElement* parent = nullptr);
 
-    OrgLine(const OrgLine&) = delete;
-    OrgLine& operator=(const OrgLine&);
     OrgLine(OrgLine&&);
     OrgLine& operator=(OrgLine&&);
     ~OrgLine() override;

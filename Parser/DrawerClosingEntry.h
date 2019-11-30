@@ -18,6 +18,8 @@
 #ifndef DRAWERCLOSINGENTRY_H
 #define DRAWERCLOSINGENTRY_H
 
+#include <memory>
+
 #include <QCoreApplication>
 
 #include <DrawerEntry.h>
@@ -33,14 +35,16 @@ public:
 
     explicit DrawerClosingEntry(OrgElement* parent = nullptr);
     explicit DrawerClosingEntry(const QString& line, OrgElement* parent = nullptr);
+    DrawerClosingEntry(DrawerClosingEntry&&);
+    DrawerClosingEntry& operator=(DrawerClosingEntry&&);
     ~DrawerClosingEntry() override;
 
 protected:
     QString mnemonic() const override;
 
 private:
-    class Private;
-    Private* d;
+    struct Private;
+    std::unique_ptr<Private> d;
 };
 
 }

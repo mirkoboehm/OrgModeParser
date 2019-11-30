@@ -46,7 +46,7 @@ public:
     explicit OrgElement(const QString& line, OrgElement* parent = nullptr);
 
     OrgElement(const OrgElement&) = delete;
-    OrgElement& operator=(const OrgElement&);
+    OrgElement& operator=(const OrgElement&) = delete;
     OrgElement(OrgElement&&);
     OrgElement& operator=(OrgElement&&);
     virtual ~OrgElement();

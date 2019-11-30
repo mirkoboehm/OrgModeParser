@@ -43,12 +43,6 @@ OrgElement::OrgElement(const QString &line, OrgElement *parent)
     setLine(line);
 }
 
-OrgElement& OrgElement::operator=(const OrgElement& other)
-{
-    *d = *other.d;
-    return *this;
-}
-
 OrgElement::OrgElement(OrgElement && other) = default;
 OrgElement& OrgElement::operator=(OrgElement &&other) = default;
 OrgElement::~OrgElement() = default;

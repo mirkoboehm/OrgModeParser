@@ -37,6 +37,10 @@ CompletedClockLine::CompletedClockLine(OrgElement *parent)
 {
 }
 
+CompletedClockLine::CompletedClockLine(CompletedClockLine && other) = default;
+CompletedClockLine& CompletedClockLine::operator=(CompletedClockLine &&other) = default;
+CompletedClockLine::~CompletedClockLine() = default;
+
 void CompletedClockLine::setEndTime(const QDateTime &end)
 {
     d->end_ = end;

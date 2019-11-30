@@ -18,6 +18,8 @@
 #ifndef FILEATTRIBUTELINE_H
 #define FILEATTRIBUTELINE_H
 
+#include <memory>
+
 #include <QCoreApplication>
 
 #include <AttributeLine.h>
@@ -34,14 +36,16 @@ public:
 
     explicit FileAttributeLine(OrgElement* parent = nullptr);
     explicit FileAttributeLine(const QString& line, OrgElement* parent = nullptr);
+    FileAttributeLine(FileAttributeLine&&);
+    FileAttributeLine& operator=(FileAttributeLine&&);
     ~FileAttributeLine() override;
 
 protected:
     QString mnemonic() const override;
 
 private:
-    class Private;
-    Private* d;
+    struct Private;
+    std::unique_ptr<Private> d;
 };
 
 }

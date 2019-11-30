@@ -18,6 +18,8 @@
 #ifndef INCOMPLETECLOCKLINE_H
 #define INCOMPLETECLOCKLINE_H
 
+#include <memory>
+
 #include <QCoreApplication>
 #include <QDateTime>
 #include <OrgElement.h>
@@ -32,6 +34,10 @@ public:
 
     explicit ClockLine(const QString& line, OrgElement* parent = nullptr);
     explicit ClockLine(OrgElement* parent = nullptr);
+    ClockLine(ClockLine&&);
+    ClockLine& operator=(ClockLine&&);
+    ~ClockLine() override;
+
 
     void setStartTime(const QDateTime& start);
     QDateTime startTime() const;
@@ -42,8 +48,8 @@ protected:
     QString description() const override;
 
 private:
-    class Private;
-    Private* d;
+    struct Private;
+    std::unique_ptr<Private> d;
 };
 
 }

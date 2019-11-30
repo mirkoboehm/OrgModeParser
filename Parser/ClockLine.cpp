@@ -30,6 +30,10 @@ ClockLine::ClockLine(const QString &line, OrgElement *parent)
 {
 }
 
+ClockLine::ClockLine(ClockLine && other) = default;
+ClockLine& ClockLine::operator=(ClockLine &&other) = default;
+ClockLine::~ClockLine() = default;
+
 ClockLine::ClockLine(OrgElement *parent)
     : ClockLine(QString(), parent)
 {

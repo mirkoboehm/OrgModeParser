@@ -18,6 +18,8 @@
 #ifndef ATTRIBUTELINE_H
 #define ATTRIBUTELINE_H
 
+#include <memory>
+
 #include <QCoreApplication>
 
 #include <OrgElement.h>
@@ -32,6 +34,8 @@ class ORGMODEPARSER_EXPORT AttributeLine : public OrgElement
 public:
     explicit AttributeLine(OrgElement* parent = nullptr);
     explicit AttributeLine(const QString& line, OrgElement* parent = nullptr);
+    AttributeLine(AttributeLine&&);
+    AttributeLine& operator=(AttributeLine&&);
     ~AttributeLine() override;
 
     void setProperty(const Property& property);
@@ -44,8 +48,8 @@ protected:
     QString description() const override;
 
 private:
-    class Private;
-    Private* d;
+    struct Private;
+    std::unique_ptr<Private> d;
 };
 
 }

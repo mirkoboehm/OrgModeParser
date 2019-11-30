@@ -35,8 +35,6 @@ public:
     typedef QList<Pointer> List;
 
     explicit OrgFile(OrgElement* parent = nullptr);
-    OrgFile(const OrgFile&) = delete;
-    OrgFile& operator=(const OrgFile&);
     OrgFile(OrgFile&&);
     OrgFile& operator=(OrgFile&&);
     ~OrgFile() override;

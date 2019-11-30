@@ -34,6 +34,7 @@ DrawerEntry::DrawerEntry(const QString &line, OrgMode::OrgElement *parent)
 {
 }
 
+DrawerEntry::DrawerEntry(DrawerEntry && other) = default;
 DrawerEntry& DrawerEntry::operator=(DrawerEntry &&other) = default;
 DrawerEntry::~DrawerEntry() = default;
 

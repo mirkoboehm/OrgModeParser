@@ -35,10 +35,9 @@ DrawerClosingEntry::DrawerClosingEntry(const QString &line, OrgMode::OrgElement 
 
 }
 
-DrawerClosingEntry::~DrawerClosingEntry()
-{
-    delete d; d = nullptr;
-}
+DrawerClosingEntry::DrawerClosingEntry(DrawerClosingEntry && other) = default;
+DrawerClosingEntry& DrawerClosingEntry::operator=(DrawerClosingEntry &&other) = default;
+DrawerClosingEntry::~DrawerClosingEntry() = default;
 
 QString DrawerClosingEntry::mnemonic() const
 {

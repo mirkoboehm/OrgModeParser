@@ -35,6 +35,7 @@ PropertyDrawerEntry::PropertyDrawerEntry(const QString &line, OrgElement *parent
 {
 }
 
+PropertyDrawerEntry::PropertyDrawerEntry(PropertyDrawerEntry && other) = default;
 PropertyDrawerEntry& PropertyDrawerEntry::operator=(PropertyDrawerEntry &&other) = default;
 PropertyDrawerEntry::~PropertyDrawerEntry() = default;
 

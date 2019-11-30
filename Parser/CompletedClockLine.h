@@ -18,6 +18,8 @@
 #ifndef CLOCKLINE_H
 #define CLOCKLINE_H
 
+#include <memory>
+
 #include <QCoreApplication>
 #include <QDateTime>
 
@@ -37,6 +39,9 @@ public:
 
     explicit CompletedClockLine(const QString& line, OrgElement* parent = nullptr);
     explicit CompletedClockLine(OrgElement* parent = nullptr);
+    CompletedClockLine(CompletedClockLine&&);
+    CompletedClockLine& operator=(CompletedClockLine&&);
+    ~CompletedClockLine() override;
 
     void setEndTime(const QDateTime& end);
     QDateTime endTime() const;
@@ -50,8 +55,8 @@ protected:
     QString description() const override;
 
 private:
-    class Private;
-    Private* d;
+    struct Private;
+    std::unique_ptr<Private> d;
 };
 
 }

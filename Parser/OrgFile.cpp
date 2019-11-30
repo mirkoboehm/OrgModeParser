@@ -30,12 +30,6 @@ OrgFile::OrgFile(OrgElement *parent)
 {
 }
 
-OrgFile& OrgFile::operator=(const OrgFile& other)
-{
-    *d = *other.d;
-    return *this;
-}
-
 OrgFile::OrgFile(OrgFile && other) = default;
 OrgFile& OrgFile::operator=(OrgFile &&other) = default;
 OrgFile::~OrgFile() = default;

@@ -35,7 +35,7 @@ public:
 
     explicit PropertyDrawerEntry(OrgElement* parent = nullptr);
     explicit PropertyDrawerEntry(const QString& line, OrgElement* parent = nullptr);
-    PropertyDrawerEntry& operator=(const PropertyDrawerEntry&);
+    PropertyDrawerEntry(PropertyDrawerEntry&&);
     PropertyDrawerEntry& operator=(PropertyDrawerEntry&&);
     ~PropertyDrawerEntry() override;
 

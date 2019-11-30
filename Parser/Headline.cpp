@@ -44,10 +44,9 @@ Headline::Headline(OrgElement* parent)
 {
 }
 
-Headline::~Headline()
-{
-    delete d; d = nullptr;
-}
+Headline::Headline(Headline && other) = default;
+Headline& Headline::operator=(Headline &&other) = default;
+Headline::~Headline() = default;
 
 QString Headline::caption() const
 {

@@ -36,9 +36,6 @@ public:
     explicit PropertyDrawer(OrgElement* parent = nullptr);
     explicit PropertyDrawer(const QString& line, OrgElement* parent = nullptr);
 
-    //TODO why not?
-    PropertyDrawer(const PropertyDrawer&) = delete;
-    PropertyDrawer& operator=(const PropertyDrawer&);
     PropertyDrawer(PropertyDrawer&&);
     PropertyDrawer& operator=(PropertyDrawer&&);
     ~PropertyDrawer() override;

@@ -35,7 +35,7 @@ public:
 
     explicit DrawerEntry(OrgElement* parent = nullptr);
     explicit DrawerEntry(const QString& line, OrgElement* parent = nullptr);
-    DrawerEntry& operator=(const DrawerEntry&);
+    DrawerEntry(DrawerEntry&&);
     DrawerEntry& operator=(DrawerEntry&&);
     ~DrawerEntry() override;
 

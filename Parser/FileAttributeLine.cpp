@@ -34,10 +34,9 @@ FileAttributeLine::FileAttributeLine(const QString &line, OrgElement *parent)
 {
 }
 
-FileAttributeLine::~FileAttributeLine()
-{
-    delete d; d = nullptr;
-}
+FileAttributeLine::FileAttributeLine(FileAttributeLine && other) = default;
+FileAttributeLine& FileAttributeLine::operator=(FileAttributeLine &&other) = default;
+FileAttributeLine::~FileAttributeLine() = default;
 
 QString FileAttributeLine::mnemonic() const
 {

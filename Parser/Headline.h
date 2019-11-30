@@ -18,6 +18,7 @@
 #ifndef HEADLINE_H
 #define HEADLINE_H
 
+#include <memory>
 #include <set>
 
 #include <QCoreApplication>
@@ -39,6 +40,8 @@ public:
 
     explicit Headline(const QString& line, OrgElement* parent = nullptr);
     explicit Headline(OrgElement* parent = nullptr);
+    Headline(Headline&&);
+    Headline& operator=(Headline&&);
     ~Headline() override;
 
     QString caption() const;
@@ -57,8 +60,8 @@ protected:
     QString mnemonic() const override;
     QString description() const override;
 private:
-    class Private;
-    Private* d;
+    struct Private;
+    std::unique_ptr<Private> d;
 };
 
 }
