@@ -19,6 +19,7 @@
 #define ORGFILECONTENT_H
 
 #include <QStringList>
+#include <QSharedPointer>
 
 #include "orgmodeparser_export.h"
 

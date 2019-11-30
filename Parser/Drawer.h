@@ -33,7 +33,7 @@ public:
 
     explicit Drawer(OrgElement* parent = nullptr);
     explicit Drawer(const QString& line, OrgElement* parent = nullptr);
-    ~Drawer();
+    ~Drawer() override;
 
     QString name() const;
     void setName(const QString& name);
