@@ -18,6 +18,8 @@
 #ifndef CLOCK_H
 #define CLOCK_H
 
+#include <memory>
+
 #include <QCoreApplication>
 
 #include "orgmodeparser_export.h"
@@ -31,6 +33,10 @@ class ORGMODEPARSER_EXPORT Clock
     Q_DECLARE_TR_FUNCTIONS(Clock)
 public:
     explicit Clock(OrgElement::Pointer element);
+    Clock(const Clock&);
+    Clock(Clock&&);
+    Clock& operator=(Clock&&);
+    virtual ~Clock();
 
     /** Recursively calculate the duration of all clock entries within element's subtree,
      *  bounded by the specified interval. */
@@ -43,8 +49,8 @@ public:
     int itemDuration(const TimeInterval& interval = TimeInterval()) const;
 
 private:
-    class Private;
-    Private* d;
+    struct Private;
+    std::unique_ptr<Private> d;
 };
 
 }

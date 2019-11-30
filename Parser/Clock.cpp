@@ -35,6 +35,16 @@ Clock::Clock(OrgElement::Pointer element)
     d->element_ = element;
 }
 
+Clock::Clock(const Clock& other)
+    : d(new Private)
+{
+    *d = *(other.d);
+}
+
+Clock::Clock(Clock && other) = default;
+Clock& Clock::operator=(Clock &&other) = default;
+Clock::~Clock() = default;
+
 int Clock::duration(const TimeInterval& interval) const
 {
     return d->subduration(interval, d->element_, true);

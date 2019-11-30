@@ -18,6 +18,8 @@
 #ifndef ATTRIBUTES_H
 #define ATTRIBUTES_H
 
+#include <memory>
+
 #include <QCoreApplication>
 #include <QVector>
 
@@ -41,8 +43,9 @@ public:
     typedef QVector<Property> Vector;
 
     explicit Attributes(const OrgElement::Pointer& element);
-    ~Attributes();
-
+    Attributes(Attributes&&);
+    Attributes& operator=(Attributes&&);
+    virtual ~Attributes();
 
     QString fileAttribute(const QString& key) const;
     Vector fileAttributes(const QString& key) const;
@@ -53,8 +56,8 @@ public:
     static QString attribute(const Vector& attributes, const QString& key);
 
 private:
-    class Private;
-    Private* d;
+    struct Private;
+    std::unique_ptr<Private> d;
 };
 
 }

@@ -50,10 +50,9 @@ Attributes::Attributes(const OrgElement::Pointer &element)
 {
 }
 
-Attributes::~Attributes()
-{
-    delete d; d = nullptr;
-}
+Attributes::Attributes(Attributes && other) = default;
+Attributes& Attributes::operator=(Attributes &&other) = default;
+Attributes::~Attributes() = default;
 
 /** @brief Return the value of a file attribute.
  * A RuntimeException is thrown if no value is defined for this key.

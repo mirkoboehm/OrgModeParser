@@ -18,6 +18,8 @@
 #ifndef TIMEINTERVAL_H
 #define TIMEINTERVAL_H
 
+#include <memory>
+
 #include <QDateTime>
 #include "orgmodeparser_export.h"
 
@@ -39,6 +41,11 @@ class ORGMODEPARSER_EXPORT TimeInterval
 public:
     explicit TimeInterval(const QDateTime& start_ = QDateTime(), const QDateTime& end_ = QDateTime());
     explicit TimeInterval(const QDate& start_, const QDate& end_);
+
+    TimeInterval(const TimeInterval&);
+    TimeInterval(TimeInterval&&);
+    TimeInterval& operator=(TimeInterval&&);
+    virtual ~TimeInterval();
 
     /** The start time of the interval. */
     QDateTime start() const;
@@ -74,8 +81,8 @@ public:
      */
     long duration() const;
 private:
-    class Private;
-    Private* d;
+    struct Private;
+    std::unique_ptr<Private> d;
 };
 
 bool ORGMODEPARSER_EXPORT operator==(const TimeInterval& left, const TimeInterval& right);

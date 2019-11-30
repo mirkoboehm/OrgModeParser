@@ -47,6 +47,16 @@ TimeInterval::TimeInterval(const QDate &start_, const QDate &end_)
 {
 }
 
+TimeInterval::TimeInterval(const TimeInterval& other)
+    : TimeInterval()
+{
+    *d = *(other.d);
+}
+
+TimeInterval::TimeInterval(TimeInterval && other) = default;
+TimeInterval& TimeInterval::operator=(TimeInterval &&other) = default;
+TimeInterval::~TimeInterval() = default;
+
 QDateTime TimeInterval::start() const
 {
     return d->start;
