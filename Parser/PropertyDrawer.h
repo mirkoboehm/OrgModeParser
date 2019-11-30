@@ -18,6 +18,8 @@
 #ifndef PROPERTYDRAWER_H
 #define PROPERTYDRAWER_H
 
+#include <memory>
+
 #include <QCoreApplication>
 
 #include <Drawer.h>
@@ -33,14 +35,20 @@ public:
 
     explicit PropertyDrawer(OrgElement* parent = nullptr);
     explicit PropertyDrawer(const QString& line, OrgElement* parent = nullptr);
+
+    //TODO why not?
+    PropertyDrawer(const PropertyDrawer&) = delete;
+    PropertyDrawer& operator=(const PropertyDrawer&);
+    PropertyDrawer(PropertyDrawer&&);
+    PropertyDrawer& operator=(PropertyDrawer&&);
     ~PropertyDrawer() override;
 
 protected:
     QString mnemonic() const override;
 
 private:
-    class Private;
-    Private* d;
+    struct Private;
+    std::unique_ptr<Private> d;
 };
 
 }

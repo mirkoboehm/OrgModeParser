@@ -19,6 +19,8 @@
 
 namespace OrgMode {
 
+struct OrgLine::Private{};
+
 OrgLine::OrgLine(OrgElement *parent)
     : OrgLine(QString(), parent)
 {
@@ -26,13 +28,12 @@ OrgLine::OrgLine(OrgElement *parent)
 
 OrgLine::OrgLine(const QString &line, OrgElement *parent)
     : OrgElement(line, parent)
-    , d(nullptr)
 {
 }
 
-OrgLine::~OrgLine()
-{
-}
+OrgLine::OrgLine(OrgLine && other) = default;
+OrgLine& OrgLine::operator=(OrgLine &&other) = default;
+OrgLine::~OrgLine() = default;
 
 bool OrgLine::isElementValid() const
 {

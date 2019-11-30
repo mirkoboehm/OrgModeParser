@@ -18,6 +18,8 @@
 #ifndef DRAWERENTRY_H
 #define DRAWERENTRY_H
 
+#include <memory>
+
 #include <QCoreApplication>
 
 #include <AttributeLine.h>
@@ -33,14 +35,16 @@ public:
 
     explicit DrawerEntry(OrgElement* parent = nullptr);
     explicit DrawerEntry(const QString& line, OrgElement* parent = nullptr);
+    DrawerEntry& operator=(const DrawerEntry&);
+    DrawerEntry& operator=(DrawerEntry&&);
     ~DrawerEntry() override;
 
 protected:
     QString mnemonic() const override;
 
 private:
-    class Private;
-    Private* d;
+    struct Private;
+    std::unique_ptr<Private> d;
 };
 
 }

@@ -18,6 +18,8 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+#include <memory>
+
 #include <QObject>
 
 #include "orgmodeparser_export.h"
@@ -32,13 +34,12 @@ class ORGMODEPARSER_EXPORT Parser : public QObject
     Q_OBJECT
 public:
     explicit Parser(QObject *parent = nullptr);
-    ~Parser();
+    ~Parser() override;
 
     OrgElement::Pointer parse(QTextStream* data, const QString& fileName = QString()) const;
-
 private:
-    class Private;
-    Private* d;
+    struct Private;
+    std::unique_ptr<Private> d;
 };
 
 QString ORGMODEPARSER_EXPORT version();

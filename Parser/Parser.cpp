@@ -360,10 +360,7 @@ Parser::Parser(QObject *parent)
 {
 }
 
-Parser::~Parser()
-{
-    delete d; d = nullptr;
-}
+Parser::~Parser() = default;
 
 OrgElement::Pointer Parser::parse(QTextStream *data, const QString &fileName) const
 {

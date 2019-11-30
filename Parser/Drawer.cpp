@@ -35,10 +35,9 @@ Drawer::Drawer(const QString &line, OrgElement *parent)
 {
 }
 
-Drawer::~Drawer()
-{
-    delete d; d = nullptr;
-}
+Drawer::Drawer(Drawer && other) = default;
+Drawer& Drawer::operator=(Drawer &&other) = default;
+Drawer::~Drawer() = default;
 
 QString Drawer::name() const
 {

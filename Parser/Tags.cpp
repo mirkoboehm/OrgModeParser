@@ -52,6 +52,9 @@ Tags::Tags(const Headline::Pointer& element)
 {
 }
 
+Tags::Tags(Tags && other) = default;
+Tags& Tags::operator=(Tags &&other) = default;
+Tags::~Tags() = default;
 
 /** @brief hasTag checks if the element is tagged with the specified key.
  *

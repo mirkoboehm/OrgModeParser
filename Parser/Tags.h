@@ -18,6 +18,8 @@
 #ifndef TAGS_H
 #define TAGS_H
 
+#include <memory>
+
 #include <QCoreApplication>
 
 #include "orgmodeparser_export.h"
@@ -29,11 +31,17 @@ class ORGMODEPARSER_EXPORT Tags
 {
 public:
     Tags(const Headline::Pointer& element);
+    Tags(const Tags&) = delete;
+    Tags& operator=(const Tags&) = delete;
+    Tags(Tags&&);
+    Tags& operator=(Tags&&);
+    virtual ~Tags();
+
     bool hasTag(const QString& tag) const;
 
 private:
-    class Private;
-    Private* d;
+    struct Private;
+    std::unique_ptr<Private> d;
 };
 
 }

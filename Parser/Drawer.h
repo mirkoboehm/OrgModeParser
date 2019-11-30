@@ -18,6 +18,8 @@
 #ifndef DRAWER_H
 #define DRAWER_H
 
+#include <memory>
+
 #include <QCoreApplication>
 
 #include <OrgElement.h>
@@ -33,6 +35,10 @@ public:
 
     explicit Drawer(OrgElement* parent = nullptr);
     explicit Drawer(const QString& line, OrgElement* parent = nullptr);
+
+    Drawer& operator=(const Drawer&); // TODO delete
+    Drawer(Drawer&&);
+    Drawer& operator=(Drawer&&);
     ~Drawer() override;
 
     QString name() const;
@@ -44,8 +50,8 @@ protected:
     QString description() const override;
 
 private:
-    class Private;
-    Private* d;
+    struct Private;
+    std::unique_ptr<Private> d;
 };
 
 }

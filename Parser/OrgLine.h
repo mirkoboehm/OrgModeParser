@@ -18,6 +18,8 @@
 #ifndef ORGLINE_H
 #define ORGLINE_H
 
+#include <memory>
+
 #include <QCoreApplication>
 
 #include <OrgElement.h>
@@ -31,6 +33,11 @@ class ORGMODEPARSER_EXPORT OrgLine : public OrgElement
 public:
     explicit OrgLine(OrgElement* parent = nullptr);
     explicit OrgLine(const QString& line, OrgElement* parent = nullptr);
+
+    OrgLine(const OrgLine&) = delete;
+    OrgLine& operator=(const OrgLine&);
+    OrgLine(OrgLine&&);
+    OrgLine& operator=(OrgLine&&);
     ~OrgLine() override;
 
 protected:
@@ -39,8 +46,8 @@ protected:
     QString description() const override;
 
 private:
-    class Private;
-    Private* d;
+    struct Private;
+    std::unique_ptr<Private> d;
 };
 
 }

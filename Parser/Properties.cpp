@@ -43,10 +43,9 @@ Properties::Properties(const OrgElement::Pointer &element)
 {
 }
 
-Properties::~Properties()
-{
-    delete d; d = nullptr;
-}
+Properties::Properties(Properties && other) = default;
+Properties& Properties::operator=(Properties &&other) = default;
+Properties::~Properties() = default;
 
 /** @brief Query the specified property for this element. */
 QString Properties::property(const QString& key) const

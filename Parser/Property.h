@@ -39,9 +39,13 @@ public:
     Property();
     explicit Property(const QString& key, const QString& value, Operation op = Property_Define);
     Property(const Property& other);
-    ~Property();
-    bool operator==(const Property& other) const;
     Property& operator=(const Property&);
+
+    Property(Property&&);
+    Property& operator=(Property&&);
+    ~Property();
+
+    bool operator==(const Property& other) const;
 
     bool isValid() const;
     void apply(const Property& token);

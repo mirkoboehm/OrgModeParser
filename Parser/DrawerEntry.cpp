@@ -34,10 +34,8 @@ DrawerEntry::DrawerEntry(const QString &line, OrgMode::OrgElement *parent)
 {
 }
 
-OrgMode::DrawerEntry::~DrawerEntry()
-{
-    delete d; d = nullptr;
-}
+DrawerEntry& DrawerEntry::operator=(DrawerEntry &&other) = default;
+DrawerEntry::~DrawerEntry() = default;
 
 QString OrgMode::DrawerEntry::mnemonic() const
 {

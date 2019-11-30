@@ -18,6 +18,8 @@
 #ifndef PROPERTYDRAWERENTRY_H
 #define PROPERTYDRAWERENTRY_H
 
+#include <memory>
+
 #include <QCoreApplication>
 
 #include <DrawerEntry.h>
@@ -33,6 +35,8 @@ public:
 
     explicit PropertyDrawerEntry(OrgElement* parent = nullptr);
     explicit PropertyDrawerEntry(const QString& line, OrgElement* parent = nullptr);
+    PropertyDrawerEntry& operator=(const PropertyDrawerEntry&);
+    PropertyDrawerEntry& operator=(PropertyDrawerEntry&&);
     ~PropertyDrawerEntry() override;
 
 protected:
@@ -40,8 +44,8 @@ protected:
     QString description() const override;
 
 private:
-    class Private;
-    Private* d;
+    struct Private;
+    std::unique_ptr<Private> d;
 };
 
 }

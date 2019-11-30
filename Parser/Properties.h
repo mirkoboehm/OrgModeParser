@@ -18,6 +18,8 @@
 #ifndef PROPERTIES_H
 #define PROPERTIES_H
 
+#include <memory>
+
 #include <QCoreApplication>
 
 #include "orgmodeparser_export.h"
@@ -41,7 +43,11 @@ public:
     typedef QVector<Property> Vector;
 
     explicit Properties(const OrgElement::Pointer& element);
-    ~Properties();
+    Properties(const Properties&) = delete;
+    Properties& operator=(const Properties&);
+    Properties(Properties&&);
+    Properties& operator=(Properties&&);
+    virtual ~Properties();
 
     QString property(const QString&) const;
     Vector properties() const;
@@ -51,8 +57,8 @@ public:
     static QString propertyValue(const QString& key, const Vector& definitions);
     static Property parseAttributeAsProperty(const Property& attribute);
 private:
-    class Private;
-    Private* d;
+    struct Private;
+    std::unique_ptr<Private> d;
 };
 
 }

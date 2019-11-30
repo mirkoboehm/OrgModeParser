@@ -54,10 +54,6 @@ Property::Property(const Property& other)
 {
 }
 
-Property::~Property()
-{
-}
-
 Property& Property::operator=(const Property &other)
 {
     if (this != &other) {
@@ -65,6 +61,10 @@ Property& Property::operator=(const Property &other)
     }
     return *this;
 }
+
+Property::Property(Property && other) = default;
+Property& Property::operator=(Property &&other) = default;
+Property::~Property() = default;
 
 bool Property::operator==(const Property& other) const
 {
