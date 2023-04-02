@@ -19,3 +19,8 @@
 *.exe
 *.out
 *.app
+
+# Various auto-generated configuration files and build directories
+CMakeLists.txt.user
+build/
+build-*/
