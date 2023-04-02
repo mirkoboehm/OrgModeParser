@@ -487,7 +487,7 @@ void ParserTests::testParserAndIdentity_data()
 
     //Test clock lines that are kept in logbook drawers:
     VerificationMethod testLogBookDrawerClockLines = [](const QByteArray&, const QByteArray&, OrgElement::Pointer element) {
-        qDebug() << endl << qPrintable(element->describe());
+        qDebug() << Qt::endl << qPrintable(element->describe());
     };
     QTest::newRow("LogBookDrawerClockLines") << FL1("://TestData/Parser/LogbookClockEntries.org") << testLogBookDrawerClockLines;
 }
@@ -528,12 +528,12 @@ void ParserTests::testParserAndIdentity()
     }
     //We now have access to the input data, the parsed element and the output data:
     if (input != output) {
-        qDebug() << endl
-                 << "---------- STRUCTURE --------" << endl
-                 << endl << qPrintable(element->describe()) << endl
-                 << "------------ INPUT  ---------" << endl
+        qDebug() << Qt::endl
+                 << "---------- STRUCTURE --------" << Qt::endl
+                 << Qt::endl << qPrintable(element->describe()) << Qt::endl
+                 << "------------ INPUT  ---------" << Qt::endl
                  << input
-                 << "------------ OUTPUT ---------" << endl
+                 << "------------ OUTPUT ---------" << Qt::endl
                  << output;
     }
     QCOMPARE(input.size(), output.size());

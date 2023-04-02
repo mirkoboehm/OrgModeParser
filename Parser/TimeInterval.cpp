@@ -43,7 +43,7 @@ TimeInterval::TimeInterval(const QDateTime& start_, const QDateTime& end_)
 }
 
 TimeInterval::TimeInterval(const QDate &start_, const QDate &end_)
-    : TimeInterval(QDateTime(start_), QDateTime(end_))
+    : TimeInterval(start_.startOfDay(), end_.startOfDay())
 {
 }
 
