@@ -51,5 +51,4 @@ int main(int argc, char *argv[])
     };
     auto const todos = findElements<Headline>(orgfile, isTODO);
     wcout << "Number of TODOs: " << todos.count() << endl;
-
 }

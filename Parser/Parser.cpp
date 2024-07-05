@@ -28,7 +28,6 @@
 #include "OrgFile.h"
 #include "Headline.h"
 #include "Attributes.h"
-#include "Properties.h"
 #include "ClockLine.h"
 #include "CompletedClockLine.h"
 #include "Exception.h"

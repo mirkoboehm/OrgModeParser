@@ -15,7 +15,6 @@
     have received a copy of the GNU General Public License along with
     OrgModeParser. If not, see <http://www.gnu.org/licenses/>.
 */
-#include <numeric>
 #include <iostream>
 
 #include <QTextStream>
