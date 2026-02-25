@@ -21,6 +21,7 @@
 #include <QtTest>
 #include <QDate>
 #include <QDateTime>
+#include <QTimeZone>
 #include <QTextStream>
 
 #include <OrgElement.h>
@@ -34,11 +35,13 @@
 
 using namespace OrgMode;
 
+// Use explicit timezone to ensure consistent DST handling across all platforms
+const QTimeZone Berlin("Europe/Berlin");
 const QDate today(2015, 4, 24);
-const QDateTime six(today, QTime(6,0));
-const QDateTime seven(today, QTime(7,0));
-const QDateTime eight(today, QTime(8,0));
-const QDateTime nine(today, QTime(9,0));
+const QDateTime six(today, QTime(6,0), Berlin);
+const QDateTime seven(today, QTime(7,0), Berlin);
+const QDateTime eight(today, QTime(8,0), Berlin);
+const QDateTime nine(today, QTime(9,0), Berlin);
 const TimeInterval sixToEight(six, eight);
 const TimeInterval sevenToNine(seven, nine);
 const TimeInterval sevenToEight(seven, eight);
@@ -59,6 +62,7 @@ class ClockTests : public QObject
     Q_OBJECT
 
 private Q_SLOTS:
+    void initTestCase();
     void testTimeIntervals_data();
     void testTimeIntervals();
     void testTimeIntervalsIsValid_data();
@@ -68,6 +72,17 @@ private Q_SLOTS:
     void testAccumulateForInterval_data();
     void testAccumulateForInterval();
 };
+
+void ClockTests::initTestCase()
+{
+    // Set timezone to Europe/Berlin to ensure consistent DST handling.
+    // The test data in WeirdClockEntries.org was created assuming German local time,
+    // and the Parser creates QDateTime objects using the system's local timezone.
+    qputenv("TZ", "Europe/Berlin");
+#ifdef Q_OS_UNIX
+    tzset();
+#endif
+}
 
 void ClockTests::testTimeIntervals_data()
 {
@@ -145,12 +160,18 @@ void ClockTests::testAccumulateForInterval_data()
     QTest::addColumn<int>("duration");
     QTest::addColumn<int>("total");
 
+    // Use explicit Berlin timezone for DST-sensitive date calculations
     const QDate mar26(2015, 3, 26);
     const QDate mar27(mar26.addDays(1));
     const QDate mar23(2015, 3, 23); //Monday
     const QDate mar30(mar23.addDays(7)); //Monday a week later
-    const TimeInterval wk13(mar23, mar30);
-    QTest::newRow("headline_1_1") << FL1("headline_1_1") << TimeInterval(mar26, mar27) << 60 * 60 << 60 * 150;
+    // Construct TimeIntervals with explicit timezone to ensure correct DST handling
+    const auto startOfDay = [](const QDate& date) {
+        return QDateTime(date, QTime(0, 0), Berlin);
+    };
+    const TimeInterval wk13(startOfDay(mar23), startOfDay(mar30));
+    const TimeInterval mar26to27(startOfDay(mar26), startOfDay(mar27));
+    QTest::newRow("headline_1_1") << FL1("headline_1_1") << mar26to27 << 60 * 60 << 60 * 150;
     QTest::newRow("headline_1_2") << FL1("headline_1_2") << wk13 << 60 * 60 << 60 * 150;
     QTest::newRow("headline_1_3 DST switch") << FL1("headline_1_3") << wk13 << 60 * 60 * 11 << 60 * 60 * 11;
     QTest::newRow("headline_1 full week") << FL1("headline_1") << wk13 << 52200 << 57600; //14:30h, 15:15h total
