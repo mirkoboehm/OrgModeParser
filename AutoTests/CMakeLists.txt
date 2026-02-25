@@ -1,7 +1,7 @@
 enable_testing()
 find_package(Qt5Test 5.3.0 REQUIRED NO_MODULE)
 
-QT5_ADD_RESOURCES( TestDataResources_SRCS TestData.qrc )
+qt5_add_resources(TestDataResources_SRCS TestData.qrc)
 
 ########### next target ###############
 

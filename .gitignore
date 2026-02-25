@@ -24,3 +24,4 @@
 CMakeLists.txt.user
 build/
 build-*/
+.qtcreator
